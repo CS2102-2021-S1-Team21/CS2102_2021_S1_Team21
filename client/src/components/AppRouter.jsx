@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import FormTest from '../lab/FormTest';
 import HelloWorld from '../lab/HelloWorld';
+import AuthShell from './AuthShell';
 
 const AppRouter = () => {
   return (
@@ -17,7 +18,7 @@ const AppRouter = () => {
         {/* <Route exact path="/reset-password" component={ResetPassword} /> */}
 
         {/* All other routes are authenticated */}
-        {/* <Route component={AuthShell} /> */}
+        <Route component={AuthShell} />
       </Switch>
     </BrowserRouter>
   );
