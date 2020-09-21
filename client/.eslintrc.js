@@ -4,7 +4,7 @@ module.exports = {
     es6: true,
     jest: true,
   },
-  extends: ['airbnb', 'prettier'],
+  extends: ['airbnb', 'prettier', 'plugin:json/recommended'],
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
@@ -12,7 +12,7 @@ module.exports = {
     ecmaVersion: 12,
     sourceType: 'module',
   },
-  plugins: ['prettier', 'jest'],
+  plugins: ['jest', 'prettier'],
   rules: {
     'react/jsx-curly-brace-presence': ['error', { props: 'never', children: 'always' }],
     curly: ['error', 'multi-line'],
