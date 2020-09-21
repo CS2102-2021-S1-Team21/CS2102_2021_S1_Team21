@@ -4,8 +4,8 @@ import React from 'react';
 const useStyles = makeStyles((theme) => ({
   root: {
     margin: theme.spacing(4),
-    textAlign: 'center'
-  }
+    textAlign: 'center',
+  },
 }));
 
 /** Circular progress indicator to be displayed while data is being fetched. */

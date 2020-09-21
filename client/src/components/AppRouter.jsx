@@ -9,8 +9,8 @@ const AppRouter = () => {
     <BrowserRouter>
       <Switch>
         {/* Lab components */}
-        <Route exact path='/hello-world' component={HelloWorld} />
-        <Route exact path='/test/forms' component={FormTest} />
+        <Route exact path="/hello-world" component={HelloWorld} />
+        <Route exact path="/test/forms" component={FormTest} />
 
         {/* Non-authenticated routes */}
         {/* <Route exact path="/login" component={Login} /> */}
