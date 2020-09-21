@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import FormTest from '../lab/FormTest';
 import HelloWorld from '../lab/HelloWorld';
 
 const AppRouter = () => {
@@ -8,6 +9,7 @@ const AppRouter = () => {
       <Switch>
         {/* Lab components */}
         <Route exact path='/hello-world' component={HelloWorld} />
+        <Route exact path='/test/forms' component={FormTest} />
 
         {/* Non-authenticated routes */}
         {/* <Route exact path="/login" component={Login} /> */}
