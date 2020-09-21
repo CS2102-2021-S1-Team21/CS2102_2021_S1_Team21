@@ -1,0 +1,27 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon --watch src --exec npm run server",
+    "server": "node index.js",
+    "lint": "eslint src/js"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CS2102-2021-S1-Team21/CS2102_2021_S1_Team21/issues"
+  },
+  "homepage": "https://github.com/CS2102-2021-S1-Team21/CS2102_2021_S1_Team21#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "nodemon": "^2.0.4",
+    "pg": "^8.3.3"
+  },
+  "devDependencies": {
+    "eslint": "^7.9.0"
+  }
+}
