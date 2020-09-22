@@ -1,0 +1,5 @@
+CREATE DATABASE cs2102;
+
+/**
+CREATE TABLE here
+**/
