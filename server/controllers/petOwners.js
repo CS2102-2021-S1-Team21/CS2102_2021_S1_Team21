@@ -1,6 +1,8 @@
 const db = require('../db');
 const sql = require('../sql');
 
+// TODO: reduce boilerplate code
+
 exports.index = async (req, res) => {
   // console.log(sql.petOwners.queries.index);
   try {
