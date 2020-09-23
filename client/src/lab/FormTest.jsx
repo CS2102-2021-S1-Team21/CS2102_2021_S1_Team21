@@ -5,11 +5,11 @@ import React, { useState } from 'react';
 // TODO: set up generic components that work with Formik
 
 const FormTest = () => {
-  const [ date, setDate ] = useState(new Date());
+  const [date, setDate] = useState(new Date());
 
   return (
     <Box>
-      <Typography variant='h1'>Forms</Typography>
+      <Typography variant="h1">{'Forms'}</Typography>
       <KeyboardDatePicker
         onChange={(newDate) => {
           setDate(newDate);

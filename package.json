@@ -1,0 +1,10 @@
+{
+  "devDependencies": {
+    "husky": "^4.3.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-push": "cd server && yarn run check && cd ../client && yarn run check"
+    }
+  }
+}
