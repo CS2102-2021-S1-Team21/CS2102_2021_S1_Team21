@@ -15,7 +15,6 @@
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-prettier": "^3.1.4",
-    "husky": "^4.3.0",
     "prettier": "^2.1.2"
   },
   "scripts": {
@@ -25,10 +24,5 @@
     "format:fix": "prettier --write",
     "check": "yarn run lint . && yarn run format .",
     "fix": "yarn run lint:fix . && yarn run format:fix ."
-  },
-  "husky": {
-    "hooks": {
-      "pre-push": "yarn run check"
-    }
   }
 }
