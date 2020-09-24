@@ -4,6 +4,8 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { makeStyles } from '@material-ui/core/styles';
 import { KeyboardDatePicker } from '@material-ui/pickers';
+import DialogActions from '@material-ui/core/DialogActions';
+import {Button, Dialog } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -17,18 +19,30 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const LeaveDialogContent = () => {
+const LeaveDialogContent = ({open, setOpen}) => {
+
   const classes = useStyles();
-  const [selectedDate, handleDateChange] = useState(new Date());
+  const [selectedDateFrom, handleDateChangeFrom] = useState(new Date());
+  const [selectedDateTo, handleDateChangeTo] = useState(new Date());
+
+  const handleCancel = () => {
+      setOpen(false);
+  };
+
+  const handleApply = () => {
+    setOpen(false);
+  //   // TODO: set up backend api request
+  };
+
   return (
-    <>
+    <Dialog open={open} onClose={handleCancel} aria-labelledby="form-dialog-title">
       <DialogTitle id="form-dialog-title">{'Leave Form'}</DialogTitle>
       <DialogContent>
         <DialogContentText>{'From:\r'}</DialogContentText>
         <KeyboardDatePicker
           clearable
-          value={selectedDate}
-          onChange={(date) => handleDateChange(date)}
+          value={selectedDateFrom}
+          onChange={(date) => handleDateChangeFrom(date)}
           minDate={new Date()}
           format="MM/dd/yyyy"
         />
@@ -37,13 +51,21 @@ const LeaveDialogContent = () => {
         <DialogContentText>{'Until:\r'}</DialogContentText>
         <KeyboardDatePicker
           clearable
-          value={selectedDate}
-          onChange={(date) => handleDateChange(date)}
-          minDate={new Date()}
+          value={selectedDateTo}
+          onChange={(date) => handleDateChangeTo(date)}
+          minDate={selectedDateFrom}
           format="MM/dd/yyyy"
         />
       </DialogContent>
-    </>
+      <DialogActions>
+        <Button onClick={handleCancel} color="primary">
+          Cancel
+        </Button>
+        <Button onClick={handleApply} color="primary">
+          Apply
+          </Button>
+      </DialogActions>
+    </Dialog>
   );
 };
 

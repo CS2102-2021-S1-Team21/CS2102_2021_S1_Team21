@@ -9,8 +9,8 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
-import DialogActions from '@material-ui/core/DialogActions';
 import LeaveDialogContent from './LeaveDialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
 
 const columns = [
   { id: 'startDate', label: 'Start Date', minWidth: 170 },
@@ -44,27 +44,18 @@ const useStyles = makeStyles({
 });
 
 const style = {
-  marginBottom: '20px',
-};
+  marginBottom: '20px'
+}
 
 /** This is a dummy component for demo purposes. The actual one will look quite different. */
 const Leaves = () => {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const classes = useStyles();
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const handleClickOpen = () => {
     setOpen(true);
-  };
-
-  const handleCancel = () => {
-    setOpen(false);
-  };
-
-  const handleApply = () => {
-    setOpen(false);
-    // TODO: set up backend api request
   };
 
   const handleChangePage = (event, newPage) => {
@@ -78,22 +69,14 @@ const Leaves = () => {
 
   return (
     <Box>
-      <h1>{'Leaves taken: __ days\r'}</h1>
-      <br />
+      <h1>
+        Leaves taken: __ days
+      </h1>
+      <br></br>
       <Button variant="contained" color="primary" onClick={handleClickOpen} style={style}>
-        {'Apply Leave\r'}
+        Apply Leave
       </Button>
-      <Dialog open={open} onClose={handleCancel} aria-labelledby="form-dialog-title">
-        <LeaveDialogContent />
-        <DialogActions>
-          <Button onClick={handleCancel} color="primary">
-            {'Cancel\r'}
-          </Button>
-          <Button onClick={handleApply} color="primary">
-            {'Apply\r'}
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <LeaveDialogContent setOpen={setOpen} open={open}></LeaveDialogContent>
       <Paper className={classes.root}>
         <TableContainer className={classes.container}>
           <Table stickyHeader aria-label="sticky table">
@@ -118,9 +101,7 @@ const Leaves = () => {
                       const value = row[column.id];
                       return (
                         <TableCell key={column.id} align={column.align}>
-                          {column.format && typeof value === 'number'
-                            ? column.format(value)
-                            : value}
+                          {column.format && typeof value === 'number' ? column.format(value) : value}
                         </TableCell>
                       );
                     })}
