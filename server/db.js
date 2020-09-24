@@ -1,6 +1,7 @@
 const { Pool } = require('pg');
 
 // to be included inside .gitignore once everyone has set up
+// TODO: use environment variables
 const pool = new Pool({
   user: 'postgres',
   password: ' ',

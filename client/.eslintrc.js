@@ -5,11 +5,12 @@ module.exports = {
     jest: true,
   },
   extends: ['airbnb', 'prettier', 'plugin:json/recommended'],
+  parser: 'babel-eslint',
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
     },
-    ecmaVersion: 12,
+    ecmaVersion: 11,
     sourceType: 'module',
   },
   plugins: ['jest', 'prettier'],

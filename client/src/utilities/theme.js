@@ -1,7 +1,13 @@
-const { createMuiTheme } = require('@material-ui/core');
+import { createMuiTheme } from '@material-ui/core';
+import { deepOrange } from '@material-ui/core/colors';
 
 const theme = createMuiTheme({
-  // no customisations for now
+  // TODO: decide on app colour scheme
+  palette: {
+    primary: {
+      main: deepOrange[500],
+    },
+  },
 });
 
 export default theme;
