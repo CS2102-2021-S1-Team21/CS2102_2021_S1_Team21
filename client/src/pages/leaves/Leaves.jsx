@@ -1,5 +1,5 @@
-import { Box } from '@material-ui/core';
-import React from 'react';
+import { Box, Button, Dialog } from '@material-ui/core';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
@@ -9,6 +9,8 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
+import LeaveDialogContent from './LeaveDialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
 
 const columns = [
   { id: 'startDate', label: 'Start Date', minWidth: 170 },
@@ -28,7 +30,7 @@ function createData(startDate, endDate, isApproved) {
 
 const rows = [
   createData('2020-11-09', '2020-11-11', 'Not approved'),
-  createData('09 November 2020', '11 November 2020', 'Not approved'),
+  createData('09 November 2020', '11 November 2020', 'Pending'),
   createData('What format should we use', 'HUH', 'Approved'),
 ];
 
@@ -41,11 +43,29 @@ const useStyles = makeStyles({
   },
 });
 
+const style = {
+  marginBottom: '20px'
+}
+
 /** This is a dummy component for demo purposes. The actual one will look quite different. */
 const Leaves = () => {
+  const [open, setOpen] = React.useState(false);
   const classes = useStyles();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleCancel = () => {
+    setOpen(false);
+  };
+
+  const handleApply = () => {
+    setOpen(false);
+    // TODO: set up backend api request
+  };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -58,10 +78,24 @@ const Leaves = () => {
 
   return (
     <Box>
-      <p>
+      <h1>
         Leaves taken: __ days
-        </p>
+      </h1>
       <br></br>
+      <Button variant="contained" color="primary" onClick={handleClickOpen} style={style}>
+        Apply Leave
+      </Button>
+      <Dialog open={open} onClose={handleCancel} aria-labelledby="form-dialog-title">
+      <LeaveDialogContent></LeaveDialogContent>
+      <DialogActions>
+          <Button onClick={handleCancel} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleApply} color="primary">
+            Apply
+          </Button>
+        </DialogActions>
+      </Dialog>
       <Paper className={classes.root}>
         <TableContainer className={classes.container}>
           <Table stickyHeader aria-label="sticky table">

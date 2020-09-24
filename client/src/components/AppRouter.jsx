@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import FormTest from '../lab/FormTest';
 import HelloWorld from '../lab/HelloWorld';
 import AuthRouter from './AuthRouter';
-import Leaves from '../pages/Leaves';
+import Leaves from '../pages/leaves/Leaves';
 
 const AppRouter = () => {
   return (
