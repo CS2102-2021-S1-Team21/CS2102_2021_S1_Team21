@@ -9,8 +9,8 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
-import LeaveDialogContent from './LeaveDialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
+import LeaveDialogContent from './LeaveDialogContent';
 
 const columns = [
   { id: 'startDate', label: 'Start Date', minWidth: 170 },
@@ -44,8 +44,8 @@ const useStyles = makeStyles({
 });
 
 const style = {
-  marginBottom: '20px'
-}
+  marginBottom: '20px',
+};
 
 /** This is a dummy component for demo purposes. The actual one will look quite different. */
 const Leaves = () => {
@@ -69,14 +69,12 @@ const Leaves = () => {
 
   return (
     <Box>
-      <h1>
-        Leaves taken: __ days
-      </h1>
-      <br></br>
+      <h1>{'Leaves taken: __ days\r'}</h1>
+      <br />
       <Button variant="contained" color="primary" onClick={handleClickOpen} style={style}>
-        Apply Leave
+        {'Apply Leave\r'}
       </Button>
-      <LeaveDialogContent setOpen={setOpen} open={open}></LeaveDialogContent>
+      <LeaveDialogContent setOpen={setOpen} open={open} />
       <Paper className={classes.root}>
         <TableContainer className={classes.container}>
           <Table stickyHeader aria-label="sticky table">
@@ -101,7 +99,9 @@ const Leaves = () => {
                       const value = row[column.id];
                       return (
                         <TableCell key={column.id} align={column.align}>
-                          {column.format && typeof value === 'number' ? column.format(value) : value}
+                          {column.format && typeof value === 'number'
+                            ? column.format(value)
+                            : value}
                         </TableCell>
                       );
                     })}

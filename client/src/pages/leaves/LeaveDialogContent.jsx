@@ -5,7 +5,8 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import { makeStyles } from '@material-ui/core/styles';
 import { KeyboardDatePicker } from '@material-ui/pickers';
 import DialogActions from '@material-ui/core/DialogActions';
-import {Button, Dialog } from '@material-ui/core';
+import { Button, Dialog } from '@material-ui/core';
+import PropTypes from 'prop-types';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -19,19 +20,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const LeaveDialogContent = ({open, setOpen}) => {
-
+const LeaveDialogContent = ({ open, setOpen }) => {
   const classes = useStyles();
   const [selectedDateFrom, handleDateChangeFrom] = useState(new Date());
   const [selectedDateTo, handleDateChangeTo] = useState(new Date());
 
   const handleCancel = () => {
-      setOpen(false);
+    setOpen(false);
   };
 
   const handleApply = () => {
     setOpen(false);
-  //   // TODO: set up backend api request
+    // TODO: set up backend api request
   };
 
   return (
@@ -59,14 +59,23 @@ const LeaveDialogContent = ({open, setOpen}) => {
       </DialogContent>
       <DialogActions>
         <Button onClick={handleCancel} color="primary">
-          Cancel
+          {'Cancel'}
         </Button>
         <Button onClick={handleApply} color="primary">
-          Apply
-          </Button>
+          {'Apply'}
+        </Button>
       </DialogActions>
     </Dialog>
   );
+};
+
+LeaveDialogContent.propTypes = {
+  open: PropTypes.bool,
+  setOpen: PropTypes.func,
+};
+LeaveDialogContent.defaultProps = {
+  open: false,
+  setOpen: () => null,
 };
 
 export default LeaveDialogContent;
