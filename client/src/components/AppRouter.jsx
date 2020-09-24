@@ -20,7 +20,6 @@ const AppRouter = () => {
 
         {/* All other routes are authenticated */}
         <Route component={AuthRouter} />
-        
       </Switch>
     </BrowserRouter>
   );

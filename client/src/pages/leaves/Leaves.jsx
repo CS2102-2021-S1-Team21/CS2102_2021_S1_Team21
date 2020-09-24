@@ -9,8 +9,8 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
-import LeaveDialogContent from './LeaveDialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
+import LeaveDialogContent from './LeaveDialogContent';
 
 const columns = [
   { id: 'startDate', label: 'Start Date', minWidth: 170 },
@@ -44,8 +44,8 @@ const useStyles = makeStyles({
 });
 
 const style = {
-  marginBottom: '20px'
-}
+  marginBottom: '20px',
+};
 
 /** This is a dummy component for demo purposes. The actual one will look quite different. */
 const Leaves = () => {
@@ -78,21 +78,19 @@ const Leaves = () => {
 
   return (
     <Box>
-      <h1>
-        Leaves taken: __ days
-      </h1>
-      <br></br>
+      <h1>{'Leaves taken: __ days\r'}</h1>
+      <br />
       <Button variant="contained" color="primary" onClick={handleClickOpen} style={style}>
-        Apply Leave
+        {'Apply Leave\r'}
       </Button>
       <Dialog open={open} onClose={handleCancel} aria-labelledby="form-dialog-title">
-      <LeaveDialogContent></LeaveDialogContent>
-      <DialogActions>
+        <LeaveDialogContent />
+        <DialogActions>
           <Button onClick={handleCancel} color="primary">
-            Cancel
+            {'Cancel\r'}
           </Button>
           <Button onClick={handleApply} color="primary">
-            Apply
+            {'Apply\r'}
           </Button>
         </DialogActions>
       </Dialog>
@@ -120,7 +118,9 @@ const Leaves = () => {
                       const value = row[column.id];
                       return (
                         <TableCell key={column.id} align={column.align}>
-                          {column.format && typeof value === 'number' ? column.format(value) : value}
+                          {column.format && typeof value === 'number'
+                            ? column.format(value)
+                            : value}
                         </TableCell>
                       );
                     })}
