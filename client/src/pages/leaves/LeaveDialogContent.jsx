@@ -73,6 +73,7 @@ LeaveDialogContent.propTypes = {
   open: PropTypes.bool,
   setOpen: PropTypes.func,
 };
+
 LeaveDialogContent.defaultProps = {
   open: false,
   setOpen: () => null,

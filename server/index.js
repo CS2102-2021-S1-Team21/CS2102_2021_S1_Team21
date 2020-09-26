@@ -5,6 +5,7 @@ const routes = require('./routes');
 const app = express();
 
 // Middleware
+app.use(express.json());
 
 app.use(
   cors({
@@ -24,6 +25,6 @@ app.use((err, req, res, next) => {
   next(err);
 });
 
-app.listen(8000, () => {
-  console.log('Server is listening on port 8000!');
+app.listen(5000, () => {
+  console.log('Server is listening on port 5000!');
 });
