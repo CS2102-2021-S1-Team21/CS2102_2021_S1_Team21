@@ -20,11 +20,10 @@ exports.apply = async (req, res) => {
 
 exports.retrieve = async (req, res) => {
   try {
-    const result = await db.query(sql.leaves.queries.retrieve);
-
-    //   res.json({ email: result.email })
+    const { email } = req.params;
+    const result = await db.query(sql.leaves.queries.retrieve, [email]);
     if (result.rowCount === 0) {
-      res.json({ error: 'No such caretaker exists' });
+      res.json({ error: 'You do not have any past leave application' });
       return; // TODO: next()?
     }
     res.json(result.rows);

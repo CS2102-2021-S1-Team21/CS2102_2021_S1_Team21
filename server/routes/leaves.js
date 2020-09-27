@@ -4,6 +4,6 @@ const leaves = require('../controllers/leaves');
 const router = express.Router();
 
 router.post('/', leaves.apply);
-router.get('/', leaves.retrieve);
+router.get('/:email', leaves.retrieve);
 
 module.exports = router;

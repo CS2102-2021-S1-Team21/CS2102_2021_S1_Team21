@@ -22,7 +22,7 @@ exports.view = async (req, res) => {
       res.json({ error: 'No such pet owner exists' });
       return; // TODO: next()?
     }
-    res.json(result.rows[0]);
+    res.json(result);
   } catch (err) {
     console.error('ERROR: ', err.message);
     res.json({ error: 'An unexpected error occurred' });
