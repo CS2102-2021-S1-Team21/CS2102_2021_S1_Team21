@@ -1,12 +1,4 @@
-import {
-  Chip,
-  FormControl,
-  FormHelperText,
-  InputLabel,
-  MenuItem,
-  Select,
-  Typography,
-} from '@material-ui/core';
+import { Chip, FormControl, FormHelperText, InputLabel, MenuItem, Select } from '@material-ui/core';
 import { getIn } from 'formik';
 import React from 'react';
 
@@ -26,15 +18,7 @@ import React from 'react';
  * />
  * ```
  */
-const FormMultiSelect = ({
-  field,
-  form,
-  label,
-  options,
-  SelectProps,
-  maxItems = 3, // FIXME: find a better way to tell if selected options are too long to be displayed
-  ...otherProps
-}) => {
+const FormMultiSelect = ({ field, form, label, options, SelectProps, ...otherProps }) => {
   const errorMessage = getIn(form.errors, field.name);
   const shouldShowError = getIn(form.touched, field.name) && !!errorMessage;
   const helperText = shouldShowError ? errorMessage : otherProps.helperText;
@@ -42,20 +26,9 @@ const FormMultiSelect = ({
   // TODO: add flow/proptypes and make `options` required
 
   const findLabel = (value) => options.find((option) => option.value === value)?.label;
-  const renderValue = (selected) => {
-    let chips = selected.map((value) => <Chip key={value} label={findLabel(value)} />);
-    // TODO: show all options if element is focused
-    const remaining = selected.length - maxItems;
-    if (remaining > 0) {
-      chips = chips.slice(0, maxItems);
-      chips.push(
-        <Typography key="last" display="inline" variant="body2">
-          {` +${remaining} more`}
-        </Typography>,
-      );
-    }
-    return chips;
-  };
+  // TODO: show all options if element is focused
+  const renderValue = (selected) =>
+    selected.map((value) => <Chip key={value} label={findLabel(value)} />);
 
   return (
     <FormControl variant="outlined" {...otherProps} error={shouldShowError} fullWidth>
