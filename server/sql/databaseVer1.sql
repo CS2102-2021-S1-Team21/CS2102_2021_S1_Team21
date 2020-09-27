@@ -133,6 +133,9 @@ CREATE TABLE Bidded_For_Job(
     transferType VARCHAR,
     transferDateTime TIMESTAMP,
     remarks VARCHAR,
+    dailyPrice DECIMAL(10,2),
+    status VARCHAR,
+    submittedAt TIMESTAMP,
     PRIMARY KEY(pet_name, PetOwnerEmail, serviceName, categoryName, CaretakerEmail, startDate, endDate)
 )
 
