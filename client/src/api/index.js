@@ -1,4 +1,5 @@
 import petOwners from './petOwners';
+import leaves from './leaves';
 
 /* ====================================
  * Index of all API request routes
@@ -7,6 +8,7 @@ import petOwners from './petOwners';
 
 const api = {
   petOwners,
+  leaves,
   // pets,
   // caretakers,
 };

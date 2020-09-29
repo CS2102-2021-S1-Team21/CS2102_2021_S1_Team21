@@ -1,5 +1,5 @@
 import { Box, Button, Dialog } from '@material-ui/core';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
@@ -11,39 +11,37 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import DialogActions from '@material-ui/core/DialogActions';
 import LeaveDialogContent from './LeaveDialogContent';
+import api from '../../api';
 
 const columns = [
-  { id: 'startDate', label: 'Start Date', minWidth: 170 },
-  { id: 'endDate', label: 'End Date', minWidth: 100 },
+  { id: 'startDate', label: 'Start Date', minWidth: '25%' },
+  { id: 'endDate', label: 'End Date', minWidth: '25%' },
+  { id: 'isEmergency', label: 'Emergency Leave', minWidth: '25%' },
   {
     id: 'isApproved',
     label: 'Approval Status',
-    minWidth: 170,
-    align: 'right',
-    format: (value) => value.toLocaleString('en-US'),
+    minWidth: '25%',
   },
 ];
 
-function createData(startDate, endDate, isApproved) {
-  return { startDate, endDate, isApproved };
-}
+// function createData(startDate, endDate, isApproved) {
+//   return { startDate, endDate, isApproved };
+// }
 
-const rows = [
-  createData('2020-11-09', '2020-11-11', 'Not approved'),
-  createData('09 November 2020', '11 November 2020', 'Pending'),
-  createData('What format should we use', 'HUH', 'Approved'),
-];
+// const rows = [
+//   createData('2020-11-09', '2020-11-11', 'Not approved'),
+//   createData('09 November 2020', '11 November 2020', 'Pending'),
+//   createData('What format should we use', 'HUH', 'Approved'),
+// ];
 
 const useStyles = makeStyles({
-  root: {
-    width: '80%',
-  },
-  container: {
-    maxHeight: 440,
+  table: {
+    minWidth: 650,
   },
 });
 
 const style = {
+  float: 'right',
   marginBottom: '20px',
 };
 
@@ -53,6 +51,13 @@ const Leaves = () => {
   const classes = useStyles();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [leaves, setLeaves] = useState([]);
+
+  useEffect(() => {
+    api.leaves.getLeaves('wincent@gmail.com').then((res) => {
+      setLeaves(res);
+    });
+  }, []);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -75,52 +80,29 @@ const Leaves = () => {
         {'Apply Leave\r'}
       </Button>
       <LeaveDialogContent setOpen={setOpen} open={open} />
-      <Paper className={classes.root}>
-        <TableContainer className={classes.container}>
-          <Table stickyHeader aria-label="sticky table">
-            <TableHead>
-              <TableRow>
-                {columns.map((column) => (
-                  <TableCell
-                    key={column.id}
-                    align={column.align}
-                    style={{ minWidth: column.minWidth }}
-                  >
-                    {column.label}
-                  </TableCell>
-                ))}
+      <TableContainer component={Paper}>
+        <Table className={classes.table} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell>{'Start Date'}</TableCell>
+              <TableCell align="right">{'End Date'}</TableCell>
+              <TableCell align="right">{'Emergency Leave'}</TableCell>
+              <TableCell align="right">{'Approval Status'}</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {leaves.map((row) => (
+              <TableRow key={row.id}>
+                <TableCell align="right">{row.startDate}</TableCell>
+                <TableCell align="right">{row.endDate}</TableCell>
+                <TableCell align="right">{row.isEmergency}</TableCell>
+                <TableCell align="right">{row.isApproved}</TableCell>
               </TableRow>
-            </TableHead>
-            <TableBody>
-              {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                    {columns.map((column) => {
-                      const value = row[column.id];
-                      return (
-                        <TableCell key={column.id} align={column.align}>
-                          {column.format && typeof value === 'number'
-                            ? column.format(value)
-                            : value}
-                        </TableCell>
-                      );
-                    })}
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[10, 25, 100]}
-          component="div"
-          count={rows.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onChangePage={handleChangePage}
-          onChangeRowsPerPage={handleChangeRowsPerPage}
-        />
-      </Paper>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      {');'}
     </Box>
   );
 };
