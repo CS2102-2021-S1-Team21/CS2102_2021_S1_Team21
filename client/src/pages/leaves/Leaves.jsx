@@ -12,6 +12,8 @@ import TableRow from '@material-ui/core/TableRow';
 import DialogActions from '@material-ui/core/DialogActions';
 import LeaveDialogContent from './LeaveDialogContent';
 import api from '../../api';
+import { format } from 'date-fns'
+import dateformat, { DATE_INPUT_FORMAT } from '../../utilities/datetime';
 
 const columns = [
   { id: 'startDate', label: 'Start Date', minWidth: '25%' },
@@ -54,10 +56,9 @@ const Leaves = () => {
   const [leaves, setLeaves] = useState([]);
 
   useEffect(() => {
-    api.leaves.getLeaves('wincent@gmail.com').then((res) => {
-      setLeaves(res);
-    });
+    api.leaves.getLeaves('wincent@gmail.com').then(x => setLeaves(x))
   }, []);
+  console.log(leaves)
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -71,6 +72,30 @@ const Leaves = () => {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
+
+  function renderApproval({isApproved}) {
+    if (isApproved) {
+      return (
+        <p>Approved</p>
+      )
+    } else {
+      return (
+        <p>Not Approved</p>
+      )
+    }
+  }
+
+  function renderEmergency({isEmergency}) {
+    if (isEmergency) {
+      return (
+        <p>Yes</p>
+      )
+    } else {
+      return (
+        <p>No</p>
+      )
+    }
+  }
 
   return (
     <Box>
@@ -91,18 +116,20 @@ const Leaves = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {leaves.map((row) => (
-              <TableRow key={row.id}>
-                <TableCell align="right">{row.startDate}</TableCell>
-                <TableCell align="right">{row.endDate}</TableCell>
-                <TableCell align="right">{row.isEmergency}</TableCell>
-                <TableCell align="right">{row.isApproved}</TableCell>
+            {leaves.map((row, index) => (
+              <TableRow key={row.index}>
+                <TableCell align="left">{row.startdate}</TableCell>
+                <TableCell align="right">{row.enddate}</TableCell>
+                <TableCell align="right">{ 
+                renderEmergency(row.isemergency)
+                }</TableCell>
+                <TableCell align="right">{renderApproval(row.isapproved)}</TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
-      {');'}
+      
     </Box>
   );
 };
