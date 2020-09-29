@@ -15,9 +15,17 @@ module.exports = {
   },
   plugins: ['jest', 'prettier'],
   rules: {
+    // downgraded rules
+    'react/jsx-props-no-spreading': ['error', { custom: 'ignore' }],
+    'react/jsx-wrap-multilines': ['error', { prop: 'ignore' }],
+    'react/no-array-index-key': 'warn',
+    'react/prop-types': 'off',
+    'no-plusplus': 'off',
+    // custom rules (to be kept even without airbnb config)
     'react/jsx-curly-brace-presence': ['error', { props: 'never', children: 'always' }],
     curly: ['error', 'multi-line'],
     'no-var': 'error',
-    'no-unused-vars': 'warn', // for ease of development (should be changed eventually)
+    // disabled for ease of development (should be changed eventually)
+    'no-unused-vars': 'warn',
   },
 };

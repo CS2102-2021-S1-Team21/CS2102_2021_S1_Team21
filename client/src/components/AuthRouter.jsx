@@ -14,13 +14,10 @@ const AuthRouter = () => {
 
   // Otherwise, go to the selected page
   return (
-    <>
-      <PetOwnerProfile />
-      {/* TODO: debug this */}
-      <Switch>
-        <Route path="/pet-owner/:email" to={PetOwnerProfile} />
-      </Switch>
-    </>
+    <Switch>
+      {/* <Route path="/pet-owner" component={PetOwnerListing} /> */}
+      <Route path="/pet-owner/:email" component={PetOwnerProfile} />
+    </Switch>
   );
 };
 

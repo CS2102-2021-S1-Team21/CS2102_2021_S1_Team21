@@ -13,8 +13,12 @@ module.exports = {
   },
   plugins: ['prettier'],
   rules: {
+    // downgraded rules
+    'no-plusplus': 'off',
+    // custom rules (to be kept even without airbnb config)
     curly: ['error', 'multi-line'],
     'no-var': 'error',
-    'no-unused-vars': 'warn', // for ease of development (should be changed eventually)
+    // disabled for ease of development (should be changed eventually)
+    'no-unused-vars': 'warn',
   },
 };
