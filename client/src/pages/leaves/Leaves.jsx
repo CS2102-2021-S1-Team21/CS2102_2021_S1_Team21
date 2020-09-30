@@ -10,9 +10,9 @@ import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import DialogActions from '@material-ui/core/DialogActions';
+import { format } from 'date-fns';
 import LeaveDialogContent from './LeaveDialogContent';
 import api from '../../api';
-import { format } from 'date-fns'
 import dateformat, { DATE_INPUT_FORMAT } from '../../utilities/datetime';
 
 const columns = [
@@ -56,9 +56,9 @@ const Leaves = () => {
   const [leaves, setLeaves] = useState([]);
 
   useEffect(() => {
-    api.leaves.getLeaves('wincent@gmail.com').then(x => setLeaves(x))
+    api.leaves.getLeaves('wincent@gmail.com').then((x) => setLeaves(x));
   }, []);
-  console.log(leaves)
+  console.log(leaves);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -73,28 +73,18 @@ const Leaves = () => {
     setPage(0);
   };
 
-  function renderApproval({isApproved}) {
+  function renderApproval({ isApproved }) {
     if (isApproved) {
-      return (
-        <p>Approved</p>
-      )
-    } else {
-      return (
-        <p>Not Approved</p>
-      )
+      return <p>{'Approved'}</p>;
     }
+    return <p>{'Not Approved'}</p>;
   }
 
-  function renderEmergency({isEmergency}) {
+  function renderEmergency({ isEmergency }) {
     if (isEmergency) {
-      return (
-        <p>Yes</p>
-      )
-    } else {
-      return (
-        <p>No</p>
-      )
+      return <p>{'Yes'}</p>;
     }
+    return <p>{'No'}</p>;
   }
 
   return (
@@ -120,16 +110,13 @@ const Leaves = () => {
               <TableRow key={row.index}>
                 <TableCell align="left">{row.startdate}</TableCell>
                 <TableCell align="right">{row.enddate}</TableCell>
-                <TableCell align="right">{ 
-                renderEmergency(row.isemergency)
-                }</TableCell>
+                <TableCell align="right">{renderEmergency(row.isemergency)}</TableCell>
                 <TableCell align="right">{renderApproval(row.isapproved)}</TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
-      
     </Box>
   );
 };

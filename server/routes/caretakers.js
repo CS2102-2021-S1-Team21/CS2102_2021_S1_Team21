@@ -1,5 +1,5 @@
 const express = require('express');
-const petOwners = require('../controllers/caretakers');
+const caretakers = require('../controllers/caretakers');
 
 const router = express.Router();
 

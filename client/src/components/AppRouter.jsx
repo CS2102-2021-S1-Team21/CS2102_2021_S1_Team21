@@ -13,7 +13,7 @@ const AppRouter = () => {
         <Route exact path="/hello-world" component={HelloWorld} />
         <Route exact path="/test/forms" component={FormTest} />
         <Route exact path="/myleaves" component={Leaves} />
-        
+
         {/* Non-authenticated routes */}
         {/* <Route exact path="/login" component={Login} /> */}
         {/* <Route exact path="/forgot-password" component={ForgotPassword} /> */}

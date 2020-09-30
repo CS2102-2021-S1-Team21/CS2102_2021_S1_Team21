@@ -2,7 +2,6 @@ import petOwners from './petOwners';
 import leaves from './leaves';
 import caretakers from './caretakers';
 
-
 /* ====================================
  * Index of all API request routes
  * ====================================

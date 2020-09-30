@@ -7,8 +7,8 @@ import { KeyboardDatePicker } from '@material-ui/pickers';
 import DialogActions from '@material-ui/core/DialogActions';
 import { Button, Dialog } from '@material-ui/core';
 import PropTypes from 'prop-types';
+import { format } from 'date-fns';
 import api from '../../api';
-import { format } from 'date-fns'
 import dateformat, { DATE_INPUT_FORMAT } from '../../utilities/datetime';
 
 const useStyles = makeStyles((theme) => ({
@@ -37,14 +37,14 @@ const LeaveDialogContent = ({ open, setOpen }) => {
     setOpen(false);
     try {
       const body = {
-      startDate: format(selectedDateFrom, DATE_INPUT_FORMAT),
-      endDate: format(selectedDateTo, DATE_INPUT_FORMAT), 
-      email: 'wincent@gmail.com', 
-      isEmergency: 'FALSE'
-    };
+        startDate: format(selectedDateFrom, DATE_INPUT_FORMAT),
+        endDate: format(selectedDateTo, DATE_INPUT_FORMAT),
+        email: 'wincent@gmail.com',
+        isEmergency: 'FALSE',
+      };
       api.leaves.applyLeave(body);
     } catch (err) {
-      console.log(err.message)
+      console.log(err.message);
     }
   };
 
@@ -68,7 +68,7 @@ const LeaveDialogContent = ({ open, setOpen }) => {
           value={selectedDateTo}
           onChange={(date) => handleDateChangeTo(date)}
           minDate={selectedDateFrom}
-          minDateMessage={'Date should not be earlier than start Date'}
+          minDateMessage="Date should not be earlier than start Date"
           format="yyyy/MM/dd"
         />
       </DialogContent>
