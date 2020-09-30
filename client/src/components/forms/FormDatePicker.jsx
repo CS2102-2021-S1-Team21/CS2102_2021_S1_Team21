@@ -8,11 +8,11 @@ import { DATE_INPUT_FORMAT } from '../../utilities/datetime';
  *
  * To be used as a custom component for Formik's <Field>, e.g.
  * ```
- * <Field
- *   name="startDate"
- *   label="Start Date"
- *   component={FormDatePicker}
- * />
+  <Field
+    name="startDate"
+    label="Start Date"
+    component={FormDatePicker}
+  />
  * ```
  */
 const FormDatePicker = ({ field, form, ...otherProps }) => {
