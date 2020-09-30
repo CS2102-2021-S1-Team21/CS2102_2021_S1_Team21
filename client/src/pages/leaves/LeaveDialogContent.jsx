@@ -9,23 +9,9 @@ import { Button, Dialog } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { format } from 'date-fns';
 import api from '../../api';
-import dateformat, { DATE_INPUT_FORMAT } from '../../utilities/datetime';
-import datepicker from '../../components/forms/FormDatePicker';
-
-const useStyles = makeStyles((theme) => ({
-  container: {
-    display: 'flex',
-    flexWrap: 'wrap',
-  },
-  textField: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    width: 200,
-  },
-}));
+import { DATE_INPUT_FORMAT } from '../../utilities/datetime';
 
 const LeaveDialogContent = ({ open, setOpen }) => {
-  const classes = useStyles();
   const [selectedDateFrom, handleDateChangeFrom] = useState(new Date());
   const [selectedDateTo, handleDateChangeTo] = useState(new Date());
 
@@ -38,8 +24,8 @@ const LeaveDialogContent = ({ open, setOpen }) => {
     setOpen(false);
     try {
       const body = {
-        startDate: format(selectedDateFrom, DATE_INPUT_FORMAT),
-        endDate: format(selectedDateTo, DATE_INPUT_FORMAT),
+        startDate: selectedDateFrom,
+        endDate: selectedDateTo,
         email: 'wincent@gmail.com',
         isEmergency: 'FALSE',
       };
