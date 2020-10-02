@@ -27,6 +27,7 @@
     "format": "prettier --check",
     "format:fix": "prettier --write",
     "check": "yarn run lint . && yarn run format .",
-    "fix": "yarn run lint:fix . && yarn run format:fix ."
+    "fix": "yarn run lint:fix . && yarn run format:fix .",
+    "start": "nodemon index.js"
   }
 }
