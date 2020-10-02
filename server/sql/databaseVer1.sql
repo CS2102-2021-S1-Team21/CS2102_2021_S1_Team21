@@ -157,7 +157,7 @@ CREATE TABLE Financed_By_Transaction(
     caretakerEmail VARCHAR,
     startDate DATE,
     endDate DATE,
-    transactionDateTime TIMESTAMP,
+    transactionDateTime TIMESTAMP NOT NULL,
     isVerified BOOLEAN SET DEFAULT FALSE,
     paymentMethod VARCHAR NOT NULL,
     totalAmount DECIMAL(10,2) NOT NULL,
