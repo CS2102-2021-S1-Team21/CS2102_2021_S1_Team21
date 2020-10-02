@@ -8,8 +8,5 @@
     "hooks": {
       "pre-push": "cd server && yarn run check && cd ../client && yarn run check"
     }
-  },
-  "dependencies": {
-    "yarn": "^1.22.10"
   }
 }
