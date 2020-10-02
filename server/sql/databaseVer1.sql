@@ -55,15 +55,15 @@ CREATE TABLE Credit_Card(
     cvvCode VARCHAR NOT NULL
 );
 
-CREATE TABLE Register(
+CREATE TABLE Registers(
     number VARCHAR REFERENCES Credit_Card(number),
-    email VARCAHR REFERENCES Pet_Owner(email),
+    email VARCHAR REFERENCES Pet_Owner(email),
     PRIMARY KEY(number, email)
 );
 
 CREATE TABLE Requirement(
     requirementType VARCHAR,
-    description VARCAHR NOT NULL,
+    description VARCHAR NOT NULL,
     petName VARCHAR REFERENCES Pet(name) ON DELETE CASCADE,
     email VARCHAR REFERENCES Pet(email) ON DELETE CASCADE,
     PRIMARY KEY(requirementType, petName, email)
@@ -86,6 +86,7 @@ CREATE TABLE Service_Type(
 
 CREATE TABLE Service(
     name VARCHAR REFERENCES Service_Type(name),
+    serviceType VARCHAR REFERENCES Service_Type(name),
     categoryName VARCHAR REFERENCES Pet_Category(categoryName),
     dailyPrice DECIMAL(10,2) NOT NULL,
     PRIMARY KEY(name, categoryName)
@@ -124,7 +125,7 @@ CREATE TABLE Applies_For_Leave_Period(
     PRIMARY KEY(email, startDate, endDate)
 );
 
-CREATE TYPE status AS ENUM (
+CREATE TYPE STATUS AS ENUM (
     'Accepted',
     'Completed',
     'Pending',
@@ -134,7 +135,7 @@ CREATE TYPE status AS ENUM (
 
 CREATE TABLE Bidded_For_Job(
     petName VARCHAR REFERENCES Pet(name) ON DELETE CASCADE,
-    PetOwnerEmail VARCHAR REFERENCES Pet(email) ON DELETE CASCADE,
+    petOwnerEmail VARCHAR REFERENCES Pet(email) ON DELETE CASCADE,
     serviceName VARCHAR REFERENCES Service(name) ON DELETE CASCADE,
     categoryName VARCHAR REFERENCES Service(categoryName) ON DELETE CASCADE,
     CaretakerEmail VARCHAR REFERENCES Caretaker(email) ON DELETE CASCADE,
@@ -144,15 +145,15 @@ CREATE TABLE Bidded_For_Job(
     transferDateTime TIMESTAMP NOT NULL,
     remarks VARCHAR,
     dailyPrice DECIMAL(10,2) NOT NULL,
-    status status DEFAULT 'Pending',
+    status STATUS DEFAULT 'Pending',
     submittedAt TIMESTAMP,
-    PRIMARY KEY(pet_name, PetOwnerEmail, serviceName, categoryName, CaretakerEmail, startDate, endDate)
+    PRIMARY KEY(pet_name, petOwnerEmail, serviceName, categoryName, CaretakerEmail, startDate, endDate)
 );
 
 '''transferType, TransferDateTime and remarks need to be NOT NULL?'''
 CREATE TABLE Financed_By_Transaction(
     petName VARCHAR REFERENCES Bidded_For_Job(petName) ON DELETE CASCADE,
-    PetOwneremail VARCHAR REFERENCES Bidded_For_Job(PetOwnerEmail) ON DELETE CASCADE,
+    petOwnerEmail VARCHAR REFERENCES Bidded_For_Job(petOwnerEmail) ON DELETE CASCADE,
     serviceName VARCHAR REFERENCES Bidded_For_Job(serviceName) ON DELETE CASCADE,
     categoryName VARCHAR REFERENCES Bidded_For_Job(categoryName) ON DELETE CASCADE,
     CaretakerEmail VARCHAR REFERENCES Bidded_For_Job(CaretakerEmail) ON DELETE CASCADE,
@@ -162,21 +163,20 @@ CREATE TABLE Financed_By_Transaction(
     isVerified BOOLEAN SET DEFAULT FALSE,
     paymentMethod VARCHAR NOT NULL,
     totalAmount DECIMAL(10,2) NOT NULL,
-    PRIMARY KEY(petName, PetOwnerEmail, serviceName, categoryName, CaretakerEmail, startDate, endDate, transactionDateTime)
+    PRIMARY KEY(petName, petOwnerEmail, serviceName, categoryName, CaretakerEmail, startDate, endDate)
 );
 
 '''dont know how to show key constraint of jobs here, same for tagged to review'''
 CREATE TABLE Tagged_To_Review(
     petName VARCHAR REFERENCES Financed_By_Transaction(petName) ON DELETE CASCADE,
-    PetOwneremail VARCHAR REFERENCES Financed_By_Transaction(PetOwnerEmail) ON DELETE CASCADE,
+    petOwnerEmail VARCHAR REFERENCES Financed_By_Transaction(petOwnerEmail) ON DELETE CASCADE,
     serviceName VARCHAR REFERENCES Financed_By_Transaction(serviceName) ON DELETE CASCADE,
     categoryName VARCHAR REFERENCES Financed_By_Transaction(categoryName) ON DELETE CASCADE,
-    CaretakerEmail VARCHAR REFERENCES Financed_By_Transaction(CaretakerEmail) ON DELETE CASCADE,
+    caretakerEmail VARCHAR REFERENCES Financed_By_Transaction(CaretakerEmail) ON DELETE CASCADE,
     startDate DATE REFERENCES Financed_By_Transaction(startDate) ON DELETE CASCADE,
     endDate DATE REFERENCES Financed_By_Transaction(endDate) ON DELETE CASCADE,
-    transactionDateTime TIMESTAMP REFERENCES Financed_By_Transaction(transactionDateTime) ON DELETE CASCADE,
     createdAt TIMESTAMP NOT NULL,
-    rating DECIMAL(2,1) NOT NULL,
+    rating INTEGER NOT NULL CHECK ((rating >= 1) AND (rating <=5)),
     comment VARCHAR,
-    PRIMARY KEY(petName, PetOwnerEmail, serviceName, categoryName, CaretakerEmail, startDate, endDate, transactionDateTime, createdAt)
+    PRIMARY KEY(petName, petOwnerEmail, serviceName, categoryName, CaretakerEmail, startDate, endDate)
 );
