@@ -1,12 +1,14 @@
 CREATE TABLE PCS_Administrator(
-    email VARCHAR PRIMARY KEY,
+    username VARCHAR PRIMARY KEY,
+    email VARCHAR NOT NULL UNIQUE,
     passwordDigest VARCHAR NOT NULL,
     name VARCHAR NOT NULL,
     deletedAt TIMESTAMP,
 );
 
 CREATE TABLE User(
-    email VARCHAR PRIMARY KEY,
+    username VARCHAR PRIMARY KEY,
+    email VARCHAR NOT NULL UNIQUE,
     passwordDigest VARCHAR NOT NULL,
     name VARCHAR NOT NULL,
     deletedAt TIMESTAMP,
@@ -17,20 +19,20 @@ CREATE TABLE User(
 );
 
 CREATE TABLE Pet_Owner(
-    email VARCHAR PRIMARY KEY REFERENCES User(email)
+    username VARCHAR PRIMARY KEY REFERENCES User(username)
 );
 
 CREATE TABLE Caretaker(
-    email VARCHAR PRIMARY KEY REFERENCES User(email),
+    username VARCHAR PRIMARY KEY REFERENCES User(username),
     totalAverageRating DECIMAL(2,1)
 );
 
 CREATE TABLE Full_Time_Employee(
-    email VARCHAR PRIMARY KEY REFERENCES Caretaker(email) ON DELETE CASCADE,
+    username VARCHAR PRIMARY KEY REFERENCES Caretaker(username) ON DELETE CASCADE,
 );
 
 CREATE TABLE Part_Time_Employee(
-    email VARCHAR PRIMARY KEY REFERENCES Caretaker(email) ON DELETE CASCADE,
+    username VARCHAR PRIMARY KEY REFERENCES Caretaker(username) ON DELETE CASCADE,
 );
 
 CREATE TYPE gender AS ENUM (
@@ -39,13 +41,13 @@ CREATE TYPE gender AS ENUM (
 );
 
 CREATE TABLE Pet(
-    email VARCHAR REFERENCES Pet_Owner(email) ON DELETE CASCADE,
+    username VARCHAR REFERENCES Pet_Owner(username) ON DELETE CASCADE,
     name VARCHAR,
     yearOfBirth DATE,
     breed VARCHAR,
     deletedAt TIMESTAMP,
     gender gender,
-    PRIMARY KEY(email, name)
+    PRIMARY KEY(username, name)
 );
 
 CREATE TABLE Credit_Card(
@@ -57,16 +59,17 @@ CREATE TABLE Credit_Card(
 
 CREATE TABLE Registers(
     number VARCHAR REFERENCES Credit_Card(number),
-    email VARCHAR REFERENCES Pet_Owner(email),
-    PRIMARY KEY(number, email)
+    username VARCHAR REFERENCES Pet_Owner(username),
+    PRIMARY KEY(number, username)
 );
 
 CREATE TABLE Requirement(
     requirementType VARCHAR,
     description VARCHAR NOT NULL,
-    petName VARCHAR REFERENCES Pet(name) ON DELETE CASCADE,
-    email VARCHAR REFERENCES Pet(email) ON DELETE CASCADE,
-    PRIMARY KEY(requirementType, petName, email)
+    petName VARCHAR NOT NULL,
+    username VARCHAR NOT NULL,
+    PRIMARY KEY(requirementType, petName, username),
+    FOREIGN KEY(petName, username) REFERENCES Pet(name, username) ON DELETE CASCADE
 );
 
 CREATE TABLE Belongs_To(
@@ -85,44 +88,44 @@ CREATE TABLE Service_Type(
 );
 
 CREATE TABLE Service(
-    name VARCHAR REFERENCES Service_Type(name),
     serviceType VARCHAR REFERENCES Service_Type(name),
     categoryName VARCHAR REFERENCES Pet_Category(categoryName),
     dailyPrice DECIMAL(10,2) NOT NULL,
-    PRIMARY KEY(name, categoryName)
+    PRIMARY KEY(name, categoryName),
 );
 
 CREATE TABLE Provides(
-    name VARCHAR REFERENCES Service(name),
-    categoryName VARCHAR REFERENCES Service(categoryName),
-    email VARCHAR REFERENCES Caretaker(email),
-    PRIMARY KEY(name, categoryName, email)
+    serviceType VARCHAR,
+    categoryName VARCHAR,
+    username VARCHAR REFERENCES Caretaker(username),
+    PRIMARY KEY(name, categoryName, username)
+    FOREIGN KEY (serviceType, categoryName) REFERENCES Service(serviceType, categoryName)
 );
 
 CREATE TABLE Records_Monthly_Summary(
-    email VARCHAR REFERENCES Caretaker(email) ON DELETE CASCADE,
+    username VARCHAR REFERENCES Caretaker(username) ON DELETE CASCADE,
     monthYear DATE NOT NULL,
     totalNoJobs INTEGER NOT NULL,
     monthAverageRating DECIMAL(2,1) NOT NULL,
     totalPetDays INTEGER NOT NULL,
     salary DECIAML(10,2) NOT NULL,
-    PRIMARY KEY(email, monthYear)
+    PRIMARY KEY(username, monthYear)
 );
 
 CREATE TABLE Indicates_Availability_Period(
-    email VARCHAR REFERENCES Part_Time_Employee(email) ON DELETE CASCADE,
+    username VARCHAR REFERENCES Part_Time_Employee(username) ON DELETE CASCADE,
     startDate DATE,
     endDate DATE,
-    PRIMARY KEY(email, startDate, endDate)
+    PRIMARY KEY(username, startDate, endDate)
 );
 
 CREATE TABLE Applies_For_Leave_Period(
-    email VARCHAR REFERENCES Full_Time_Employee(email) ON DELETE CASCADE,
+    username VARCHAR REFERENCES Full_Time_Employee(username) ON DELETE CASCADE,
     startDate DATE,
     endDate DATE,
     isEmergency BOOLEAN NOT NULL,
     isApproved BOOLEAN SET DEFAULT FALSE,
-    PRIMARY KEY(email, startDate, endDate)
+    PRIMARY KEY(username, startDate, endDate)
 );
 
 CREATE TYPE STATUS AS ENUM (
@@ -135,10 +138,10 @@ CREATE TYPE STATUS AS ENUM (
 
 CREATE TABLE Bidded_For_Job(
     petName VARCHAR REFERENCES Pet(name) ON DELETE CASCADE,
-    petOwnerEmail VARCHAR REFERENCES Pet(email) ON DELETE CASCADE,
-    serviceName VARCHAR REFERENCES Service(name) ON DELETE CASCADE,
+    petOwnerEmail VARCHAR REFERENCES Pet(username) ON DELETE CASCADE,
+    serviceType VARCHAR REFERENCES Service(serviceType) ON DELETE CASCADE,
     categoryName VARCHAR REFERENCES Service(categoryName) ON DELETE CASCADE,
-    CaretakerEmail VARCHAR REFERENCES Caretaker(email) ON DELETE CASCADE,
+    CaretakerEmail VARCHAR REFERENCES Caretaker(username) ON DELETE CASCADE,
     startDate DATE,
     endDate DATE,
     transferType VARCHAR NOT NULL,
@@ -147,14 +150,14 @@ CREATE TABLE Bidded_For_Job(
     dailyPrice DECIMAL(10,2) NOT NULL,
     status STATUS DEFAULT 'Pending',
     submittedAt TIMESTAMP,
-    PRIMARY KEY(pet_name, petOwnerEmail, serviceName, categoryName, CaretakerEmail, startDate, endDate)
+    PRIMARY KEY(pet_name, petOwnerEmail, serviceType, categoryName, CaretakerEmail, startDate, endDate)
 );
 
 '''transferType, TransferDateTime and remarks need to be NOT NULL?'''
 CREATE TABLE Financed_By_Transaction(
     petName VARCHAR REFERENCES Bidded_For_Job(petName) ON DELETE CASCADE,
     petOwnerEmail VARCHAR REFERENCES Bidded_For_Job(petOwnerEmail) ON DELETE CASCADE,
-    serviceName VARCHAR REFERENCES Bidded_For_Job(serviceName) ON DELETE CASCADE,
+    serviceType VARCHAR REFERENCES Bidded_For_Job(serviceType) ON DELETE CASCADE,
     categoryName VARCHAR REFERENCES Bidded_For_Job(categoryName) ON DELETE CASCADE,
     CaretakerEmail VARCHAR REFERENCES Bidded_For_Job(CaretakerEmail) ON DELETE CASCADE,
     startDate DATE REFERENCES Bidded_For_Job(startDate) ON DELETE CASCADE,
@@ -163,14 +166,14 @@ CREATE TABLE Financed_By_Transaction(
     isVerified BOOLEAN SET DEFAULT FALSE,
     paymentMethod VARCHAR NOT NULL,
     totalAmount DECIMAL(10,2) NOT NULL,
-    PRIMARY KEY(petName, petOwnerEmail, serviceName, categoryName, CaretakerEmail, startDate, endDate)
+    PRIMARY KEY(petName, petOwnerEmail, serviceType, categoryName, CaretakerEmail, startDate, endDate)
 );
 
 '''dont know how to show key constraint of jobs here, same for tagged to review'''
 CREATE TABLE Tagged_To_Review(
     petName VARCHAR REFERENCES Financed_By_Transaction(petName) ON DELETE CASCADE,
     petOwnerEmail VARCHAR REFERENCES Financed_By_Transaction(petOwnerEmail) ON DELETE CASCADE,
-    serviceName VARCHAR REFERENCES Financed_By_Transaction(serviceName) ON DELETE CASCADE,
+    serviceType VARCHAR REFERENCES Financed_By_Transaction(serviceType) ON DELETE CASCADE,
     categoryName VARCHAR REFERENCES Financed_By_Transaction(categoryName) ON DELETE CASCADE,
     caretakerEmail VARCHAR REFERENCES Financed_By_Transaction(CaretakerEmail) ON DELETE CASCADE,
     startDate DATE REFERENCES Financed_By_Transaction(startDate) ON DELETE CASCADE,
@@ -178,5 +181,5 @@ CREATE TABLE Tagged_To_Review(
     createdAt TIMESTAMP NOT NULL,
     rating INTEGER NOT NULL CHECK ((rating >= 1) AND (rating <=5)),
     comment VARCHAR,
-    PRIMARY KEY(petName, petOwnerEmail, serviceName, categoryName, CaretakerEmail, startDate, endDate)
+    PRIMARY KEY(petName, petOwnerEmail, serviceType, categoryName, CaretakerEmail, startDate, endDate)
 );
