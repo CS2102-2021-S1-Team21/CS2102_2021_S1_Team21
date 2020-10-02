@@ -6,7 +6,7 @@ const caretakers = {
   },
   getCaretaker: async (email) => {
     return baseAPI.get(`caretakers/${encodeURIComponent(email)}`);
-  }
-}
+  },
+};
 
 export default caretakers;
