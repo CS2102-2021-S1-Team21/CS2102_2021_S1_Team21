@@ -1,13 +1,23 @@
-import { Button, Card, CardActions, CardContent, Typography } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import api from '../api';
+import { makeStyles } from '@material-ui/core/styles';
+import { Button, Card, CardActions, CardContent, Typography } from '@material-ui/core';
+import TextField from '@material-ui/core/TextField';
 
 /** This is a dummy component for demo purposes. The actual one will look quite different. */
 const CaretakerProfile = () => {
-  const [caretaker, setCaretaker] = useState({ name: 'Bugs Bunny', email: 'hello@world.org' });
+  const [caretaker, setCaretaker] = useState({ name: 'Bugs Bunny', email: 'hello@world.org', phonenumber: '999', address: 'nus', bio:' i like carrots' });
+
+  makeStyles((theme) => ({
+    root: {
+      '& > *': {
+        margin: theme.spacing(1),
+      },
+    },
+  }));
 
   useEffect(() => {
-    api.caretakers.getCaretaker('notaphoenix@gmail.com').then((res) => {
+    api.caretakers.getCaretaker('asdfasdf@gmail.com').then((res) => {
       setCaretaker(res);
     });
   }, []);
@@ -15,7 +25,7 @@ const CaretakerProfile = () => {
   return (
     <Card>
       <CardContent>
-        <Typography>{'Caretaker Profile'}</Typography>
+        <Typography>{'Pet Owner Profile'}</Typography>
         <Typography color="primary">{`Name: ${caretaker.name}`}</Typography>
         <Typography color="secondary">{`Email: ${caretaker.email}`}</Typography>
       </CardContent>

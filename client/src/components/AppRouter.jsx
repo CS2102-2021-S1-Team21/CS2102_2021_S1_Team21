@@ -4,6 +4,7 @@ import FormTest from '../lab/FormTest';
 import HelloWorld from '../lab/HelloWorld';
 import AuthRouter from './AuthRouter';
 import Leaves from '../pages/leaves/Leaves';
+import EditProfile from '../pages/EditProfile';
 
 const AppRouter = () => {
   return (
@@ -13,6 +14,7 @@ const AppRouter = () => {
         <Route exact path="/hello-world" component={HelloWorld} />
         <Route exact path="/test/forms" component={FormTest} />
         <Route exact path="/myleaves" component={Leaves} />
+        <Route exact path="/editprofile" component={EditProfile} />
 
         {/* Non-authenticated routes */}
         {/* <Route exact path="/login" component={Login} /> */}
