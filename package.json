@@ -1,4 +1,6 @@
 {
+  "name": "petCaringServices",
+  "license": "MIT",
   "devDependencies": {
     "husky": "^4.3.0"
   },
@@ -6,5 +8,8 @@
     "hooks": {
       "pre-push": "cd server && yarn run check && cd ../client && yarn run check"
     }
+  },
+  "dependencies": {
+    "yarn": "^1.22.10"
   }
 }
