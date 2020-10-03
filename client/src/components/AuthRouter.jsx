@@ -17,8 +17,8 @@ const AuthRouter = () => {
   return (
     <Switch>
       {/* <Route path="/pet-owner" component={PetOwnerListing} /> */}
-      <Route path="/pet-owner/:email" component={PetOwnerProfile} />
-      <Route path="/caretakers/:email" component={CaretakerProfile} />
+      <Route exact path="/pet-owner/:email" component={PetOwnerProfile} />
+      <Route exact path="/caretakers/:email" component={CaretakerProfile} />
     </Switch>
   );
 };

@@ -22,7 +22,8 @@ exports.view = async (req, res) => {
       res.json({ error: 'No such caretaker exists' });
       return; // TODO: next()?
     }
-    res.json(result);
+    const user = result.rows[0];
+    res.json(user);
   } catch (err) {
     console.error('ERROR: ', err.message);
     res.json({ error: 'An unexpected error occurred' });

@@ -1,16 +1,18 @@
-import { Button, Card, CardActions, CardContent, Typography } from '@material-ui/core';
+import { Card, CardContent, Typography } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import api from '../api';
 
 /** This is a dummy component for demo purposes. The actual one will look quite different. */
-const PetOwnerProfile = () => {
+const PetOwnerProfile = (props) => {
+  const { match } = props;
+  const handle = match.params.email;
   const [petOwner, setPetOwner] = useState({ name: 'Bugs Bunny', email: 'hello@world.org' });
 
   useEffect(() => {
-    api.petOwners.getPetOwner('notaphoenix@gmail.com').then((res) => {
+    api.petOwners.getPetOwner(handle).then((res) => {
       setPetOwner(res);
     });
-  }, []);
+  });
 
   return (
     <Card>
@@ -19,21 +21,6 @@ const PetOwnerProfile = () => {
         <Typography color="primary">{`Name: ${petOwner.name}`}</Typography>
         <Typography color="secondary">{`Email: ${petOwner.email}`}</Typography>
       </CardContent>
-      <CardActions>
-        <Button
-          size="small"
-          variant="outlined"
-          color="primary"
-          // onClick={() => {
-          //   api.petOwners
-          //     .updateOwner(owner)
-          //     .then((res) => setPetOwner(res))
-          //     .catch((err) => console.err(err));
-          // }}
-        >
-          {'Confirm'}
-        </Button>
-      </CardActions>
     </Card>
   );
 };
