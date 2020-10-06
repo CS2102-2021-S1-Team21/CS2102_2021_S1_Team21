@@ -18,8 +18,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(
   cors({
     // allow CORS for any port on localhost or example-domain.herokuapp.com
+    credentials: true,
     // TODO: replace with actual heroku domain
     origin: /https?:\/\/(localhost:[0-9]{1,5})|(example-domain.herokuapp.com)/,
+    exposedHeaders: ['Set-Cookie'],
   }),
 );
 
@@ -31,9 +33,9 @@ app.use(
     resave: false, // TODO: figure out if this needs to be true
     saveUninitialized: true, // to allow tracking of repeat visitors
     cookie: {
-      maxAge: 60000,
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 1 week
     },
-    // TODO: how does session store work?
+    // TODO: how does session store work? what's a MemoryStore?
   }),
 );
 app.use(passport.initialize());
@@ -45,7 +47,7 @@ app.use('/api', routes); // prepend all routes with '/api'
 // Generic Error Handling
 app.use((err, req, res) => {
   console.error(err.message);
-  res.json({ status: 500, message: 'An unexpected error occurred' });
+  res.status(500).json({ message: 'An unexpected error occurred' });
 });
 
 // -------------------- Server --------------------
