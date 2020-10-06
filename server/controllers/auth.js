@@ -28,18 +28,20 @@ exports.create_session = async (req, res, next) => {
 };
 
 // Logout
-exports.delete_session = (req, res) => {
-  req.logout();
+exports.delete_session = async (req, res) => {
+  await req.logout();
   res.status(200).json({ message: 'Good bye!' });
 };
 
 // Verify session
-// exports.session_info = (req, res) => {
-//   // get user for this session
-//   // get user info from db
-//   // send to frontend
-//   console.log(req);
-// };
+exports.session_info = (req, res) => {
+  if (!req.user) {
+    // TODO: handle expired/ non-existent sessions
+    res.status(500).json({ message: 'An unexpected error occurred' });
+  }
+  const { username, email, name } = req.user;
+  res.status(200).json({ data: { username, email, name } });
+};
 
 // Signup
 exports.create_user = (req, res, next) => {
