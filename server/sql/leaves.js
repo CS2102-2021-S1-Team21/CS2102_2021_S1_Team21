@@ -1,9 +1,0 @@
-const leaves = {};
-
-leaves.queries = {
-  apply:
-    'INSERT INTO applies_for_leave_period (email, startDate, endDate, isEmergency) VALUES ($1, $2, $3, $4) RETURNING *',
-  retrieve: `SELECT *, to_char(startDate, 'dd/MM/yyyy') as start, to_char(endDate, 'dd/MM/yyyy') as end FROM applies_for_leave_period WHERE email LIKE $1 ORDER BY startDate DESC`,
-};
-
-module.exports = leaves;
