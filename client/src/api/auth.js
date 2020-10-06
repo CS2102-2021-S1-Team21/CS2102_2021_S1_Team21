@@ -7,11 +7,16 @@ const auth = {
   },
   logout: async () => {
     try {
-      await baseAPI.delete('logout');
+      const response = await baseAPI.delete('logout');
       removeSessionCookie();
+      return response;
     } catch (error) {
-      console.error(error);
+      console.error(error); // TODO: error handling
+      return Promise.reject(error);
     }
+  },
+  getSessionInfo: async () => {
+    return baseAPI.get('session');
   },
   signup: async (userAttributes) => {
     return baseAPI.post('signup');
