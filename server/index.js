@@ -27,17 +27,22 @@ app.use(
 
 // -------------------- Authentication --------------------
 auth.init(app); // TODO: change to use() pattern
-app.use(
-  session({
-    secret: 'simulator simulator', // process.env.SECRET, // TODO: add 'dotenv' and ENV variables
-    resave: false, // TODO: figure out if this needs to be true
-    saveUninitialized: true, // to allow tracking of repeat visitors
-    cookie: {
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 1 week
-    },
-    // TODO: how does session store work? what's a MemoryStore?
-  }),
-);
+
+const sessionConfig = {
+  secret: 'simulator simulator', // process.env.SECRET, // TODO: add 'dotenv' and ENV variables
+  resave: false, // TODO: figure out if this needs to be true
+  saveUninitialized: true, // to allow tracking of repeat visitors
+  cookie: {
+    httpOnly: false, // allow browser JavaScript to access the cookie
+    maxAge: 24 * 60 * 60 * 1000, // 24 hours
+  },
+  // TODO: how does session store work? what's a MemoryStore?
+};
+if (app.get('env') === 'production') {
+  sessionConfig.cookie.secure = true; // only use cookie over HTTPS
+}
+app.use(session(sessionConfig));
+
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -45,7 +50,9 @@ app.use(passport.session());
 app.use('/api', routes); // prepend all routes with '/api'
 
 // Generic Error Handling
-app.use((err, req, res) => {
+// Note: 4th parameter `next` is required for error-handling middleware
+// eslint-disable-next-line no-unused-vars
+app.use((err, req, res, next) => {
   console.error(err.message);
   res.status(500).json({ message: 'An unexpected error occurred' });
 });
