@@ -1,11 +1,16 @@
+// const bodyParser = require('body-parser');
 const cors = require('cors');
 const express = require('express');
+const session = require('express-session');
+const passport = require('passport');
+
+const auth = require('./auth');
 const routes = require('./routes');
 
 const app = express();
 
-// Middleware
-
+// -------------------- General Setup --------------------
+// app.use(bodyParser.json()); // support parsing of 'application/json' type POST data
 app.use(
   cors({
     // allow CORS for any port on localhost or example-domain.herokuapp.com
@@ -14,16 +19,32 @@ app.use(
   }),
 );
 
-// Routing
+// -------------------- Authentication --------------------
+auth.init(app); // TODO: change to use() pattern
+app.use(
+  session({
+    secret: 'simulator simulator', // process.env.SECRET, // TODO: add 'dotenv' and ENV variables
+    resave: false, // TODO: figure out if this needs to be true
+    saveUninitialized: true, // to allow tracking of repeat visitors
+    cookie: {
+      maxAge: 60000,
+    },
+    // TODO: how does session store work?
+  }),
+);
+app.use(passport.initialize());
+app.use(passport.session());
+
+// -------------------- Routing --------------------
 app.use('/api', routes); // prepend all routes with '/api'
 
 // Generic Error Handling
-app.use((err, req, res, next) => {
-  // TODO: decide structure of error response
-  res.json({ error: 'An unexpected error occurred' });
-  next(err);
+app.use((err, req, res) => {
+  console.error(err.message);
+  res.json({ status: 500, message: 'An unexpected error occurred' });
 });
 
+// -------------------- Server --------------------
 app.listen(8000, () => {
   console.log('Server is listening on port 8000!');
 });
