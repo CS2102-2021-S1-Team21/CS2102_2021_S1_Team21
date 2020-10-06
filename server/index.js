@@ -1,4 +1,4 @@
-// const bodyParser = require('body-parser');
+const bodyParser = require('body-parser');
 const cors = require('cors');
 const express = require('express');
 const session = require('express-session');
@@ -10,7 +10,11 @@ const routes = require('./routes');
 const app = express();
 
 // -------------------- General Setup --------------------
-// app.use(bodyParser.json()); // support parsing of 'application/json' type POST data
+// support parsing of 'application/json' type POST data
+app.use(bodyParser.json());
+// support parsing of 'application/x-www-form-urlencoded' type data
+app.use(bodyParser.urlencoded({ extended: true }));
+
 app.use(
   cors({
     // allow CORS for any port on localhost or example-domain.herokuapp.com
