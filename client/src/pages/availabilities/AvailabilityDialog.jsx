@@ -8,11 +8,12 @@ import DialogActions from '@material-ui/core/DialogActions';
 import { Button, Dialog } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { format } from 'date-fns';
-import formik from 'formik';
+import { Formik, Field } from 'formik';
 import api from '../../api';
 import { DATE_INPUT_FORMAT } from '../../utilities/datetime';
+import FormDatePicker from '../../components/forms/FormDatePicker';
 
-const LeaveDialogContent = ({ open, setOpen }) => {
+const AvailabilityDialog = ({ open, setOpen }) => {
   const [selectedDateFrom, handleDateChangeFrom] = useState(new Date());
   const [selectedDateTo, handleDateChangeTo] = useState(new Date());
 
@@ -23,43 +24,34 @@ const LeaveDialogContent = ({ open, setOpen }) => {
   const handleApply = async (e) => {
     e.preventDefault();
     setOpen(false);
-    try {
-      const body = {
-        startDate: selectedDateFrom,
-        endDate: selectedDateTo,
-        email: 'wincent@gmail.com',
-        isEmergency: 'FALSE',
-      };
-      await api.leaves.applyLeave(body);
-      console.log(body.startDate);
-    } catch (err) {
-      console.log(err.message);
-    }
+    // try {
+    //   const body = {
+    //     startDate: selectedDateFrom,
+    //     endDate: selectedDateTo,
+    //     email: 'wincent@gmail.com',
+    //     isEmergency: 'FALSE',
+    //   };
+    //   await api.leaves.applyLeave(body);
+    //   console.log(body.startDate);
+    // } catch (err) {
+    //   console.log(err.message);
+    // }
   };
 
   return (
     <Dialog open={open} onClose={handleCancel} aria-labelledby="form-dialog-title">
-      <DialogTitle id="form-dialog-title">{'Leave Form'}</DialogTitle>
+      <DialogTitle id="form-dialog-title">{'Availability'}</DialogTitle>
       <DialogContent>
         <DialogContentText>{'From:\r'}</DialogContentText>
-        <KeyboardDatePicker
-          clearable
-          value={selectedDateFrom}
-          onChange={(date) => handleDateChangeFrom(date)}
-          minDate={new Date()}
-          format="yyyy/MM/dd"
-        />
+        <Formik>
+          <Field name="selectedDateFrom" label="Start Date" component={FormDatePicker} />
+        </Formik>
       </DialogContent>
       <DialogContent>
         <DialogContentText>{'Until:\r'}</DialogContentText>
-        <KeyboardDatePicker
-          clearable
-          value={selectedDateTo}
-          onChange={(date) => handleDateChangeTo(date)}
-          minDate={selectedDateFrom}
-          minDateMessage="Date should not be earlier than start Date"
-          format="yyyy/MM/dd"
-        />
+        <Formik>
+          <Field name="selectedDateTo" label="End Date" component={FormDatePicker} />
+        </Formik>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleCancel} color="primary">
@@ -73,14 +65,4 @@ const LeaveDialogContent = ({ open, setOpen }) => {
   );
 };
 
-LeaveDialogContent.propTypes = {
-  open: PropTypes.bool,
-  setOpen: PropTypes.func,
-};
-
-LeaveDialogContent.defaultProps = {
-  open: false,
-  setOpen: () => null,
-};
-
-export default LeaveDialogContent;
+export default AvailabilityDialog;

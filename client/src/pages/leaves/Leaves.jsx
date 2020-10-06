@@ -1,4 +1,4 @@
-import { Box, Button } from '@material-ui/core';
+import { Button, Card } from '@material-ui/core';
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
@@ -63,7 +63,7 @@ const Leaves = () => {
   }
 
   return (
-    <Box>
+    <Card>
       <h1>{'Leaves taken: __ days\r'}</h1>
       <br />
       <Button variant="contained" color="primary" onClick={handleClickOpen} style={style}>
@@ -92,7 +92,7 @@ const Leaves = () => {
           </TableBody>
         </Table>
       </TableContainer>
-    </Box>
+    </Card>
   );
 };
 
