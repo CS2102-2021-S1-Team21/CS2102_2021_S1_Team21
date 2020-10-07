@@ -36,7 +36,7 @@ const CaretakerProfile = (props) => {
   useEffect(() => {
     fetchCaretaker();
     setServices(
-      getServices().map((s) => {
+      fetchServices().map((s) => {
         if (!s.message) {
           s.message = `${s.name} for ${s.petCategory}`; // eslint-disable-line no-param-reassign
         }
