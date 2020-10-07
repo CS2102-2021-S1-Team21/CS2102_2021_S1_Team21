@@ -1,23 +1,30 @@
 import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
+import Cookies from 'js-cookie';
+
+import api from '../api';
+import Loading from './Loading';
 import PetOwnerProfile from '../pages/PetOwnerProfile';
+import { getSessionCookie } from '../utilities/sessionCookie';
+import NavBar from './NavBar';
 
 const AuthRouter = () => {
-  // TODO: Check if user is authenticated
-  // use cookie + express-session on backend
-  const isAuthenticated = true;
+  // Determine whether a user is logged in or not by whether the session cookie is set
+  // Assumption: session cookie is cleared properly upon logout
+  // TODO: check whether cookie expiry works correctly
+  const session = getSessionCookie();
 
-  // If authentication fails, redirect to login
-  if (!isAuthenticated) {
+  if (!session) {
     return <Redirect to="/login" />;
   }
 
-  // Otherwise, go to the selected page
   return (
-    <Switch>
-      {/* <Route path="/pet-owner" component={PetOwnerListing} /> */}
-      <Route path="/pet-owner/:email" component={PetOwnerProfile} />
-    </Switch>
+    <NavBar>
+      <Switch>
+        {/* <Route path="/pet-owner" component={PetOwnerListing} /> */}
+        <Route path="/pet-owner/:email" component={PetOwnerProfile} />
+      </Switch>
+    </NavBar>
   );
 };
 
