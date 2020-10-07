@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Card, Grid, Chip, Box, CardContent, Container, Typography } from '@material-ui/core';
+import { Card, Chip, Box, CardContent, Container, Typography } from '@material-ui/core';
 import api from '../api';
 import ReviewsSection from '../lab/ReviewsSection';
 
@@ -69,7 +69,7 @@ const CaretakerProfile = (props) => {
 
           <Typography variant="h6">{'Services I offer'}</Typography>
           <Box mt={1}>{services}</Box>
-          <ReviewsSection handle={handle}/>
+          <ReviewsSection handle={handle} />
         </CardContent>
       </Card>
     </Container>
