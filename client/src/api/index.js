@@ -1,3 +1,4 @@
+import auth from './auth';
 import petOwners from './petOwners';
 
 /* ====================================
@@ -6,6 +7,7 @@ import petOwners from './petOwners';
  */
 
 const api = {
+  auth,
   petOwners,
   // pets,
   // caretakers,

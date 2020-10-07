@@ -1,23 +1,49 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
+import api from '../api';
 import PetOwnerProfile from '../pages/PetOwnerProfile';
+import { getSessionCookie } from '../utilities/sessionCookie';
+import { StoreProvider } from '../utilities/store';
+import Loading from './Loading';
+import NavBar from './NavBar';
 
 const AuthRouter = () => {
-  // TODO: Check if user is authenticated
-  // use cookie + express-session on backend
-  const isAuthenticated = true;
+  const sessionCookie = getSessionCookie();
+  const [user, setUser] = useState(null);
+  const [requestFailed, setRequestFailed] = useState(false);
 
-  // If authentication fails, redirect to login
-  if (!isAuthenticated) {
+  const getLoggedInUser = async () => {
+    api.auth
+      .getSessionInfo()
+      .then((response) => {
+        setUser(response.data);
+      })
+      .catch(() => setRequestFailed(true));
+  };
+
+  // Determine whether a user is logged in or not by whether the session cookie exists
+  // Assumption: session cookie is cleared properly upon logout
+  // TODO: check whether cookie expiry works correctly
+  if (!sessionCookie || requestFailed) {
     return <Redirect to="/login" />;
   }
 
-  // Otherwise, go to the selected page
+  // If there's an existing session, make sure the user is loaded before showing the page
+  // TODO: error handling
+  if (!user) {
+    getLoggedInUser();
+    return <Loading />;
+  }
+
   return (
-    <Switch>
-      {/* <Route path="/pet-owner" component={PetOwnerListing} /> */}
-      <Route path="/pet-owner/:email" component={PetOwnerProfile} />
-    </Switch>
+    <StoreProvider value={{ user }}>
+      <NavBar>
+        <Switch>
+          {/* <Route path="/pet-owner" component={PetOwnerListing} /> */}
+          <Route path="/pet-owner/:email" component={PetOwnerProfile} />
+        </Switch>
+      </NavBar>
+    </StoreProvider>
   );
 };
 

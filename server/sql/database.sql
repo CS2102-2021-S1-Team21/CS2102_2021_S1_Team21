@@ -12,5 +12,17 @@ CREATE TABLE pet_owners
   email VARCHAR PRIMARY KEY,
   name VARCHAR NOT NULL,
 );
-INSERT INTO pet_owners VALUES ('notaphoenix@gmail.com', 'mushu');
-INSERT INTO pet_owners VALUES ('theexplorer@gmail.com', 'dora');
+
+CREATE TABLE AppUser
+(
+  username VARCHAR PRIMARY KEY,
+  email VARCHAR NOT NULL UNIQUE,
+  passwordDigest VARCHAR NOT NULL,
+  name VARCHAR NOT NULL,
+  deletedAt TIMESTAMP,
+  bio VARCHAR,
+  phoneNumber VARCHAR NOT NULL,
+  address VARCHAR NOT NULL,
+  postalCode VARCHAR NOT NULL
+);
+
