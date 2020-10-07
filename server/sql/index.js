@@ -3,3 +3,4 @@
 exports.petOwners = require('./petOwners');
 exports.leaves = require('./leaves');
 exports.caretakers = require('./caretakers');
+exports.reviews = require('./reviews');
