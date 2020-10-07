@@ -16,7 +16,7 @@ const PetOwnerProfile = (props) => {
 
   useEffect(() => {
     fetchPetOwner();
-  }, []);
+  });
 
   return (
     <Card>
