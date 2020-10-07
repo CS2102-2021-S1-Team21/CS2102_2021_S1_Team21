@@ -3,11 +3,11 @@ import baseAPI from './baseAPI';
 
 const auth = {
   login: async ({ username, password }) => {
-    return baseAPI.post('login', { username, password });
+    return baseAPI.post('sessions', { username, password });
   },
   logout: async () => {
     try {
-      const response = await baseAPI.delete('logout');
+      const response = await baseAPI.delete('sessions');
       removeSessionCookie();
       return response;
     } catch (error) {
@@ -16,10 +16,10 @@ const auth = {
     }
   },
   getSessionInfo: async () => {
-    return baseAPI.get('session');
+    return baseAPI.get('sessions');
   },
   signup: async (userAttributes) => {
-    return baseAPI.post('signup');
+    return baseAPI.post('users');
   },
 };
 

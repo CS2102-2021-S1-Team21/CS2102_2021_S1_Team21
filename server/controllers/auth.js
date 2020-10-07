@@ -33,13 +33,14 @@ exports.delete_session = async (req, res) => {
   res.status(200).json({ message: 'Good bye!' });
 };
 
-// Verify session
+// Session info
 exports.session_info = (req, res) => {
   if (!req.user) {
     // TODO: handle expired/ non-existent sessions
     res.status(500).json({ message: 'An unexpected error occurred' });
   }
   const { username, email, name } = req.user;
+  // TODO: permissions
   res.status(200).json({ data: { username, email, name } });
 };
 
