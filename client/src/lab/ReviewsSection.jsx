@@ -11,6 +11,7 @@ const ReviewsSection = (props) => {
 
   // const [average, setAverage] = useState();
   const [reviews, setReviews] = useState([]);
+  const [avg, setAverage] = useState(5);
 
   makeStyles((theme) => ({
     root: {
@@ -21,16 +22,14 @@ const ReviewsSection = (props) => {
   }));
 
   useEffect(() => {
-    api.reviews
-      .getReview(handle)
-      .then((res) => {
-        setReviews(res);
-      })
-      .then();
+    api.reviews.getReview(handle).then((res) => {
+      setReviews(res[1]);
+      setAverage(res[0]);
+    });
   }, [handle]);
 
   const columns = [
-    { field: 'id', headerName: 'ID', width: 70 },
+    { field: 'id', headerName: 'ID', width: 70, hide: true },
     {
       field: 'postedon',
       headerName: 'Date posted',
@@ -60,9 +59,9 @@ const ReviewsSection = (props) => {
   return (
     <Box mt={3}>
       <Typography variant="h5">{'Reviews'}</Typography>
-      <Box fontWeight={5} component="span">
+      <Box display="flex">
         <Typography variant="subtitle1">{'Average Rating: '}</Typography>
-        <Rating name="read-only" value={3} readOnly />
+        <Rating name="read-only" value={avg} readOnly />
       </Box>
       <div style={{ height: 525, width: '100%' }}>
         <DataGrid

@@ -22,7 +22,9 @@ exports.view = async (req, res) => {
       res.json({ error: 'Reviews for this caretaker do not exist' });
       return; // TODO: next()?
     }
-    res.json(result.rows);
+    const sumOfRatings = result.rows.reduce((a, b) => a + b.rating, 0);
+    const avg = sumOfRatings / result.rows.length;
+    res.json([avg, result.rows]);
   } catch (err) {
     console.error('ERROR: ', err.message);
     res.json({ error: 'An unexpected error occurred' });
