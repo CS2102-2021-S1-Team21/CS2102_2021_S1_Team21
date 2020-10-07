@@ -19,17 +19,22 @@ const CaretakerProfile = (props) => {
     },
   }));
 
-  useEffect(() => {
-    api.caretakers.getCaretaker(handle).then((res) => {
+  const fetchCaretaker = async () => {
+    api.petOwners.getCaretaker(handle).then((res) => {
       setCaretaker(res);
     });
-    function getServices() {
-      return [
-        { name: 'grooming', petCategory: 'dog' },
-        { name: 'grooming', petCategory: 'cat' },
-        { name: 'walk', petCategory: 'dog' },
-      ];
-    }
+  };
+
+  function fetchServices() {
+    return [
+      { name: 'grooming', petCategory: 'dog' },
+      { name: 'grooming', petCategory: 'cat' },
+      { name: 'walk', petCategory: 'dog' },
+    ];
+  }
+
+  useEffect(() => {
+    fetchCaretaker();
     setServices(
       getServices().map((s) => {
         if (!s.message) {
