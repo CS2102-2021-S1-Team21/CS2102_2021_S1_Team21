@@ -47,7 +47,7 @@ const CaretakerProfile = (props) => {
         );
       }),
     );
-  }, [handle]);
+  });
 
   return (
     <Container>
