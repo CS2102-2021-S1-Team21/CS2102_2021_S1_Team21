@@ -56,7 +56,7 @@ const CaretakerProfile = (props) => {
       <Card>
         <CardContent>
           <Box mb={3}>
-            <Typography style={{ color: 'red' }} variant="h4">{`${caretaker.name}`}</Typography>
+            <Typography variant="h4">{`${caretaker.name}`}</Typography>
           </Box>
           <Typography variant="h6">{'About'}</Typography>
           <Typography paragraph>{`${caretaker.bio}`}</Typography>

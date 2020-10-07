@@ -64,9 +64,10 @@ const ReviewsSection = (props) => {
         <Typography variant="subtitle1">{'Average Rating: '}</Typography>
         <Rating name="read-only" value={3} readOnly />
       </Box>
-      <div style={{ height: 600, width: '100%' }}>
+      <div style={{ height: 525, width: '100%' }}>
         <DataGrid
-          rowHeight={80}
+          rowHeight={90}
+          headerHeight={0}
           disableSelectionOnClick="true"
           rows={reviews}
           columns={columns}

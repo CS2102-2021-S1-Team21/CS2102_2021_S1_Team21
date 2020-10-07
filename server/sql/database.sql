@@ -59,3 +59,7 @@ INSERT INTO Tagged_To_Review VALUES(
   'cat', 'coconut@gmail.com', 'feed cat', 'cats', 'wincent@gmail.com', '1/1/2020', '1/1/2020', '1/2/2020', 3, 'pretty okay') ON conflict DO nothing;
 INSERT INTO Tagged_To_Review VALUES(
   'cat', 'coconut@gmail.com', 'feed cat', 'cats', 'wincent@gmail.com', '1/1/2020', '1/1/2020', '1/2/2020', 4, 'pretty good') ON conflict DO nothing;
+  INSERT INTO Tagged_To_Review VALUES(
+  'cat', 'ginger@gmail.com', 'feed cat', 'cats', 'wincent@gmail.com', '1/1/2020', '1/1/2020', '1/3/2020', 4, 'pretty good') ON conflict DO nothing;
+    INSERT INTO Tagged_To_Review VALUES(
+  'cat', 'apple@gmail.com', 'feed cat', 'cats', 'wincent@gmail.com', '1/1/2020', '1/1/2020', '1/3/2020', 4, 'pretty good') ON conflict DO nothing;
