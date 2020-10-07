@@ -1,3 +1,4 @@
+import auth from './auth';
 import petOwners from './petOwners';
 import leaves from './leaves';
 
@@ -7,6 +8,7 @@ import leaves from './leaves';
  */
 
 const api = {
+  auth,
   petOwners,
   leaves,
   // pets,

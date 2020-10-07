@@ -6,10 +6,14 @@ import api from '../api';
 const PetOwnerProfile = () => {
   const [petOwner, setPetOwner] = useState({ name: 'Bugs Bunny', email: 'hello@world.org' });
 
-  useEffect(() => {
+  const fetchPetOwner = async () => {
     api.petOwners.getPetOwner('notaphoenix@gmail.com').then((res) => {
       setPetOwner(res);
     });
+  };
+
+  useEffect(() => {
+    fetchPetOwner();
   }, []);
 
   return (
@@ -24,12 +28,13 @@ const PetOwnerProfile = () => {
           size="small"
           variant="outlined"
           color="primary"
-          // onClick={() => {
-          //   api.petOwners
-          //     .updateOwner(owner)
-          //     .then((res) => setPetOwner(res))
-          //     .catch((err) => console.err(err));
-          // }}
+          onClick={() => {
+            fetchPetOwner();
+            // api.petOwners
+            //   .updateOwner(owner)
+            //   .then((res) => setPetOwner(res))
+            //   .catch((err) => console.err(err));
+          }}
         >
           {'Confirm'}
         </Button>
