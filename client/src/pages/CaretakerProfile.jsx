@@ -7,15 +7,8 @@ import ReviewsSection from '../lab/ReviewsSection';
 /** This is a dummy component for demo purposes. The actual one will look quite different. */
 const CaretakerProfile = (props) => {
   const { match } = props;
-  const handle = match.params.email;
-  const [caretaker, setCaretaker] = useState({
-    // name: 'Bugs Bunny',
-    // email: 'hello@world.org',
-    // phonenumber: '999',
-    // address: 'nus',
-    // bio: ' i like carrots',
-    //
-  });
+  const handle = match.params.username;
+  const [caretaker, setCaretaker] = useState({});
   const [services, setServices] = useState([]);
 
   makeStyles((theme) => ({

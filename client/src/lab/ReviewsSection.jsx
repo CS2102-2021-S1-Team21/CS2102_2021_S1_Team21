@@ -35,7 +35,7 @@ const ReviewsSection = (props) => {
       headerName: 'Date posted',
       width: 130,
     },
-    { field: 'caretakeremail', headerName: 'From', width: 170 },
+    { field: 'caretakerUsername', headerName: 'From', width: 170 },
     {
       field: 'servicetype',
       headerName: 'Service',

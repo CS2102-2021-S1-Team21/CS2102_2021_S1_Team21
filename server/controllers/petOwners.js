@@ -15,14 +15,14 @@ exports.index = async (req, res, next) => {
 };
 
 exports.new = async (req, res, next) => {
-  const { name, email } = req.body;
+  const { name, username } = req.body;
   try {
-    const result = await db.query('INSERT INTO pet_owners VALUES ($1, $2)', [name, email]);
+    const result = await db.query('INSERT INTO pet_owners VALUES ($1, $2)', [name, username]);
     res.json(result);
   } catch (err) {
     // handle duplicate key value error
     if (err.code === '23505') {
-      res.status(400).json({ message: 'Email already exists' });
+      res.status(400).json({ message: 'Username is taken' });
       return;
     }
     next(err);
@@ -30,9 +30,9 @@ exports.new = async (req, res, next) => {
 };
 
 exports.view = async (req, res, next) => {
-  const { email } = req.params;
+  const { username } = req.params;
   try {
-    const result = await db.query(sql.petOwners.queries.view, [email]);
+    const result = await db.query(sql.petOwners.queries.view, [username]);
     if (result.rowCount === 0) {
       res.status(404).json({ message: 'Pet owner not found' });
       return;

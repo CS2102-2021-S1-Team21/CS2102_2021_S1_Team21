@@ -15,9 +15,9 @@ exports.index = async (req, res) => {
 };
 
 exports.view = async (req, res) => {
-  const { email } = req.params;
+  const { username } = req.params;
   try {
-    const result = await db.query(sql.reviews.queries.view, [email]);
+    const result = await db.query(sql.reviews.queries.view, [username]);
     if (result.rowCount === 0) {
       res.json({ error: 'Reviews for this caretaker do not exist' });
       return; // TODO: next()?

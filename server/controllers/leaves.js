@@ -5,9 +5,9 @@ const sql = require('../sql');
 
 exports.apply = async (req, res) => {
   try {
-    const { email, startDate, endDate, isEmergency } = req.body;
+    const { username, startDate, endDate, isEmergency } = req.body;
     const result = await db.query(sql.leaves.queries.apply, [
-      email,
+      username,
       startDate,
       endDate,
       isEmergency,
@@ -20,8 +20,8 @@ exports.apply = async (req, res) => {
 
 exports.retrieve = async (req, res) => {
   try {
-    const { email } = req.params;
-    const result = await db.query(sql.leaves.queries.retrieve, [email]);
+    const { username } = req.params;
+    const result = await db.query(sql.leaves.queries.retrieve, [username]);
     if (result.rowCount === 0) {
       res.json({ error: 'You do not have any past leave application' });
       return; // TODO: next()?

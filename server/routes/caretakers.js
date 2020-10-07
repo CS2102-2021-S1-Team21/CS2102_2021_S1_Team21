@@ -4,6 +4,6 @@ const caretakers = require('../controllers/caretakers');
 const router = express.Router();
 
 router.get('/', caretakers.index);
-router.get('/:email', caretakers.view);
+router.get('/:username', caretakers.view);
 
 module.exports = router;

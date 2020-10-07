@@ -4,8 +4,8 @@ const reviews = {
   getReviews: async () => {
     return baseAPI.get('reviews');
   },
-  getReview: async (email) => {
-    return baseAPI.get(`reviews/${email}`);
+  getReview: async (username) => {
+    return baseAPI.get(`reviews/${username}`);
   },
 };
 

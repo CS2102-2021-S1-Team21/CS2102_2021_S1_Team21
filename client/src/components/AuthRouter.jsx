@@ -41,8 +41,8 @@ const AuthRouter = () => {
       <NavBar>
         <Switch>
           {/* <Route path="/pet-owner" component={PetOwnerListing} /> */}
-          <Route path="/pet-owner/:email" component={PetOwnerProfile} />
-          <Route path="/caretakers/:email" component={CaretakerProfile} />
+          <Route path="/pet-owner/:username" component={PetOwnerProfile} />
+          <Route path="/caretakers/:username" component={CaretakerProfile} />
         </Switch>
       </NavBar>
     </StoreProvider>

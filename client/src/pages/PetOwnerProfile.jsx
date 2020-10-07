@@ -5,8 +5,12 @@ import api from '../api';
 /** This is a dummy component for demo purposes. The actual one will look quite different. */
 const PetOwnerProfile = (props) => {
   const { match } = props;
-  const handle = match.params.email;
-  const [petOwner, setPetOwner] = useState({ name: 'Bugs Bunny', email: 'hello@world.org' });
+  const handle = match.params.username;
+  const [petOwner, setPetOwner] = useState({
+    name: 'Bugs Bunny',
+    username: 'bugss',
+    email: 'hello@world.org',
+  });
 
   const fetchPetOwner = async () => {
     api.petOwners.getPetOwner(handle).then((res) => {
