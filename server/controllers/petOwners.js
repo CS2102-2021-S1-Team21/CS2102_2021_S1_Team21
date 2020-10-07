@@ -21,7 +21,7 @@ exports.new = async (req, res, next) => {
   } catch (err) {
     // handle duplicate key value error
     if (err.code === '23505') {
-      res.status(400).json({ message: 'Email already exists' });
+      res.status(400).json({ error: 'Email already exists' });
       return;
     }
     next(err);
@@ -33,7 +33,7 @@ exports.view = async (req, res, next) => {
   try {
     const result = await db.query('SELECT * FROM pet_owners WHERE email LIKE $1', [email]);
     if (result.rowCount === 0) {
-      res.status(404).json({ message: 'Pet owner not found' });
+      res.status(404).json({ error: 'Pet owner not found' });
       return;
     }
     res.json(result);
