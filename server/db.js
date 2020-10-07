@@ -1,5 +1,4 @@
 const { Pool } = require('pg');
-const fs = require('fs');
 
 // to be included inside .gitignore once everyone has set up
 // TODO: use environment variables
