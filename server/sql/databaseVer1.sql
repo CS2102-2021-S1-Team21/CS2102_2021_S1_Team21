@@ -26,7 +26,7 @@ CREATE TABLE Part_Time_Employee(
     email VARCHAR PRIMARY KEY REFERENCES Caretaker(email) ON DELETE CASCADE,
 )
 
-'''
+/*
 CREATE TABLE Full_Time_Employee(
     email VARCHAR PRIMARY KEY,
     passwordDigest VARCHAR NOT NULL,
@@ -50,7 +50,7 @@ CREATE TABLE Part_Time_Employee(
     postalCode VARCHAR NOT NULL,
     totalAverageRating INTEGER
 )
-'''
+*/
 CREATE TABLE Pet_Owner(
     email VARCHAR PRIMARY KEY,
     passwordDigest VARCHAR NOT NULL,
@@ -79,9 +79,9 @@ CREATE TABLE Credit_Card(
     cvvCode INTEGER NOT NULL
 )
 
-''' 
-check if this satisfy key constraints and total participation constraint
-'''
+
+/* check if this satisfy key constraints and total participation constraint */
+
 
 CREATE TABLE Register(
     number INTEGER REFERENCES Credit_Card(number),
@@ -125,6 +125,7 @@ CREATE TABLE Provides(
     email VARCHAR REFERENCES Caretaker(email),
     PRIMARY KEY(name, categoryName, email)
 )
+/*
 '''
 2 provides table. as no "Caretaker" table due to covering constriants
 therefore can only reference FK from PT_employee and FT_employee separately
@@ -144,6 +145,7 @@ CREATE TABLE Provides_FT(
     PRIMARY KEY(name, categoryName, email)
 )
 '''
+*/
 
 CREATE TABLE Records_Monthly_Summary(
     email VARCHAR REFERENCES Caretaker(email) ON DELETE CASCADE,
@@ -155,7 +157,7 @@ CREATE TABLE Records_Monthly_Summary(
     PRIMARY KEY(email, monthYear)
 )
 
-
+/*
 '''same issue as Provides'''
 '''
 CREATE TABLE Records_Monthly_Summary_PT(
@@ -178,6 +180,7 @@ CREATE TABLE Records_Monthly_Summary_FT(
     PRIMARY KEY(email, monthYear)
 )
 '''
+*/
 
 CREATE TABLE Indicates_Availability_Period(
     email VARCHAR REFERENCES Part_Time_Employee(email) ON DELETE CASCADE,
@@ -191,7 +194,7 @@ CREATE TABLE Applies_For_Leave_Period(
     startDate DATE,
     endDate DATE,
     isEmergency BOOLEAN NOT NULL,
-    isApproved BOOLEAN SET DEFAULT FALSE,
+    isApproved BOOLEAN DEFAULT FALSE,
     PRIMARY KEY(email, startDate, endDate)
 )
 
@@ -208,6 +211,7 @@ CREATE TABLE Bidded_For_Job(
     remarks VARCHAR,
     PRIMARY KEY(pet_name, email, serviceName, categoryName, email, startDate, endDate)
 )
+/*
 '''same issue regarding the covering constraints'''
 '''transferType, TransferDateTime and remarks need to be NOT NULL?'''
 '''
@@ -239,6 +243,7 @@ CREATE TABLE Bidded_For_Job_FT(
     PRIMARY KEY(pet_name, email, serviceName, categoryName, email, startDate, endDate)
 )
 '''
+*/
 
 CREATE TABLE Financed_By_Transaction(
     petName VARCHAR REFERENCES Pet(name) ON DELETE CASCADE,
@@ -249,12 +254,13 @@ CREATE TABLE Financed_By_Transaction(
     startDate DATE REFERENCES Bidded_For_Job(startDate) ON DELETE CASCADE,
     endDate DATE REFERENCES Bidded_For_Job(endDate) ON DELETE CASCADE,
     transactionDateTime DATETIME,
-    isVerified BOOLEAN SET DEFAULT FALSE,
+    isVerified BOOLEAN DEFAULT FALSE,
     paymentMethod VARCHAR NOT NULL,
     totalAmount DECIMAL(10,2) NOT NULL,
     PRIMARY KEY(petName, PetOwnerEmail, serviceName, categoryName, CaretakerEmail, startDate, endDate, transactionDateTime)
 )
 
+/*
 '''dont know how to show key constraint of jobs here, same for tagged to review'''
 '''
 CREATE TABLE Financed_By_Transaction_PT(
@@ -287,6 +293,7 @@ CREATE TABLE Financed_By_Transaction_FT(
     PRIMARY KEY(pet_name, email, serviceName, categoryName, email, startDate, endDate, transactionDateTime)
 )
 '''
+*/
 
 CREATE TABLE Tagged_To_Review(
     petName VARCHAR REFERENCES Pet(name) ON DELETE CASCADE,
@@ -302,6 +309,8 @@ CREATE TABLE Tagged_To_Review(
     comment VARCHAR,
     PRIMARY KEY(petName, PetOwnerEmail, serviceName, categoryName, CaretakerEmail, startDate, endDate, transactionDateTime, createdAt)
 )
+
+/*
 '''
 CREATE TABLE Tagged_To_Review_PT(
     petName VARCHAR REFERENCES Pet(name) ON DELETE CASCADE,
@@ -333,3 +342,4 @@ CREATE TABLE Tagged_To_Review_FT(
     PRIMARY KEY(petName, email, serviceName, categoryName, email, startDate, endDate, transactionDateTime, createdAt)
 )
 '''
+*/
