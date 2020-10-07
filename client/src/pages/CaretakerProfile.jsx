@@ -39,7 +39,9 @@ const CaretakerProfile = (props) => {
     }
     setServices(
       getServices().map((s) => {
-        s.message = s.name + ' for ' + s.petCategory;
+        if (!s.message) {
+          s.message = `${s.name} for ${s.petCategory}`; // eslint-disable-line no-param-reassign
+        }
         return (
           <Box component="span" mr={1}>
             <Chip label={s.message} />
@@ -67,6 +69,7 @@ const CaretakerProfile = (props) => {
 
           <Typography variant="h6">{'Services I offer'}</Typography>
           <Box mt={1}>{services}</Box>
+          <ReviewsSection handle={handle}/>
         </CardContent>
       </Card>
     </Container>
