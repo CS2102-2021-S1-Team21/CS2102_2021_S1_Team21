@@ -3,8 +3,10 @@ const cors = require('cors');
 const express = require('express');
 const session = require('express-session');
 const passport = require('passport');
+const PGStore = require('connect-pg-simple')(session);
 
 const auth = require('./auth');
+const pool = require('./db');
 const routes = require('./routes');
 
 const app = express();
@@ -26,17 +28,17 @@ app.use(
 );
 
 // -------------------- Authentication --------------------
-auth.init(app); // TODO: change to use() pattern
+auth.init(app);
 
 const sessionConfig = {
+  store: new PGStore({ pool }),
   secret: 'simulator simulator', // process.env.SECRET, // TODO: add 'dotenv' and ENV variables
-  resave: false, // TODO: figure out if this needs to be true
+  resave: false, // PGStore supports the `touch` method
   saveUninitialized: true, // to allow tracking of repeat visitors
   cookie: {
     httpOnly: false, // allow browser JavaScript to access the cookie
     maxAge: 24 * 60 * 60 * 1000, // 24 hours
   },
-  // TODO: how does session store work? what's a MemoryStore?
 };
 if (app.get('env') === 'production') {
   sessionConfig.cookie.secure = true; // only use cookie over HTTPS
