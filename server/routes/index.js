@@ -1,22 +1,26 @@
-const express = require('express');
+const router = require('express').Router();
+
+const auth = require('./auth');
+const { ensureAuthenticated } = require('../auth/middleware');
 const petOwners = require('./petOwners');
 const leaves = require('./leaves');
 const caretakers = require('./caretakers');
 const reviews = require('./reviews');
 
-const router = express.Router();
+router.use('/', auth);
 
 // Routes
 
-router.use('/pet-owners', petOwners);
-router.use('/leaves', leaves);
-router.use('/caretakers', caretakers);
-router.use('/reviews', reviews);
+router.use('/pet-owners', ensureAuthenticated, petOwners);
+router.use('/leaves', ensureAuthenticated, leaves);
+router.use('/caretakers', ensureAuthenticated, caretakers);
+router.use('/reviews', ensureAuthenticated, reviews);
+router.use('/pet-owners', ensureAuthenticated, petOwners);
 
-// Example routes, to be removed
+// Catch-all route (used for error handling)
 
 router.get('/', (req, res) => {
-  res.json({ text: 'Hello World!' });
+  res.status(401).json({ message: 'Not logged in' }); // TODO: not needed here
 });
 
 module.exports = router;

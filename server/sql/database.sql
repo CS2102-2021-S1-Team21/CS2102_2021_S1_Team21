@@ -63,3 +63,17 @@ INSERT INTO Tagged_To_Review VALUES(
   'cat', 'ginger@gmail.com', 'feed cat', 'cats', 'wincent@gmail.com', '1/1/2020', '1/1/2020', '1/3/2020', 4, 'pretty good') ON conflict DO nothing;
 INSERT INTO Tagged_To_Review VALUES(
   'cat', 'apple@gmail.com', 'feed cat', 'cats', 'wincent@gmail.com', '1/1/2020', '1/1/2020', '1/3/2020', 4, 'pretty good') ON conflict DO nothing;
+  
+CREATE TABLE AppUser
+(
+  username VARCHAR PRIMARY KEY,
+  email VARCHAR NOT NULL UNIQUE,
+  passwordDigest VARCHAR NOT NULL,
+  name VARCHAR NOT NULL,
+  deletedAt TIMESTAMP,
+  bio VARCHAR,
+  phoneNumber VARCHAR NOT NULL,
+  address VARCHAR NOT NULL,
+  postalCode VARCHAR NOT NULL
+);
+

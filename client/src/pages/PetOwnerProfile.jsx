@@ -8,11 +8,15 @@ const PetOwnerProfile = (props) => {
   const handle = match.params.email;
   const [petOwner, setPetOwner] = useState({ name: 'Bugs Bunny', email: 'hello@world.org' });
 
-  useEffect(() => {
+  const fetchPetOwner = async () => {
     api.petOwners.getPetOwner(handle).then((res) => {
       setPetOwner(res);
     });
-  });
+  };
+
+  useEffect(() => {
+    fetchPetOwner();
+  }, []);
 
   return (
     <Card>
@@ -21,6 +25,22 @@ const PetOwnerProfile = (props) => {
         <Typography color="primary">{`Name: ${petOwner.name}`}</Typography>
         <Typography color="secondary">{`Email: ${petOwner.email}`}</Typography>
       </CardContent>
+      <CardActions>
+        <Button
+          size="small"
+          variant="outlined"
+          color="primary"
+          onClick={() => {
+            fetchPetOwner();
+            // api.petOwners
+            //   .updateOwner(owner)
+            //   .then((res) => setPetOwner(res))
+            //   .catch((err) => console.err(err));
+          }}
+        >
+          {'Confirm'}
+        </Button>
+      </CardActions>
     </Card>
   );
 };
