@@ -8,6 +8,8 @@ import axios from 'axios';
 const baseAPI = axios.create({
   // TODO: use environment variables
   baseURL: 'http://localhost:8000/api',
+  withCredentials: true, // to allow cookies
+  validateStatus: (status) => status >= 200 && status < 500, // allow status codes 400+ to be received by application
 });
 
 // TODO: error handling
@@ -29,7 +31,8 @@ baseAPI.interceptors.response.use(
         }`,
       );
     }
-    return response.data; // ignore other attributes (TODO: decide if this should be elsewhere)
+    return { ...response.data, status: response.status }; // ignore other attributes
+    // TODO: manually handle error status codes (show message) then throw error (instead of returning it as a response)
   },
   (error) => {
     console.error(error);
