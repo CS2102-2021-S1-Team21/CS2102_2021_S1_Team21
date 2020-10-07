@@ -28,7 +28,7 @@ exports.create_session = async (req, res, next) => {
 
 // Logout
 exports.delete_session = async (req, res) => {
-  await req.logout();
+  await Promise.all([req.session.destroy(), req.logout()]);
   res.status(200).json({ message: 'Good bye!' });
 };
 
