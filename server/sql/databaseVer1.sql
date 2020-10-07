@@ -47,6 +47,7 @@ CREATE TABLE Pet(
     breed VARCHAR,
     deletedAt TIMESTAMP,
     gender gender,
+    categoryName VARCHAR NOT NULL REFERENCES Pet_Category(categoryName),
     PRIMARY KEY(username, name)
 );
 
@@ -69,9 +70,7 @@ CREATE TABLE Requirement(
 );
 
 CREATE TABLE Pet_Category(
-    categoryName VARCHAR,
-    petName VARCHAR REFERENCES Pet(name),
-    PRIMARY KEY(petName, categoryName)
+    categoryName VARCHAR PRIMARY KEY,
 );
 
 CREATE TABLE Service_Type(
