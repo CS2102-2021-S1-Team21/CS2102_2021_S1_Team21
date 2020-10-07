@@ -10,7 +10,7 @@ exports.create_session = async (req, res, next) => {
 
     // authentication failed
     if (!user) {
-      res.status(401).json({ message: 'Invalid username or password' });
+      res.status(401).json({ error: 'Invalid username or password' });
       return;
     }
 
@@ -37,7 +37,7 @@ exports.delete_session = async (req, res) => {
 exports.session_info = (req, res) => {
   if (!req.user) {
     // TODO: handle expired/ non-existent sessions
-    res.status(500).json({ message: 'An unexpected error occurred' });
+    res.status(500).json({ error: 'An unexpected error occurred' });
   }
   const { username, email, name } = req.user;
   // TODO: permissions
