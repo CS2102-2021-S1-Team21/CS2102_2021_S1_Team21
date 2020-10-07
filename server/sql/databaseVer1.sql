@@ -6,7 +6,7 @@ CREATE TABLE PCS_Administrator(
     deletedAt TIMESTAMP,
 );
 
-CREATE TABLE User(
+CREATE TABLE AppUser(
     username VARCHAR PRIMARY KEY,
     email VARCHAR NOT NULL UNIQUE,
     passwordDigest VARCHAR NOT NULL,
@@ -19,11 +19,11 @@ CREATE TABLE User(
 );
 
 CREATE TABLE Pet_Owner(
-    username VARCHAR PRIMARY KEY REFERENCES User(username)
+    username VARCHAR PRIMARY KEY REFERENCES AppUser(username)
 );
 
 CREATE TABLE Caretaker(
-    username VARCHAR PRIMARY KEY REFERENCES User(username),
+    username VARCHAR PRIMARY KEY REFERENCES AppUser(username),
     totalAverageRating DECIMAL(2,1)
 );
 
