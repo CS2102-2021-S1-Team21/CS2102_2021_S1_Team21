@@ -56,7 +56,7 @@ app.use('/api', routes); // prepend all routes with '/api'
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
   console.error(err.message);
-  res.status(500).json({ message: 'An unexpected error occurred' });
+  res.status(500).json({ error: 'An unexpected error occurred' });
 });
 
 // -------------------- Server --------------------

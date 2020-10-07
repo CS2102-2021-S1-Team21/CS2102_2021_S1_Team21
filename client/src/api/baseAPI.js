@@ -31,7 +31,7 @@ baseAPI.interceptors.response.use(
         }`,
       );
     }
-    return { ...response.data, status: response.status }; // ignore other attributes
+    return response.data; // ignore other attributes
     // TODO: manually handle error status codes (show message) then throw error (instead of returning it as a response)
   },
   (error) => {

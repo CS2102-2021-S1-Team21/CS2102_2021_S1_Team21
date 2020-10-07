@@ -22,7 +22,7 @@ exports.new = async (req, res, next) => {
   } catch (err) {
     // handle duplicate key value error
     if (err.code === '23505') {
-      res.status(400).json({ message: 'Username is taken' });
+      res.status(400).json({ error: 'Username is taken' });
       return;
     }
     next(err);
@@ -34,7 +34,7 @@ exports.view = async (req, res, next) => {
   try {
     const result = await db.query(sql.petOwners.queries.view, [username]);
     if (result.rowCount === 0) {
-      res.status(404).json({ message: 'Pet owner not found' });
+      res.status(404).json({ error: 'Pet owner not found' });
       return;
     }
     res.json(result);
