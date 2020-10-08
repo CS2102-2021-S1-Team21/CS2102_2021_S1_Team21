@@ -6,7 +6,7 @@ import { getSessionCookie } from '../utilities/sessionCookie';
 import { StoreProvider } from '../utilities/store';
 import Loading from './Loading';
 import NavBar from './NavBar';
-import ProfileSettings from '../pages/profileSettings/ProfileSettings';
+import ProfileSettings from '../pages/ProfileSettings';
 
 const AuthRouter = () => {
   const sessionCookie = getSessionCookie();
