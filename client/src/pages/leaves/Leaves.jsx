@@ -42,8 +42,9 @@ const Leaves = () => {
   const store = useStore();
 
   useEffect(() => {
-    api.leaves.getLeaves(store.user.username).then((x) => setLeaves(x)); 
+    api.leaves.getLeaves(store.user.username).then((x) => setLeaves(x));
   }, []);
+  console.log(leaves);
 
   const handleClickOpen = () => {
     setOpen(true);

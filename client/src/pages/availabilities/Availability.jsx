@@ -11,7 +11,7 @@ import {
   TableRow,
   TableCell,
   Paper,
-  Container
+  Container,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import React, { useState, useEffect } from 'react';
@@ -19,6 +19,7 @@ import { Formik, getIn, Field } from 'formik';
 import FormTextArea from '../../components/forms/FormTextArea';
 import AvailabilityDialog from './AvailabilityDialog';
 import { useStore } from '../../utilities/store';
+import api from '../../api';
 
 const useStyles = makeStyles({
   root: {
@@ -27,7 +28,7 @@ const useStyles = makeStyles({
   bullet: {
     display: 'inline-block',
     margin: '0 2px',
-    transform: 'scale(0.8)',
+    transform: 'scale(0.5)',
   },
   title: {
     fontSize: 14,
@@ -53,6 +54,11 @@ const Availability = () => {
   const [availability, setAvailability] = useState([]);
   const store = useStore();
 
+  useEffect(() => {
+    api.availability.getAvailability(store.user.username).then((x) => setAvailability(x));
+  }, []);
+  console.log(availability);
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -75,7 +81,12 @@ const Availability = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                <TableRow />
+                {availability.map((row, index) => (
+                  <TableRow key={row.index}>
+                    <TableCell align="left">{row.start}</TableCell>
+                    <TableCell align="right">{row.end}</TableCell>
+                  </TableRow>
+                ))}
               </TableBody>
             </Table>
           </TableContainer>

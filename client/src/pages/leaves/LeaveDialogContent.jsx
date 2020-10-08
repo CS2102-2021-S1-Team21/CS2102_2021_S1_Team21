@@ -11,10 +11,12 @@ import { format } from 'date-fns';
 import formik from 'formik';
 import api from '../../api';
 import { DATE_INPUT_FORMAT } from '../../utilities/datetime';
+import { useStore } from '../../utilities/store';
 
 const LeaveDialogContent = ({ open, setOpen }) => {
   const [selectedDateFrom, handleDateChangeFrom] = useState(new Date());
   const [selectedDateTo, handleDateChangeTo] = useState(new Date());
+  const store = useStore();
 
   const handleCancel = () => {
     setOpen(false);
@@ -27,11 +29,10 @@ const LeaveDialogContent = ({ open, setOpen }) => {
       const body = {
         startDate: selectedDateFrom,
         endDate: selectedDateTo,
-        email: 'wincent@gmail.com',
+        caretakerUsername: store.user.username,
         isEmergency: 'FALSE',
       };
       await api.leaves.applyLeave(body);
-      console.log(body.startDate);
     } catch (err) {
       console.log(err.message);
     }

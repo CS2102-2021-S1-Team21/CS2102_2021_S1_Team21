@@ -12,10 +12,12 @@ import { Formik, Field } from 'formik';
 import api from '../../api';
 import { DATE_INPUT_FORMAT } from '../../utilities/datetime';
 import FormDatePicker from '../../components/forms/FormDatePicker';
+import { useStore } from '../../utilities/store';
 
 const AvailabilityDialog = ({ open, setOpen }) => {
   const [selectedDateFrom, handleDateChangeFrom] = useState(new Date());
   const [selectedDateTo, handleDateChangeTo] = useState(new Date());
+  const store = useStore();
 
   const handleCancel = () => {
     setOpen(false);
@@ -24,43 +26,51 @@ const AvailabilityDialog = ({ open, setOpen }) => {
   const handleApply = async (e) => {
     e.preventDefault();
     setOpen(false);
-    // try {
-    //   const body = {
-    //     startDate: selectedDateFrom,
-    //     endDate: selectedDateTo,
-    //     email: 'wincent@gmail.com',
-    //     isEmergency: 'FALSE',
-    //   };
-    //   await api.leaves.applyLeave(body);
-    //   console.log(body.startDate);
-    // } catch (err) {
-    //   console.log(err.message);
-    // }
+    try {
+      const body = {
+        startDate: selectedDateFrom,
+        endDate: selectedDateTo,
+        caretakerUsername: store.user.username,
+      };
+      await api.availability.addAvailability(body);
+    } catch (err) {
+      console.log(err.message);
+    }
   };
 
   return (
-    <Formik onSubmit={handleApply}>
-      <Dialog open={open} onClose={handleCancel} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">{'Availability'}</DialogTitle>
-        <DialogContent>
-          <DialogContentText>{'From:\r'}</DialogContentText>
-          <Field name="selectedDateFrom" label="Start Date" component={FormDatePicker} />
-        </DialogContent>
-        <DialogContent>
-          <DialogContentText>{'Until:\r'}</DialogContentText>
-
-          <Field name="selectedDateTo" label="End Date" component={FormDatePicker} />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCancel} color="primary">
-            {'Cancel'}
-          </Button>
-          <Button type="submit" onClick={handleApply} color="primary">
-            {'Apply'}
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </Formik>
+    <Dialog open={open} onClose={handleCancel} aria-labelledby="form-dialog-title">
+      <DialogTitle id="form-dialog-title">{'Leave Form'}</DialogTitle>
+      <DialogContent>
+        <DialogContentText>{'From:\r'}</DialogContentText>
+        <KeyboardDatePicker
+          clearable
+          value={selectedDateFrom}
+          onChange={(date) => handleDateChangeFrom(date)}
+          minDate={new Date()}
+          format="yyyy/MM/dd"
+        />
+      </DialogContent>
+      <DialogContent>
+        <DialogContentText>{'Until:\r'}</DialogContentText>
+        <KeyboardDatePicker
+          clearable
+          value={selectedDateTo}
+          onChange={(date) => handleDateChangeTo(date)}
+          minDate={selectedDateFrom}
+          minDateMessage="Date should not be earlier than start Date"
+          format="yyyy/MM/dd"
+        />
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleCancel} color="primary">
+          {'Cancel'}
+        </Button>
+        <Button onClick={handleApply} color="primary">
+          {'Apply'}
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 };
 
