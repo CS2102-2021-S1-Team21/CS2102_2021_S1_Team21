@@ -4,7 +4,6 @@ import { Card, Chip, Box, CardContent, Container, Typography } from '@material-u
 import api from '../api';
 import ReviewsSection from './ReviewsSection';
 
-/** This is a dummy component for demo purposes. The actual one will look quite different. */
 const CaretakerProfile = (props) => {
   const { match } = props;
   const handle = match.params.username;
