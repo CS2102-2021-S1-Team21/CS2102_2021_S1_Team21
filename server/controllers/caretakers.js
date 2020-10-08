@@ -1,13 +1,9 @@
 const db = require('../db');
 const sql = require('../sql');
 
-// TODO: reduce boilerplate code
-
 exports.index = async (req, res) => {
-  // console.log(sql.caretakers.queries.index);
   try {
     const result = await db.query(sql.caretakers.queries.index);
-    // console.log(result);
     res.json({ totalCount: result.rowCount, entries: result.rows });
   } catch (err) {
     console.error(err);
