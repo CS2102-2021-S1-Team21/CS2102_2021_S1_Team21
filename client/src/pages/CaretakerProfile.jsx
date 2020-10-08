@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Card, Chip, Box, CardContent, Container, Typography } from '@material-ui/core';
 import api from '../api';
@@ -19,11 +19,11 @@ const CaretakerProfile = (props) => {
     },
   }));
 
-  const fetchCaretaker = async () => {
+  const fetchCaretaker = useCallback(async () => {
     api.caretakers.getCaretaker(handle).then((res) => {
       setCaretaker(res);
     });
-  };
+  }, [handle]);
 
   function fetchServices() {
     return [
@@ -47,7 +47,7 @@ const CaretakerProfile = (props) => {
         );
       }),
     );
-  });
+  }, [fetchCaretaker]);
 
   return (
     <Container>
