@@ -42,7 +42,9 @@ const ReviewsSection = (props) => {
       field: 'rating',
       headerName: 'Rating',
       width: 160,
-      renderCell: (params) => <Rating name="read-only" value={params.value} readOnly />,
+      renderCell: (params) => (
+        <Rating name="read-only" value={params.value} precision={0.5} readOnly />
+      ),
     },
     {
       field: 'comment',
@@ -57,7 +59,7 @@ const ReviewsSection = (props) => {
       <Typography variant="h5">{'Reviews'}</Typography>
       <Box display="flex">
         <Typography variant="subtitle1">{'Average Rating: '}</Typography>
-        <Rating name="read-only" value={avg} readOnly />
+        <Rating name="read-only" value={avg} precision={0.5} readOnly />
       </Box>
       <div style={{ height: 525, width: '100%' }}>
         <DataGrid

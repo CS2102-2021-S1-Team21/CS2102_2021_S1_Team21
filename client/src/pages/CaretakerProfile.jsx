@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Card, Chip, Box, CardContent, Container, Typography } from '@material-ui/core';
 import api from '../api';
-import ReviewsSection from '../lab/ReviewsSection';
+import ReviewsSection from './ReviewsSection';
 
 /** This is a dummy component for demo purposes. The actual one will look quite different. */
 const CaretakerProfile = (props) => {

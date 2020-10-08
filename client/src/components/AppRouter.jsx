@@ -14,8 +14,6 @@ const AppRouter = () => {
         {/* Lab components */}
         <Route exact path="/hello-world" component={HelloWorld} />
         <Route exact path="/test/forms" component={FormTest} />
-        {/* <Route exact path="/myleaves" component={Leaves} /> */}
-        <Route exact path="/editprofile" component={EditProfile} />
 
         {/* Non-authenticated routes */}
         <Route exact path="/login" component={Login} />
