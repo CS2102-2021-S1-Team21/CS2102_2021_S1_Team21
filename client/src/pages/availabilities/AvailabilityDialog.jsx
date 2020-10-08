@@ -9,6 +9,7 @@ import { Button, Dialog } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { format } from 'date-fns';
 import { Formik, Field } from 'formik';
+import addYears from 'date-fns/addYears';
 import api from '../../api';
 import { DATE_INPUT_FORMAT } from '../../utilities/datetime';
 import FormDatePicker from '../../components/forms/FormDatePicker';
@@ -44,7 +45,6 @@ const AvailabilityDialog = ({ open, setOpen }) => {
       <DialogContent>
         <DialogContentText>{'From:\r'}</DialogContentText>
         <KeyboardDatePicker
-          clearable
           value={selectedDateFrom}
           onChange={(date) => handleDateChangeFrom(date)}
           minDate={new Date()}
@@ -54,10 +54,10 @@ const AvailabilityDialog = ({ open, setOpen }) => {
       <DialogContent>
         <DialogContentText>{'Until:\r'}</DialogContentText>
         <KeyboardDatePicker
-          clearable
           value={selectedDateTo}
           onChange={(date) => handleDateChangeTo(date)}
           minDate={selectedDateFrom}
+          maxDate={addYears(selectedDateTo, 1)}
           minDateMessage="Date should not be earlier than start Date"
           format="yyyy/MM/dd"
         />

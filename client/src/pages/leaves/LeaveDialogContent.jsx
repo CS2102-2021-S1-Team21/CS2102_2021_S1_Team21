@@ -44,7 +44,6 @@ const LeaveDialogContent = ({ open, setOpen }) => {
       <DialogContent>
         <DialogContentText>{'From:\r'}</DialogContentText>
         <KeyboardDatePicker
-          clearable
           value={selectedDateFrom}
           onChange={(date) => handleDateChangeFrom(date)}
           minDate={new Date()}
@@ -54,7 +53,6 @@ const LeaveDialogContent = ({ open, setOpen }) => {
       <DialogContent>
         <DialogContentText>{'Until:\r'}</DialogContentText>
         <KeyboardDatePicker
-          clearable
           value={selectedDateTo}
           onChange={(date) => handleDateChangeTo(date)}
           minDate={selectedDateFrom}
