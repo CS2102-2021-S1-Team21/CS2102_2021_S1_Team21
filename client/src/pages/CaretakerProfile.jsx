@@ -20,7 +20,7 @@ const CaretakerProfile = (props) => {
   }));
 
   const fetchCaretaker = async () => {
-    api.petOwners.getCaretaker(handle).then((res) => {
+    api.caretakers.getCaretaker(handle).then((res) => {
       setCaretaker(res);
     });
   };
@@ -47,7 +47,7 @@ const CaretakerProfile = (props) => {
         );
       }),
     );
-  });
+  }, [handle]);
 
   return (
     <Container>

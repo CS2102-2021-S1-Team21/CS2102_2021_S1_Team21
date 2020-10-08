@@ -11,7 +11,7 @@ const ReviewsSection = (props) => {
 
   // const [average, setAverage] = useState();
   const [reviews, setReviews] = useState([]);
-  const [avg, setAverage] = useState(5);
+  const [avg, setAverage] = useState(0);
 
   makeStyles((theme) => ({
     root: {
@@ -23,8 +23,10 @@ const ReviewsSection = (props) => {
 
   useEffect(() => {
     api.reviews.getReview(handle).then((res) => {
-      setReviews(res[1]);
-      setAverage(res[0]);
+      if (res[1]) {
+        setReviews(res[1]);
+        setAverage(res[0]);
+      }
     });
   }, [handle]);
 
@@ -35,13 +37,7 @@ const ReviewsSection = (props) => {
       headerName: 'Date posted',
       width: 130,
     },
-    { field: 'caretakerUsername', headerName: 'From', width: 170 },
-    {
-      field: 'servicetype',
-      headerName: 'Service',
-      type: 'date',
-      width: 150,
-    },
+    { field: 'petownerusername', headerName: 'From', width: 150 },
     {
       field: 'rating',
       headerName: 'Rating',
@@ -52,7 +48,7 @@ const ReviewsSection = (props) => {
       field: 'comment',
       headerName: 'Comment',
       sortable: false,
-      width: 500,
+      width: 730,
     },
   ];
 
