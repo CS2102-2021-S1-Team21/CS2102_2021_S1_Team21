@@ -33,7 +33,7 @@ const Leaves = () => {
   useEffect(() => {
     api.leaves.getLeaves(store.user.username).then((x) => setLeaves(x));
   }, []);
-  
+
   const handleClickOpen = () => {
     setOpen(true);
   };
