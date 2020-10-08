@@ -12,8 +12,8 @@ router.use('/', auth);
 
 // Routes
 
-router.use('/leaves', leaves);
-router.use('/availability', availability);
+router.use('/leaves', ensureAuthenticated, leaves);
+router.use('/availability', ensureAuthenticated, availability);
 router.use('/pet-owners', ensureAuthenticated, petOwners);
 router.use('/caretakers', ensureAuthenticated, caretakers);
 router.use('/reviews', ensureAuthenticated, reviews);

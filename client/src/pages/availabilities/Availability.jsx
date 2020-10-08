@@ -43,7 +43,6 @@ const style = {
   marginBottom: '20px',
 };
 
-/** This is a dummy component for demo purposes. The actual one will look quite different. */
 const Availability = () => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);

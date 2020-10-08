@@ -1,9 +1,8 @@
 const db = require('../db');
-const sql = require('../sql');
 
 exports.index = async (req, res) => {
   try {
-    const result = await db.query(sql.caretakers.queries.index);
+    const result = await db.query('SELECT * FROM Caretaker');
     res.json({ totalCount: result.rowCount, entries: result.rows });
   } catch (err) {
     console.error(err);
@@ -13,7 +12,10 @@ exports.index = async (req, res) => {
 exports.view = async (req, res) => {
   const { username } = req.params;
   try {
-    const result = await db.query(sql.caretakers.queries.view, [username]);
+    const result = await db.query(
+      'SELECT * FROM AppUser WHERE username = $1 AND $1 IN (SELECT caretakerUsername from Caretaker)',
+      [username],
+    );
     if (result.rowCount === 0) {
       res.json({ error: 'No such caretaker exists' });
       return; // TODO: next()?

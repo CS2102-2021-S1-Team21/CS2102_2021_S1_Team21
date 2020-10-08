@@ -17,7 +17,7 @@ exports.retrieve = async (req, res) => {
   try {
     const { caretakerUsername } = req.params;
     const result = await db.query(
-      `SELECT *, to_char(startDate, 'dd/MM/yyyy') as start, to_char(endDate, 'dd/MM/yyyy') as end FROM applies_for_leave_period WHERE caretakerUsername LIKE $1 ORDER BY startDate DESC`,
+      `SELECT *, to_char(startDate, 'dd/MM/yyyy') as start, to_char(endDate, 'dd/MM/yyyy') as end FROM applies_for_leave_period WHERE caretakerUsername = $1 ORDER BY startDate DESC`,
       [caretakerUsername],
     );
     res.json(result.rows);

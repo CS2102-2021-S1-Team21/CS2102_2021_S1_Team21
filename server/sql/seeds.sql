@@ -67,8 +67,7 @@ VALUES ('wincent',
 
 
 INSERT INTO Caretaker
-VALUES ('harambe',
-        4.3);
+VALUES ('harambe', 4.3);
 
 
 INSERT INTO Caretaker
@@ -150,8 +149,8 @@ VALUES('Gougou',
        'wincent',
        25,
        '1/1/20',
+       '12/10/19',
        '12/12/19',
-       '12/18/19',
        'Through PCS',
        5,
        'Amazing, my dog came back pregnant',
@@ -170,10 +169,6 @@ VALUES('Gougou',
        2,
        'Terrible, my dog came back obese',
        '1/1/20');
-
-INSERT INTO pet_owner
-VALUES
-  ('', '', null, '', 'oompaloompa');
 
 INSERT INTO Caretaker VALUES ('oompaloompa', null);
 
