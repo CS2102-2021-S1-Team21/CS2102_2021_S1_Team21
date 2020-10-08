@@ -1,29 +1,63 @@
-import { AppBar, Button, makeStyles, Toolbar, Tooltip, Typography } from '@material-ui/core';
+import { AppBar, Button, IconButton, makeStyles, Toolbar, Tooltip } from '@material-ui/core';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import PetsIcon from '@material-ui/icons/Pets';
+import SettingsIcon from '@material-ui/icons/Settings';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import api from '../api';
 import { useStore } from '../utilities/store';
 
 const useStyles = makeStyles((theme) => ({
-  title: {
+  buttonWithSpace: {
+    margin: theme.spacing(1),
+  },
+  navItem: {
+    margin: theme.spacing(1),
+  },
+  space: {
     flexGrow: 1,
   },
-  name: {
-    color: theme.palette.primary.contrastText,
-    marginLeft: theme.spacing(2),
+  title: {
+    marginRight: theme.spacing(2),
   },
 }));
 
 const NavBar = ({ children }) => {
   const classes = useStyles();
   const history = useHistory();
-  const store = useStore();
+  const { user } = useStore();
 
-  // note: temporary, for testing only
   const handleLogin = async () => {
-    const response = await api.auth.login({ username: 'oompaloompa', password: 'password' });
+    // note: temporary, for testing only
+    const accountType = prompt(
+      'Which type of user do you want to log in as?\n\n1 - Admin\n2 - Pet Owner\n3 - Full-Time Caretaker\n4 - Part-Time Caretaker\n5 - Pet Owner + Full-Time + Part-Time Caretaker (invalid option, but just for demo purposes)',
+    );
+    const username = ((type) => {
+      switch (type) {
+        case '1':
+          return 'pcsadmin';
+        case '2':
+          return 'ladygaga';
+        case '3':
+          return 'harambe';
+        case '4':
+          return 'dora';
+        case '5':
+          return 'oompaloompa';
+        default:
+          return null;
+      }
+    })(accountType);
+    if (!username) return;
+    const response = await api.auth.login({
+      username,
+      password: accountType === '1' ? 'pcsadmin' : 'password',
+    });
     console.log(response);
     history.push('/pet-owner/hello@gmail.com');
+    // to change to this eventually
+    // history.push('/login');
   };
 
   const handleLogout = async () => {
@@ -36,25 +70,113 @@ const NavBar = ({ children }) => {
     <>
       <AppBar position="static">
         <Toolbar>
-          <Typography className={classes.title}>{'Pet Caring Services'}</Typography>
-          <Button variant="contained" onClick={handleLogin}>
-            {'Login'}
+          <Button
+            startIcon={<PetsIcon />}
+            color="inherit"
+            size="large"
+            className={classes.title}
+            onClick={() => (user ? history.push('/dashboard') : history.push('/'))}
+          >
+            {'PCS'}
           </Button>
-          <Button variant="contained" onClick={handleLogout}>
-            {'Logout'}
-          </Button>
-          {store?.user && (
-            <Tooltip
-              title={
+
+          {user ? (
+            <>
+              {/* TODO: handle mobile layout */}
+              {user.isPetOwner && (
                 <>
-                  {`Username: ${store.user.username}`}
-                  <br />
-                  {`Email: ${store.user.email}`}
+                  <Button
+                    color="inherit"
+                    className={classes.navItem}
+                    onClick={() => history.push('/caretakers')}
+                  >
+                    {'Find Caretakers'}
+                  </Button>
+                  <Button
+                    color="inherit"
+                    className={classes.navItem}
+                    onClick={() => history.push('/mypets')}
+                  >
+                    {'My Pets'}
+                  </Button>
+                  <Button
+                    color="inherit"
+                    className={classes.navItem}
+                    onClick={() => history.push('/mybookings')}
+                  >
+                    {'My Bookings'}
+                  </Button>
                 </>
-              }
-            >
-              <Button className={classes.name}>{store.user.name}</Button>
-            </Tooltip>
+              )}
+              {(user.isFullTimeCaretaker || user.isPartTimeCaretaker) && (
+                <Button
+                  color="inherit"
+                  className={classes.navItem}
+                  onClick={() => history.push('/myjobs')}
+                >
+                  {'My Jobs'}
+                </Button>
+              )}
+              {user.isFullTimeCaretaker && (
+                <Button
+                  color="inherit"
+                  className={classes.navItem}
+                  onClick={() => history.push('/myleaves')}
+                >
+                  {'My Leave Applications'}
+                </Button>
+              )}
+              {user.isPartTimeCaretaker && (
+                <Button
+                  color="inherit"
+                  className={classes.navItem}
+                  onClick={() => history.push('/myavailability')}
+                >
+                  {'My Availability'}
+                </Button>
+              )}
+
+              <div className={classes.space} />
+              <Tooltip title="Edit Account Settings" onClick={() => history.push('/edit-profile')}>
+                <IconButton color="inherit">
+                  <SettingsIcon />
+                </IconButton>
+              </Tooltip>
+              <Tooltip
+                title={`View Profile (${user.name})`}
+                // TODO: does this mean that pet owners need a profile too?
+                onClick={() => history.push('/my-profile')}
+              >
+                <IconButton color="inherit">
+                  <AccountCircleIcon />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title="Log Out">
+                <IconButton color="inherit" onClick={handleLogout}>
+                  <ExitToAppIcon />
+                </IconButton>
+              </Tooltip>
+            </>
+          ) : (
+            <>
+              <div className={classes.space} />
+              <Button
+                variant="outlined"
+                color="inherit"
+                className={classes.buttonWithSpace}
+                onClick={() => history.push('/signup')}
+              >
+                {'Sign Up'}
+              </Button>
+              <Button
+                variant="outlined"
+                color="inherit"
+                className={classes.buttonWithSpace}
+                onClick={handleLogin}
+              >
+                {'Login'}
+              </Button>
+            </>
           )}
         </Toolbar>
       </AppBar>
