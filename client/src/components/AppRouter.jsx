@@ -4,8 +4,6 @@ import FormTest from '../lab/FormTest';
 import HelloWorld from '../lab/HelloWorld';
 import Login from '../pages/Login';
 import AuthRouter from './AuthRouter';
-import Leaves from '../pages/leaves/Leaves';
-import Availability from '../pages/availabilities/Availability';
 
 const AppRouter = () => {
   return (
@@ -14,8 +12,6 @@ const AppRouter = () => {
         {/* Lab components */}
         <Route exact path="/hello-world" component={HelloWorld} />
         <Route exact path="/test/forms" component={FormTest} />
-        <Route exact path="/myleaves" component={Leaves} />
-        <Route exact path="/myavailability" component={Availability} />
         {/* Non-authenticated routes */}
         <Route exact path="/login" component={Login} />
         {/* <Route exact path="/forgot-password" component={ForgotPassword} /> */}

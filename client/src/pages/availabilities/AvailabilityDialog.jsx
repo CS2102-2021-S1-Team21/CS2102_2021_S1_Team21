@@ -39,29 +39,28 @@ const AvailabilityDialog = ({ open, setOpen }) => {
   };
 
   return (
-    <Dialog open={open} onClose={handleCancel} aria-labelledby="form-dialog-title">
-      <DialogTitle id="form-dialog-title">{'Availability'}</DialogTitle>
-      <DialogContent>
-        <DialogContentText>{'From:\r'}</DialogContentText>
-        <Formik>
+    <Formik onSubmit={handleApply}>
+      <Dialog open={open} onClose={handleCancel} aria-labelledby="form-dialog-title">
+        <DialogTitle id="form-dialog-title">{'Availability'}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>{'From:\r'}</DialogContentText>
           <Field name="selectedDateFrom" label="Start Date" component={FormDatePicker} />
-        </Formik>
-      </DialogContent>
-      <DialogContent>
-        <DialogContentText>{'Until:\r'}</DialogContentText>
-        <Formik>
+        </DialogContent>
+        <DialogContent>
+          <DialogContentText>{'Until:\r'}</DialogContentText>
+
           <Field name="selectedDateTo" label="End Date" component={FormDatePicker} />
-        </Formik>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleCancel} color="primary">
-          {'Cancel'}
-        </Button>
-        <Button onClick={handleApply} color="primary">
-          {'Apply'}
-        </Button>
-      </DialogActions>
-    </Dialog>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCancel} color="primary">
+            {'Cancel'}
+          </Button>
+          <Button type="submit" onClick={handleApply} color="primary">
+            {'Apply'}
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </Formik>
   );
 };
 

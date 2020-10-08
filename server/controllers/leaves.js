@@ -22,10 +22,6 @@ exports.retrieve = async (req, res) => {
       `SELECT *, to_char(startDate, 'dd/MM/yyyy') as start, to_char(endDate, 'dd/MM/yyyy') as end FROM applies_for_leave_period WHERE email LIKE $1 ORDER BY startDate DESC`,
       [email],
     );
-    if (result.rowCount === 0) {
-      res.json({ error: 'You do not have any past leave application' });
-      return;
-    }
     res.json(result.rows);
   } catch (err) {
     console.error('ERROR: ', err.message);

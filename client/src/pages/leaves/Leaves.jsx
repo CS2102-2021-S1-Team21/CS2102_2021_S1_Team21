@@ -1,4 +1,4 @@
-import { Button, Card } from '@material-ui/core';
+import { Button, Card, Container } from '@material-ui/core';
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
@@ -10,6 +10,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import LeaveDialogContent from './LeaveDialogContent';
 import api from '../../api';
+import { useStore } from '../../utilities/store';
 
 const columns = [
   { id: 'startDate', label: 'Start Date', minWidth: '25%' },
@@ -38,11 +39,11 @@ const Leaves = () => {
   const [open, setOpen] = useState(false);
   const classes = useStyles();
   const [leaves, setLeaves] = useState([]);
+  const store = useStore();
 
   useEffect(() => {
-    api.leaves.getLeaves('wincent@gmail.com').then((x) => setLeaves(x));
+    api.leaves.getLeaves(store.user.username).then((x) => setLeaves(x)); 
   }, []);
-  console.log(leaves);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -63,7 +64,7 @@ const Leaves = () => {
   }
 
   return (
-    <Card>
+    <Container>
       <h1>{'Leaves taken: __ days\r'}</h1>
       <br />
       <Button variant="contained" color="primary" onClick={handleClickOpen} style={style}>
@@ -92,7 +93,7 @@ const Leaves = () => {
           </TableBody>
         </Table>
       </TableContainer>
-    </Card>
+    </Container>
   );
 };
 
