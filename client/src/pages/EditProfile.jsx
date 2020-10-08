@@ -4,7 +4,6 @@ import { Card, CardContent, Typography } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import api from '../api';
 
-/** This is a dummy component for demo purposes. The actual one will look quite different. */
 const EditProfile = () => {
   const [user, setUser] = useState({
     name: 'Bugs Bunny',
