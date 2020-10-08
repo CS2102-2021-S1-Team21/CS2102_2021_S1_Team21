@@ -2,17 +2,11 @@ import React, { useState } from 'react';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import { makeStyles } from '@material-ui/core/styles';
 import { KeyboardDatePicker } from '@material-ui/pickers';
 import DialogActions from '@material-ui/core/DialogActions';
 import { Button, Dialog } from '@material-ui/core';
-import PropTypes from 'prop-types';
-import { format } from 'date-fns';
-import { Formik, Field } from 'formik';
 import addYears from 'date-fns/addYears';
 import api from '../../api';
-import { DATE_INPUT_FORMAT } from '../../utilities/datetime';
-import FormDatePicker from '../../components/forms/FormDatePicker';
 import { useStore } from '../../utilities/store';
 
 const AvailabilityDialog = ({ open, setOpen }) => {

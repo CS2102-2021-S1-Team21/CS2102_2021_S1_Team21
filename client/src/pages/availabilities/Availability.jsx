@@ -1,5 +1,4 @@
 import {
-  Box,
   Button,
   Card,
   CardContent,
@@ -15,8 +14,6 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import React, { useState, useEffect } from 'react';
-import { Formik, getIn, Field } from 'formik';
-import FormTextArea from '../../components/forms/FormTextArea';
 import AvailabilityDialog from './AvailabilityDialog';
 import { useStore } from '../../utilities/store';
 import api from '../../api';
@@ -49,7 +46,6 @@ const style = {
 /** This is a dummy component for demo purposes. The actual one will look quite different. */
 const Availability = () => {
   const classes = useStyles();
-  const bull = <span className={classes.bullet}>{'•'}</span>;
   const [open, setOpen] = useState(false);
   const [availability, setAvailability] = useState([]);
   const store = useStore();
@@ -57,7 +53,6 @@ const Availability = () => {
   useEffect(() => {
     api.availability.getAvailability(store.user.username).then((x) => setAvailability(x));
   }, []);
-  console.log(availability);
 
   const handleClickOpen = () => {
     setOpen(true);

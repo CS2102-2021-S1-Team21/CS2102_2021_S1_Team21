@@ -1,4 +1,4 @@
-import { Button, Card, Container } from '@material-ui/core';
+import { Button, Container } from '@material-ui/core';
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
@@ -11,17 +11,6 @@ import TableRow from '@material-ui/core/TableRow';
 import LeaveDialogContent from './LeaveDialogContent';
 import api from '../../api';
 import { useStore } from '../../utilities/store';
-
-const columns = [
-  { id: 'startDate', label: 'Start Date', minWidth: '25%' },
-  { id: 'endDate', label: 'End Date', minWidth: '25%' },
-  { id: 'isEmergency', label: 'Emergency Leave', minWidth: '25%' },
-  {
-    id: 'isApproved',
-    label: 'Approval Status',
-    minWidth: '25%',
-  },
-];
 
 const useStyles = makeStyles({
   table: {
@@ -44,8 +33,7 @@ const Leaves = () => {
   useEffect(() => {
     api.leaves.getLeaves(store.user.username).then((x) => setLeaves(x));
   }, []);
-  console.log(leaves);
-
+  
   const handleClickOpen = () => {
     setOpen(true);
   };
