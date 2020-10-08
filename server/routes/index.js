@@ -4,12 +4,14 @@ const auth = require('./auth');
 const { ensureAuthenticated } = require('../auth/middleware');
 const petOwners = require('./petOwners');
 const leaves = require('./leaves');
+const availability = require('./availability');
 
 router.use('/', auth);
 
 // Routes
 
 router.use('/leaves', leaves);
+router.use('/availability', availability);
 router.use('/pet-owners', ensureAuthenticated, petOwners);
 
 // Catch-all route (used for error handling)

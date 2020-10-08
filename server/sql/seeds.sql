@@ -14,3 +14,4 @@ INSERT INTO Caretaker VALUES ('oompaloompa', null);
 
 INSERT INTO Full_Time_Employee VALUES ('oompaloompa');
 
+INSERT INTO Full_Time_Employee VALUES ('oompaloompa');
