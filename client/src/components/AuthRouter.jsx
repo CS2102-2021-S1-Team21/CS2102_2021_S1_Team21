@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import api from '../api';
 import PetOwnerProfile from '../pages/PetOwnerProfile';
+import CaretakerProfile from '../pages/CaretakerProfile';
+import EditProfile from '../pages/EditProfile';
 import { getSessionCookie } from '../utilities/sessionCookie';
 import { StoreProvider } from '../utilities/store';
 import Loading from './Loading';
@@ -40,7 +42,10 @@ const AuthRouter = () => {
       <NavBar>
         <Switch>
           {/* <Route path="/pet-owner" component={PetOwnerListing} /> */}
-          <Route path="/pet-owner/:email" component={PetOwnerProfile} />
+          <Route path="/pet-owner/:username" component={PetOwnerProfile} />
+          <Route path="/caretakers/:username" component={CaretakerProfile} />
+          {/* <Route exact path="/myleaves" component={Leaves} /> */}
+          <Route exact path="/editprofile" component={EditProfile} />
         </Switch>
       </NavBar>
     </StoreProvider>

@@ -4,8 +4,8 @@ const petOwners = {
   getPetOwners: async () => {
     return baseAPI.get('pet-owners');
   },
-  getPetOwner: async (email) => {
-    return baseAPI.get(`pet-owners/${encodeURIComponent(email)}`);
+  getPetOwner: async (username) => {
+    return baseAPI.get(`pet-owners/${username}`);
   },
 };
 
