@@ -5,11 +5,8 @@ import { Box, Typography } from '@material-ui/core';
 import Rating from '@material-ui/lab/Rating';
 import api from '../api';
 
-/** This is a dummy component for demo purposes. The actual one will look quite different. */
 const ReviewsSection = (props) => {
   const { handle } = props;
-
-  // const [average, setAverage] = useState();
   const [reviews, setReviews] = useState([]);
   const [avg, setAverage] = useState(0);
 

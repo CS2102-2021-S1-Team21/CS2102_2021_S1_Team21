@@ -1,8 +1,7 @@
 import { Card, CardActions, Button, CardContent, Typography } from '@material-ui/core';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import api from '../api';
 
-/** This is a dummy component for demo purposes. The actual one will look quite different. */
 const PetOwnerProfile = (props) => {
   const { match } = props;
   const handle = match.params.username;
@@ -12,15 +11,15 @@ const PetOwnerProfile = (props) => {
     email: 'hello@world.org',
   });
 
-  const fetchPetOwner = async () => {
+  const fetchPetOwner = useCallback(async () => {
     api.petOwners.getPetOwner(handle).then((res) => {
       setPetOwner(res);
     });
-  };
+  }, [handle]);
 
   useEffect(() => {
     fetchPetOwner();
-  });
+  }, [fetchPetOwner]);
 
   return (
     <Card>

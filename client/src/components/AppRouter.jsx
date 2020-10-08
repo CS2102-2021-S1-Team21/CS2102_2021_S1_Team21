@@ -5,7 +5,6 @@ import HelloWorld from '../lab/HelloWorld';
 import Login from '../pages/Login';
 import AuthRouter from './AuthRouter';
 // import Leaves from '../pages/leaves/Leaves';
-import EditProfile from '../pages/EditProfile';
 
 const AppRouter = () => {
   return (
