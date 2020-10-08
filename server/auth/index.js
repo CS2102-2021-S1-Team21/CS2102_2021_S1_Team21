@@ -6,9 +6,26 @@ const db = require('../db');
 
 function findUser(username, callback) {
   db.query(
-    `SELECT username, email, passwordDigest, name, 'user' AS type FROM AppUser WHERE username = $1
-     UNION
-     SELECT username, email, passwordDigest, name, 'admin' AS type FROM PCS_Administrator WHERE username = $1`,
+    `SELECT 
+        username, email, passwordDigest, name, 
+        FALSE AS isAdmin,
+        CASE WHEN Pet_Owner.petOwnerUsername IS NULL THEN FALSE ELSE TRUE END AS isPetOwner,
+        CASE WHEN Full_Time_Employee.caretakerUsername IS NULL THEN FALSE ELSE TRUE END AS isFullTimeCaretaker,
+        CASE WHEN Part_Time_Employee.caretakerUsername IS NULL THEN FALSE ELSE TRUE END AS isPartTimeCaretaker
+      FROM AppUser
+        LEFT OUTER JOIN Pet_Owner ON AppUser.username = Pet_Owner.petOwnerUsername
+        LEFT OUTER JOIN Full_Time_Employee ON AppUser.username = Full_Time_Employee.caretakerUsername
+        LEFT OUTER JOIN Part_Time_Employee ON AppUser.username = Part_Time_Employee.caretakerUsername
+      WHERE AppUser.deletedAt IS NULL AND AppUser.username = $1
+      UNION
+      SELECT
+        username, email, passwordDigest, name, 
+        TRUE AS isAdmin,
+        FALSE AS isPetOwner,
+        FALSE AS isFullTimeCaretaker,
+        FALSE AS isPartTimeCaretaker
+      FROM PCS_Administrator 
+      WHERE username = $1`,
     [username],
     (err, data) => {
       if (err) {
@@ -19,7 +36,7 @@ function findUser(username, callback) {
         return callback(null, false);
       }
       if (data.rows.length !== 1) {
-        return callback(new Error('Multiple users with the same username')); // programmer's error
+        return callback(new Error(`Multiple users found. Check database for username ${username}`)); // programmer's error
       }
 
       const user = data.rows[0];

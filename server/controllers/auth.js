@@ -1,5 +1,4 @@
 const passport = require('passport');
-// const db = require('../db');
 
 // Login
 exports.create_session = async (req, res, next) => {
@@ -18,7 +17,7 @@ exports.create_session = async (req, res, next) => {
       if (loginError) {
         return next(loginError);
       }
-      const { username, email, name } = user;
+      const { username, email, name } = user; // don't send passwordDigest
       return res.status(200).json({
         message: `Welcome, ${req.user.name}!`,
         data: { username, email, name },
@@ -38,10 +37,27 @@ exports.session_info = (req, res) => {
   if (!req.user) {
     // TODO: handle expired/ non-existent sessions
     res.status(500).json({ error: 'An unexpected error occurred' });
+    return;
   }
-  const { username, email, name } = req.user;
-  // TODO: permissions
-  res.status(200).json({ data: { username, email, name } });
+
+  const {
+    username,
+    email,
+    name,
+    isadmin,
+    ispetowner,
+    isparttimecaretaker,
+    isfulltimecaretaker,
+  } = req.user; // don't send passwordDigest
+  res.status(200).json({
+    username,
+    email,
+    name,
+    isAdmin: isadmin,
+    isPetOwner: ispetowner,
+    isPartTimeCaretaker: isparttimecaretaker,
+    isFullTimeCaretaker: isfulltimecaretaker,
+  });
 };
 
 // Signup
