@@ -1,7 +1,5 @@
 const db = require('../db');
 
-// TODO: reduce boilerplate code
-
 exports.apply = async (req, res) => {
   try {
     const { caretakerUsername, startDate, endDate, isEmergency } = req.body;

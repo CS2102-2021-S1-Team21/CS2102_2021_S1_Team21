@@ -26,6 +26,23 @@ CREATE TABLE Applies_For_Leave_Period(
     PRIMARY KEY(email, startDate, endDate)
 );
 
+CREATE TABLE Tagged_To_Review(
+    petName VARCHAR,
+    petOwnerEmail VARCHAR,
+    serviceType VARCHAR,
+    categoryName VARCHAR,
+    caretakerEmail VARCHAR,
+    startDate DATE,
+    endDate DATE,
+    createdAt TIMESTAMP NOT NULL,
+    rating INTEGER NOT NULL CHECK ((rating >= 1) AND (rating <=5)),
+    comment VARCHAR,
+    PRIMARY KEY(petName, petOwnerEmail, serviceType, categoryName, caretakerEmail, startDate, endDate), 
+    -- FOREIGN KEY(petName, petOwnerEmail, serviceType, categoryName, caretakerEmail, startDate, endDate) 
+        -- REFERENCES Financed_By_Transaction(petName, petOwnerEmail, serviceType, categoryName, caretakerEmail, startDate, endDate) ON DELETE CASCADE
+);
+
+
 CREATE TABLE AppUser
 (
   username VARCHAR PRIMARY KEY,
@@ -38,4 +55,3 @@ CREATE TABLE AppUser
   address VARCHAR NOT NULL,
   postalCode VARCHAR NOT NULL
 );
-

@@ -5,6 +5,8 @@
   "dependencies": {
     "@date-io/date-fns": "1.x",
     "@material-ui/core": "^4.11.0",
+    "@material-ui/data-grid": "^4.0.0-alpha.6",
+    "@material-ui/lab": "^4.0.0-alpha.56",
     "@material-ui/pickers": "^3.2.10",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
@@ -14,7 +16,6 @@
     "formik": "^2.1.5",
     "js-cookie": "^2.2.1",
     "lodash": "^4.17.20",
-    "prop-types": "^15.7.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
@@ -33,11 +34,6 @@
     "eslint-plugin-react": "^7.20.6",
     "eslint-plugin-react-hooks": "^4.1.2",
     "prettier": "^2.1.2"
-  },
-  "husky": {
-    "hooks": {
-      "pre-push": "cd server && yarn run check && cd ../client && yarn run check"
-    }
   },
   "scripts": {
     "start": "react-scripts start",

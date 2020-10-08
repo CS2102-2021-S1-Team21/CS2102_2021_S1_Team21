@@ -5,7 +5,6 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import { KeyboardDatePicker } from '@material-ui/pickers';
 import DialogActions from '@material-ui/core/DialogActions';
 import { Button, Dialog } from '@material-ui/core';
-import PropTypes from 'prop-types';
 import api from '../../api';
 import { useStore } from '../../utilities/store';
 
@@ -66,16 +65,6 @@ const LeaveDialogContent = ({ open, setOpen }) => {
       </DialogActions>
     </Dialog>
   );
-};
-
-LeaveDialogContent.propTypes = {
-  open: PropTypes.bool,
-  setOpen: PropTypes.func,
-};
-
-LeaveDialogContent.defaultProps = {
-  open: false,
-  setOpen: () => null,
 };
 
 export default LeaveDialogContent;
