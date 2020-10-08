@@ -6,6 +6,7 @@ import { getSessionCookie } from '../utilities/sessionCookie';
 import { StoreProvider } from '../utilities/store';
 import Loading from './Loading';
 import NavBar from './NavBar';
+import ProfileSettings from '../pages/profileSettings/ProfileSettings';
 
 const AuthRouter = () => {
   const sessionCookie = getSessionCookie();
@@ -41,6 +42,7 @@ const AuthRouter = () => {
         <Switch>
           {/* <Route path="/pet-owner" component={PetOwnerListing} /> */}
           <Route path="/pet-owner/:email" component={PetOwnerProfile} />
+          <Route path="/profile-settings" component={ProfileSettings} />
         </Switch>
       </NavBar>
     </StoreProvider>
