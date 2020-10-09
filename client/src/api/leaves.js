@@ -7,7 +7,7 @@ const leaves = {
   getLeaves: async (caretakerUsername) => {
     return baseAPI.get(`leaves/${caretakerUsername}`);
   },
-  getAllPendingLeaves : async () => {
+  getAllPendingLeaves: async () => {
     return baseAPI.get(`leaves`);
   },
 };

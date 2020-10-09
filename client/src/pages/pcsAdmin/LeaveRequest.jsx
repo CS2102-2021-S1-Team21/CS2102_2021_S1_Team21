@@ -1,4 +1,4 @@
-import React, {useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -13,20 +13,20 @@ import api from '../../api';
 const useStyles = makeStyles({
   table: {
     minWidth: 650,
-    marginTop: 50
+    marginTop: 50,
   },
   container: {
-    maxHeight: 800
+    maxHeight: 800,
   },
   button: {
-    marginTop: 20
-  }
+    marginTop: 20,
+  },
 });
 
 const LeaveRequest = () => {
   const classes = useStyles();
   const [pendingLeaves, setPendingLeaves] = useState([]);
-  
+
   useEffect(() => {
     api.leaves.getAllPendingLeaves().then((res) => {
       setPendingLeaves(res);
@@ -43,17 +43,17 @@ const LeaveRequest = () => {
 
   const handleApproval = (index) => {
     console.log(index);
-  }
+  };
 
   return (
     <TableContainer component={Paper} className={classes.container}>
       <Table className={classes.table} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell>Caretaker Username</TableCell>
-            <TableCell>Start Date</TableCell>
-            <TableCell>End Date</TableCell>
-            <TableCell>Is Emergency</TableCell>
+            <TableCell>{'Caretaker Username'}</TableCell>
+            <TableCell>{'Start Date'}</TableCell>
+            <TableCell>{'End Date'}</TableCell>
+            <TableCell>{'Is Emergency'}</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -65,7 +65,14 @@ const LeaveRequest = () => {
               <TableCell>{row.start}</TableCell>
               <TableCell>{row.end}</TableCell>
               <TableCell>{renderEmergency(row.isemergency)}</TableCell>
-              <Button onClick={handleApproval(index)} variant="contained" color="primary" className={classes.button}>Approve</Button>
+              <Button
+                onClick={handleApproval(index)}
+                variant="contained"
+                color="primary"
+                className={classes.button}
+              >
+                {'Approve'}
+              </Button>
             </TableRow>
           ))}
         </TableBody>

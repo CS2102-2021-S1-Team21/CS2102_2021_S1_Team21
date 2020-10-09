@@ -1,11 +1,11 @@
 import React from 'react';
 import { Container } from '@material-ui/core';
-import LeaveRequest from './LeaveRequest'
+import LeaveRequest from './LeaveRequest';
 
 const PcsAdmin = () => {
   return (
     <Container>
-      <LeaveRequest></LeaveRequest>
+      <LeaveRequest />
     </Container>
   );
 };
