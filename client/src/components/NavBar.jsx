@@ -55,7 +55,7 @@ const NavBar = ({ children }) => {
       password: accountType === '1' ? 'pcsadmin' : 'password',
     });
     console.log(response);
-    history.push('/pet-owner/hello@gmail.com');
+    history.push('/pet-owners/oompaloompa');
     // to change to this eventually
     // history.push('/login');
   };
