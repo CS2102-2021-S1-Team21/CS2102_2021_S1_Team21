@@ -19,6 +19,15 @@
 -- VALUES('theexplorer@gmail.com',
 --        'dora');
 
+INSERT INTO PCS_Administrator
+VALUES
+  (
+    'pcsadmin',
+    'admin@petcaringservices.org.sg',
+    '$2a$10$n2q9efUAsWFKbPzTu6O/4udJG6/kuwV.X.c8uwHTX36cpCk/Er3aK', -- bcrypt for 'pcsadmin'
+    'PCS Admin',
+    null);
+
 INSERT INTO AppUser
 VALUES ('oompaloompa',
         'minion@wonkafactory.co',
@@ -30,6 +39,16 @@ VALUES ('oompaloompa',
  '',
  '');
 
+INSERT INTO AppUser
+VALUES ('dora',
+        'theexplorer@gmail.com',
+        '$2a$10$k9A9eGmV/AHwQ2toQSfI/OonyqFLtcL7DQFEmGeyRF2htHJV4SaQW', -- bcrypt for 'password'
+ 'Dora the Explorer',
+ null,
+ '',
+ '',
+ '',
+ '');
 
 INSERT INTO AppUser
 VALUES ('ladygaga',
@@ -74,6 +93,11 @@ INSERT INTO Caretaker
 VALUES ('wincent',
         5);
 
+INSERT INTO Caretaker
+VALUES ('dora', 4.5);
+
+INSERT INTO Part_Time_Employee
+VALUES ('dora');
 
 INSERT INTO Full_Time_Employee
 VALUES ('harambe');

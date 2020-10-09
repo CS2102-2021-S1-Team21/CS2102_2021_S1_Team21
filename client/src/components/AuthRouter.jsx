@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import api from '../api';
-import PetOwnerProfile from '../pages/PetOwnerProfile';
+import Availability from '../pages/availabilities/Availability';
 import CaretakerProfile from '../pages/CaretakerProfile';
 import EditProfile from '../pages/EditProfile';
+import Leaves from '../pages/leaves/Leaves';
+import PetOwnerProfile from '../pages/PetOwnerProfile';
 import { getSessionCookie } from '../utilities/sessionCookie';
 import { StoreProvider } from '../utilities/store';
 import Loading from './Loading';
 import NavBar from './NavBar';
-import Leaves from '../pages/leaves/Leaves';
-import Availability from '../pages/availabilities/Availability';
 
 const AuthRouter = () => {
   const sessionCookie = getSessionCookie();
@@ -20,7 +20,7 @@ const AuthRouter = () => {
     api.auth
       .getSessionInfo()
       .then((response) => {
-        setUser(response.data);
+        setUser(response);
       })
       .catch(() => setRequestFailed(true));
   };
@@ -43,13 +43,11 @@ const AuthRouter = () => {
     <StoreProvider value={{ user }}>
       <NavBar>
         <Switch>
-          {/* <Route path="/pet-owner" component={PetOwnerListing} /> */}
-          <Route path="/pet-owner/:email" component={PetOwnerProfile} />
-          <Route exact path="/myleaves" component={Leaves} />
-          <Route exact path="/myavailability" component={Availability} />
-          <Route path="/pet-owner/:username" component={PetOwnerProfile} />
+          <Route exact path="/my-leaves" component={Leaves} />
+          <Route exact path="/my-availability" component={Availability} />
+          <Route exact path="/edit-profile" component={EditProfile} />
+          <Route path="/pet-owners/:username" component={PetOwnerProfile} />
           <Route path="/caretakers/:username" component={CaretakerProfile} />
-          <Route exact path="/editprofile" component={EditProfile} />
         </Switch>
       </NavBar>
     </StoreProvider>
