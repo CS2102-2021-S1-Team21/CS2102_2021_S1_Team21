@@ -51,7 +51,7 @@ const Availability = () => {
 
   useEffect(() => {
     api.availability.getAvailability(store.user.username).then((x) => setAvailability(x));
-  }, []);
+  }, [store.user.username]);
 
   const handleClickOpen = () => {
     setOpen(true);
