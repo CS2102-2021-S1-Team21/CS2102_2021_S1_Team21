@@ -72,7 +72,7 @@ const Leaves = () => {
           </TableHead>
           <TableBody>
             {leaves.map((row, index) => (
-              <TableRow key={row.index}>
+              <TableRow key={index}>
                 <TableCell align="left">{row.start}</TableCell>
                 <TableCell align="right">{row.end}</TableCell>
                 <TableCell align="right">{renderEmergency(row.isemergency)}</TableCell>

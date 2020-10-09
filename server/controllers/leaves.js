@@ -26,3 +26,15 @@ exports.retrieve = async (req, res) => {
     res.json({ error: 'An unexpected error occurred' });
   }
 };
+
+exports.retrieveAllPending = async (req, res) => {
+  try {
+    const result = await db.query(
+      `SELECT *, to_char(startDate, 'dd/MM/yyyy') as start, to_char(endDate, 'dd/MM/yyyy') as end FROM applies_for_leave_period WHERE isApproved = False ORDER BY startDate ASC`,
+    );
+    res.json(result.rows);
+  } catch (err) {
+    console.error('ERROR: ', err.message);
+    res.json({ error: 'An unexpected error occurred' });
+  }
+};

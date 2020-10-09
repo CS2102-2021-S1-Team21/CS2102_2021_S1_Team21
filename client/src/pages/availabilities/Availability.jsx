@@ -76,7 +76,7 @@ const Availability = () => {
               </TableHead>
               <TableBody>
                 {availability.map((row, index) => (
-                  <TableRow key={row.index}>
+                  <TableRow key={index}>
                     <TableCell align="left">{row.start}</TableCell>
                     <TableCell align="right">{row.end}</TableCell>
                   </TableRow>
