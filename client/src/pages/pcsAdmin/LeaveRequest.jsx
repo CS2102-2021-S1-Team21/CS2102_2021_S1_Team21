@@ -41,8 +41,14 @@ const LeaveRequest = () => {
     return <p>{'No'}</p>;
   }
 
-  const handleApproval = (index) => {
-    console.log(index);
+  const handleApproval = async (index) => {
+    const item = pendingLeaves[index];
+    console.log(item);
+    try {
+      await api.leaves.updateLeaveApproved(item.caretakerusername, item.startdate, item.enddate);
+    } catch (err) {
+      console.log(err.message);
+    }
   };
 
   return (
@@ -64,15 +70,17 @@ const LeaveRequest = () => {
               </TableCell>
               <TableCell>{row.start}</TableCell>
               <TableCell>{row.end}</TableCell>
-              <TableCell>{renderEmergency(row.isemergency)}</TableCell>
-              <Button
-                onClick={handleApproval(index)}
-                variant="contained"
-                color="primary"
-                className={classes.button}
-              >
-                {'Approve'}
-              </Button>
+              <TableCell>
+                <Button
+                  onClick={() => handleApproval(index)}
+                  variant="contained"
+                  color="primary"
+                  className={classes.button}
+                >
+                  {'Approve'}
+                </Button>
+                {/* {renderEmergency(row.isemergency)} */}
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

@@ -10,6 +10,9 @@ const leaves = {
   getAllPendingLeaves: async () => {
     return baseAPI.get(`leaves`);
   },
+  updateLeaveApproved: async (caretakerUsername, startDate, endDate) => {
+    return baseAPI.put(`leaves/${caretakerUsername}/${startDate}/${endDate}`);
+  },
 };
 
 export default leaves;
