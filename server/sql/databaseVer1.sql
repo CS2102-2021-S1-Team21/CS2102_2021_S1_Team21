@@ -1,3 +1,5 @@
+-- psql -U postgres cs2102 < server/node_modules/connect-pg-simple/table.sql
+
 CREATE TABLE PCS_Administrator(
     username VARCHAR PRIMARY KEY,
     email VARCHAR NOT NULL UNIQUE,
