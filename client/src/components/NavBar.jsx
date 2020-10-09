@@ -95,14 +95,14 @@ const NavBar = ({ children }) => {
                   <Button
                     color="inherit"
                     className={classes.navItem}
-                    onClick={() => history.push('/mypets')}
+                    onClick={() => history.push('/my-pets')}
                   >
                     {'My Pets'}
                   </Button>
                   <Button
                     color="inherit"
                     className={classes.navItem}
-                    onClick={() => history.push('/mybookings')}
+                    onClick={() => history.push('/my-bookings')}
                   >
                     {'My Bookings'}
                   </Button>
@@ -112,7 +112,7 @@ const NavBar = ({ children }) => {
                 <Button
                   color="inherit"
                   className={classes.navItem}
-                  onClick={() => history.push('/myjobs')}
+                  onClick={() => history.push('/my-jobs')}
                 >
                   {'My Jobs'}
                 </Button>
@@ -121,7 +121,7 @@ const NavBar = ({ children }) => {
                 <Button
                   color="inherit"
                   className={classes.navItem}
-                  onClick={() => history.push('/myleaves')}
+                  onClick={() => history.push('/my-leaves')}
                 >
                   {'My Leave Applications'}
                 </Button>
@@ -130,7 +130,7 @@ const NavBar = ({ children }) => {
                 <Button
                   color="inherit"
                   className={classes.navItem}
-                  onClick={() => history.push('/myavailability')}
+                  onClick={() => history.push('/my-availability')}
                 >
                   {'My Availability'}
                 </Button>
