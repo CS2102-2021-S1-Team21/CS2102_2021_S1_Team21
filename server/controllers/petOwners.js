@@ -1,13 +1,10 @@
 const db = require('../db');
-const sql = require('../sql');
 
 // TODO: reduce boilerplate code
 
 exports.index = async (req, res, next) => {
-  // console.log(sql.petOwners.queries.index);
   try {
-    const result = await db.query(sql.petOwners.queries.index);
-    // console.log(result);
+    const result = await db.query('SELECT * FROM pet_owners');
     res.json({ totalCount: result.rowCount, entries: result.rows });
   } catch (err) {
     next(err);
@@ -32,7 +29,10 @@ exports.new = async (req, res, next) => {
 exports.view = async (req, res, next) => {
   const { username } = req.params;
   try {
-    const result = await db.query(sql.petOwners.queries.view, [username]);
+    const result = await db.query(
+      'SELECT * FROM AppUser WHERE username = $1 AND $1 IN (SELECT petOwnerUsername from Pet_Owner)',
+      [username],
+    );
     if (result.rowCount === 0) {
       res.status(404).json({ error: 'Pet owner not found' });
       return;

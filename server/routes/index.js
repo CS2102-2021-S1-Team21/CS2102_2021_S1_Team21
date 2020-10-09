@@ -4,6 +4,7 @@ const auth = require('./auth');
 const { ensureAuthenticated } = require('../auth/middleware');
 const petOwners = require('./petOwners');
 const leaves = require('./leaves');
+const availability = require('./availability');
 const caretakers = require('./caretakers');
 const reviews = require('./reviews');
 
@@ -11,11 +12,11 @@ router.use('/', auth);
 
 // Routes
 
-router.use('/pet-owners', ensureAuthenticated, petOwners);
 router.use('/leaves', ensureAuthenticated, leaves);
+router.use('/availability', ensureAuthenticated, availability);
+router.use('/pet-owners', ensureAuthenticated, petOwners);
 router.use('/caretakers', ensureAuthenticated, caretakers);
 router.use('/reviews', ensureAuthenticated, reviews);
-router.use('/pet-owners', ensureAuthenticated, petOwners);
 
 // Catch-all route (used for error handling)
 

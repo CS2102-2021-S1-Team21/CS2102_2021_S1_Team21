@@ -1,9 +1,8 @@
 const db = require('../db');
-const sql = require('../sql');
 
 exports.index = async (req, res) => {
   try {
-    const result = await db.query(sql.reviews.queries.index);
+    const result = await db.query('SELECT * FROM Bidded_For_Job');
     res.json({ totalCount: result.rowCount, entries: result.rows });
   } catch (err) {
     console.error(err);
@@ -14,7 +13,10 @@ exports.index = async (req, res) => {
 exports.view = async (req, res) => {
   const { username } = req.params;
   try {
-    const result = await db.query(sql.reviews.queries.view, [username]);
+    const result = await db.query(
+      "SELECT ROW_NUMBER() OVER (ORDER BY reviewDateTime) AS id, *, to_char(reviewDateTime, 'DD/MM/YYYY') AS postedOn FROM Bidded_For_Job WHERE caretakerUsername = $1",
+      [username],
+    );
     if (result.rowCount === 0) {
       res.json({ error: 'Reviews for this caretaker do not exist' });
       return; // TODO: next()?

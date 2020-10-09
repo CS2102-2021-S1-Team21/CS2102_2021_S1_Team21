@@ -8,6 +8,8 @@ import { getSessionCookie } from '../utilities/sessionCookie';
 import { StoreProvider } from '../utilities/store';
 import Loading from './Loading';
 import NavBar from './NavBar';
+import Leaves from '../pages/leaves/Leaves';
+import Availability from '../pages/availabilities/Availability';
 
 const AuthRouter = () => {
   const sessionCookie = getSessionCookie();
@@ -42,9 +44,11 @@ const AuthRouter = () => {
       <NavBar>
         <Switch>
           {/* <Route path="/pet-owner" component={PetOwnerListing} /> */}
+          <Route path="/pet-owner/:email" component={PetOwnerProfile} />
+          <Route exact path="/myleaves" component={Leaves} />
+          <Route exact path="/myavailability" component={Availability} />
           <Route path="/pet-owner/:username" component={PetOwnerProfile} />
           <Route path="/caretakers/:username" component={CaretakerProfile} />
-          {/* <Route exact path="/myleaves" component={Leaves} /> */}
           <Route exact path="/editprofile" component={EditProfile} />
         </Switch>
       </NavBar>
