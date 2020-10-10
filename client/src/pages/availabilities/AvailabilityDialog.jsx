@@ -6,6 +6,7 @@ import { KeyboardDatePicker } from '@material-ui/pickers';
 import DialogActions from '@material-ui/core/DialogActions';
 import { Button, Dialog } from '@material-ui/core';
 import addYears from 'date-fns/addYears';
+import { addDays } from 'date-fns';
 import api from '../../api';
 import { useStore } from '../../utilities/store';
 
@@ -23,8 +24,8 @@ const AvailabilityDialog = ({ open, setOpen }) => {
     setOpen(false);
     try {
       const body = {
-        startDate: selectedDateFrom,
-        endDate: selectedDateTo,
+        startDate: addDays(selectedDateFrom, 1),
+        endDate: addDays(selectedDateTo, 1),
         caretakerUsername: store.user.username,
       };
       await api.availability.addAvailability(body);

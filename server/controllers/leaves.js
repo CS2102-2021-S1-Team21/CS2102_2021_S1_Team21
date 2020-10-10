@@ -44,9 +44,7 @@ exports.updateApproval = async (req, res) => {
     const { caretakerUsername, startDate, endDate } = req.params;
     console.log(caretakerUsername, startDate, endDate);
     const result = await db.query(
-      `UPDATE applies_for_leave_period
-       SET isapproved = true
-       WHERE (caretakerUsername = $1)`,
+      `UPDATE applies_for_leave_period SET isapproved = true WHERE (caretakerUsername = $1 AND startDate = $2 AND endDate = $3)`,
       [caretakerUsername, startDate, endDate],
     );
     res.json(result.rows);

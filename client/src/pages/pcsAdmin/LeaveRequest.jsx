@@ -8,6 +8,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
+import { format } from 'date-fns';
 import api from '../../api';
 
 const useStyles = makeStyles({
@@ -43,9 +44,10 @@ const LeaveRequest = () => {
 
   const handleApproval = async (index) => {
     const item = pendingLeaves[index];
-    console.log(item);
+    const start = format(new Date(item.startdate), 'yyyy-MM-dd');
+    const end = format(new Date(item.enddate), 'yyyy-MM-dd');
     try {
-      await api.leaves.updateLeaveApproved(item.caretakerusername, item.startdate, item.enddate);
+      await api.leaves.updateLeaveApproved(item.caretakerusername, start, end);
     } catch (err) {
       console.log(err.message);
     }
