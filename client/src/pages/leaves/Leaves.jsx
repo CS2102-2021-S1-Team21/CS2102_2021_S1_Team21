@@ -1,8 +1,9 @@
-import { Button, Container } from '@material-ui/core';
+import { Button, CardContent, Container, Card } from '@material-ui/core';
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
+
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
@@ -54,7 +55,19 @@ const Leaves = () => {
 
   return (
     <Container>
-      <h1>{'Leaves taken: __ days\r'}</h1>
+      <h1>{'Leave Application\r'}</h1>
+      <Card>
+        <CardContent>
+          <h4>{'Consecutive working day(s):'}</h4>
+          <h4>{'Total set of 150 days achieved since *date of appuser created at*:'}</h4>
+          <p>
+            {
+              'Note: You must work for a minimum of 2 sets of 150 consecutive days a year. Once your leave is approved, '
+            }
+            {'your consecutive working day(s) will be reset to 0.'}
+          </p>
+        </CardContent>
+      </Card>
       <br />
       <Button variant="contained" color="primary" onClick={handleClickOpen} style={style}>
         {'Apply Leave\r'}
