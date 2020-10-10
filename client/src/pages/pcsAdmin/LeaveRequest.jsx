@@ -35,13 +35,6 @@ const LeaveRequest = () => {
   }, []);
   console.log(pendingLeaves);
 
-  function renderEmergency(isEmergency) {
-    if (isEmergency) {
-      return <p>{'Yes'}</p>;
-    }
-    return <p>{'No'}</p>;
-  }
-
   const handleApproval = async (index) => {
     const item = pendingLeaves[index];
     const start = format(new Date(item.startdate), 'yyyy-MM-dd');
@@ -61,7 +54,7 @@ const LeaveRequest = () => {
             <TableCell>{'Caretaker Username'}</TableCell>
             <TableCell>{'Start Date'}</TableCell>
             <TableCell>{'End Date'}</TableCell>
-            <TableCell>{'Is Emergency'}</TableCell>
+            <TableCell>{''}</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
