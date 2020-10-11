@@ -120,6 +120,7 @@ CREATE TYPE TRANSFER_TYPE AS ENUM (
     'On-site transfer'
 );
 
+
 CREATE TABLE Bids(
     petName VARCHAR,
     petOwnerUsername VARCHAR,
