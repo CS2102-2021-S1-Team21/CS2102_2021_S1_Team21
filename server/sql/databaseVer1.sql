@@ -131,13 +131,12 @@ CREATE TABLE Bids(
     endDate DATE,
     transferType TRANSFER_TYPE NOT NULL,
     remarks VARCHAR,
-    transactionIsVerified BOOLEAN DEFAULT FALSE CHECK(status = 'Accepted'),
     transactionDateTime TIMESTAMP CHECK (status = 'Accepted'),
     paymentMethod PAYMENT_METHOD CHECK (status = 'Accepted'),
     totalAmount DECIMAL(10,2) CHECK (status = 'Accepted'),
-    rating INTEGER CHECK ((rating >= 1) AND (rating <=5) AND (transactionIsVerified) AND (status = 'Completed')),
-    comment VARCHAR CHECK (transactionIsVerified AND status = 'Completed'),
-    reviewDateTime TIMESTAMP CHECK (transactionIsVerified AND status = 'Completed'),
+    rating INTEGER CHECK ((rating >= 1) AND (rating <=5) AND (transactionDateTime IS NOT NULL) AND (status = 'Completed')),
+    comment VARCHAR CHECK ((transactionDateTime IS NOT NULL) AND status = 'Completed'),
+    reviewDateTime TIMESTAMP CHECK ((transactionDateTime IS NOT NULL) AND status = 'Completed'),
     PRIMARY KEY(petName, petOwnerUsername, caretakerUsername, submittedAt, startDate, endDate),
     FOREIGN KEY(petName, petOwnerUsername) REFERENCES Pet(name, petOwnerUsername) ON DELETE CASCADE
 );
