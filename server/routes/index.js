@@ -2,6 +2,7 @@ const router = require('express').Router();
 
 const auth = require('./auth');
 const { ensureAuthenticated } = require('../auth/middleware');
+const pets = require('./pets');
 const petOwners = require('./petOwners');
 const leaves = require('./leaves');
 const availability = require('./availability');
@@ -17,6 +18,7 @@ router.use('/availability', ensureAuthenticated, availability);
 router.use('/pet-owners', ensureAuthenticated, petOwners);
 router.use('/caretakers', ensureAuthenticated, caretakers);
 router.use('/reviews', ensureAuthenticated, reviews);
+router.use('/pets', ensureAuthenticated, pets);
 
 // Catch-all route (used for error handling)
 
