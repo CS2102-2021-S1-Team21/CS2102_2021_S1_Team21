@@ -1,6 +1,6 @@
 -- DROP TABLE IF EXISTS pet_owners;
 -- DROP TABLE IF EXISTS PCS_Administrator;
--- DROP TABLE IF EXISTS AppUser;
+-- DROP TABLE IF EXISTS App_User;
 -- DROP TABLE IF EXISTS Pet_Owner;
 -- DROP TABLE IF EXISTS Caretaker;
 -- DROP TABLE IF EXISTS Full_Time_Employee;
@@ -11,7 +11,7 @@
 -- DROP TABLE IF EXISTS Records_Monthly_Summary;
 -- DROP TABLE IF EXISTS Indicates_Availability_Period;
 -- DROP TABLE IF EXISTS Applies_For_Leave_Period;
--- DROP TABLE IF EXISTS Bidded_For_Job;
+-- DROP TABLE IF EXISTS Bids;
  -- INSERT INTO pet_owners
 -- VALUES ('notaphoenix@gmail.com',
 --         'mushu');
@@ -28,7 +28,7 @@ VALUES
     'PCS Admin',
     null);
 
-INSERT INTO AppUser
+INSERT INTO App_User
 VALUES ('oompaloompa',
         'minion@wonkafactory.co',
         '$2a$10$k9A9eGmV/AHwQ2toQSfI/OonyqFLtcL7DQFEmGeyRF2htHJV4SaQW', -- bcrypt for 'password'
@@ -39,7 +39,7 @@ VALUES ('oompaloompa',
  '',
  '');
 
-INSERT INTO AppUser
+INSERT INTO App_User
 VALUES ('dora',
         'theexplorer@gmail.com',
         '$2a$10$k9A9eGmV/AHwQ2toQSfI/OonyqFLtcL7DQFEmGeyRF2htHJV4SaQW', -- bcrypt for 'password'
@@ -50,7 +50,7 @@ VALUES ('dora',
  '',
  '');
 
-INSERT INTO AppUser
+INSERT INTO App_User
 VALUES ('ladygaga',
         'mistress@monstafactory.co',
         '$2a$10$k9A9eGmV/AHwQ2toQSfI/OonyqFLtcL7DQFEmGeyRF2htHJV4SaQW', -- bcrypt for 'password'
@@ -62,7 +62,7 @@ VALUES ('ladygaga',
  '1212121212');
 
 
-INSERT INTO AppUser
+INSERT INTO App_User
 VALUES ('harambe', 'harambe@gmail.com',
                   '$2a$10$k9A9eGmV/AHwQ2toQSfI/OonyqFLtcL7DQFEmGeyRF2htHJV4SaQW', -- bcrypt for 'password'
  'Mr Harambe',
@@ -73,7 +73,7 @@ VALUES ('harambe', 'harambe@gmail.com',
  '123123');
 
 
-INSERT INTO AppUser
+INSERT INTO App_User
 VALUES ('wincent',
         'wincent@gmail.com',
         '$2a$10$k9A9eGmV/AHwQ2toQSfI/OonyqFLtcL7DQFEmGeyRF2htHJV4SaQW', -- bcrypt for 'password'
@@ -167,7 +167,7 @@ VALUES ('wincent',
         FALSE);
 
 
-INSERT INTO Bidded_For_Job(petName, petOwnerUsername, caretakerUsername, dailyPrice, submittedAt, startDate, endDate, transferType, rating, comment, reviewDateTime)
+INSERT INTO Bids(petName, petOwnerUsername, caretakerUsername, dailyPrice, submittedAt, startDate, endDate, transferType, rating, comment, reviewDateTime)
 VALUES('Gougou',
        'ladygaga',
        'wincent',
@@ -175,13 +175,13 @@ VALUES('Gougou',
        '1/1/20',
        '12/10/19',
        '12/12/19',
-       'Through PCS',
+       'On-site transfer',
        5,
        'Amazing, my dog came back pregnant',
        '1/1/20');
 
 
-INSERT INTO Bidded_For_Job(petName, petOwnerUsername, caretakerUsername, dailyPrice, submittedAt, startDate, endDate, transferType, rating, comment, reviewDateTime)
+INSERT INTO Bids(petName, petOwnerUsername, caretakerUsername, dailyPrice, submittedAt, startDate, endDate, transferType, rating, comment, reviewDateTime)
 VALUES('Gougou',
        'ladygaga',
        'wincent',
@@ -189,7 +189,7 @@ VALUES('Gougou',
        '1/1/20',
        '3/3/20',
        '3/6/20',
-       'Through PCS',
+       'On-site transfer',
        2,
        'Terrible, my dog came back obese',
        '1/1/20');

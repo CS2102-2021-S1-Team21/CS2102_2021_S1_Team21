@@ -8,7 +8,7 @@ CREATE TABLE PCS_Administrator(
     deletedAt TIMESTAMP
 );
 
-CREATE TABLE AppUser(
+CREATE TABLE App_User(
     username VARCHAR PRIMARY KEY,
     email VARCHAR NOT NULL UNIQUE,
     passwordDigest VARCHAR NOT NULL,
@@ -25,11 +25,11 @@ CREATE TABLE Pet_Owner(
     ccName VARCHAR,
     ccExpiryDate DATE,
     ccCvvCode VARCHAR,
-    petOwnerUsername VARCHAR PRIMARY KEY REFERENCES AppUser(username)
+    petOwnerUsername VARCHAR PRIMARY KEY REFERENCES App_User(username)
 );
 
 CREATE TABLE Caretaker(
-    caretakerUsername VARCHAR PRIMARY KEY REFERENCES AppUser(username),
+    caretakerUsername VARCHAR PRIMARY KEY REFERENCES App_User(username),
     totalAverageRating DECIMAL(2,1)
 );
 
@@ -111,7 +111,19 @@ CREATE TYPE STATUS AS ENUM (
     'Rejected'
 );
 
-CREATE TABLE Bidded_For_Job(
+CREATE TYPE PAYMENT_METHOD AS ENUM (
+    'Cash',
+    'Credit Card'
+);
+
+CREATE TYPE TRANSFER_TYPE AS ENUM (
+    'Delivery',
+    'Pick-up',
+    'On-site transfer'
+);
+
+
+CREATE TABLE Bids(
     petName VARCHAR,
     petOwnerUsername VARCHAR,
     caretakerUsername VARCHAR REFERENCES Caretaker(caretakerUsername) ON DELETE CASCADE,
@@ -120,15 +132,14 @@ CREATE TABLE Bidded_For_Job(
     submittedAt TIMESTAMP,
     startDate DATE,
     endDate DATE,
-    transferType VARCHAR NOT NULL,
+    transferType TRANSFER_TYPE NOT NULL,
     remarks VARCHAR,
-    transactionIsVerified BOOLEAN DEFAULT FALSE,
-    transactionDateTime TIMESTAMP,
-    paymentMethod VARCHAR,
-    totalAmount DECIMAL(10,2),
-    rating INTEGER CHECK ((rating >= 1) AND (rating <=5)),
-    comment VARCHAR,
-    reviewDateTime TIMESTAMP,
+    transactionDateTime TIMESTAMP CHECK (status = 'Accepted'),
+    paymentMethod PAYMENT_METHOD CHECK (status = 'Accepted'),
+    totalAmount DECIMAL(10,2) CHECK (status = 'Accepted'),
+    rating INTEGER CHECK ((rating >= 1) AND (rating <=5) AND (transactionDateTime IS NOT NULL) AND (status = 'Completed')),
+    comment VARCHAR CHECK ((transactionDateTime IS NOT NULL) AND status = 'Completed'),
+    reviewDateTime TIMESTAMP CHECK ((transactionDateTime IS NOT NULL) AND status = 'Completed'),
     PRIMARY KEY(petName, petOwnerUsername, caretakerUsername, submittedAt, startDate, endDate),
     FOREIGN KEY(petName, petOwnerUsername) REFERENCES Pet(name, petOwnerUsername) ON DELETE CASCADE
 );
