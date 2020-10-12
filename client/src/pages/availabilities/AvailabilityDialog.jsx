@@ -24,8 +24,8 @@ const AvailabilityDialog = ({ open, setOpen }) => {
     setOpen(false);
     try {
       const body = {
-        startDate: addDays(selectedDateFrom, 1),
-        endDate: addDays(selectedDateTo, 1),
+        startDate: selectedDateFrom,
+        endDate: selectedDateTo,
         caretakerUsername: store.user.username,
       };
       await api.availability.addAvailability(body);
