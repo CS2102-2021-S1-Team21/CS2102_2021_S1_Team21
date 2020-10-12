@@ -2,7 +2,7 @@ const db = require('../db');
 
 exports.index = async (req, res) => {
   try {
-    const result = await db.query('SELECT * FROM Bidded_For_Job');
+    const result = await db.query('SELECT * FROM bids');
     res.json({ totalCount: result.rowCount, entries: result.rows });
   } catch (err) {
     console.error(err);
@@ -14,7 +14,7 @@ exports.view = async (req, res) => {
   const { username } = req.params;
   try {
     const result = await db.query(
-      "SELECT ROW_NUMBER() OVER (ORDER BY reviewDateTime) AS id, *, to_char(reviewDateTime, 'DD/MM/YYYY') AS postedOn FROM Bidded_For_Job WHERE caretakerUsername = $1",
+      "SELECT ROW_NUMBER() OVER (ORDER BY reviewDateTime) AS id, *, to_char(reviewDateTime, 'DD/MM/YYYY') AS postedOn FROM Bids WHERE caretakerUsername = $1",
       [username],
     );
     if (result.rowCount === 0) {
