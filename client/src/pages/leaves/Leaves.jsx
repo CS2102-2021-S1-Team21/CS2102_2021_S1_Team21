@@ -68,10 +68,12 @@ const Leaves = () => {
             }
             {'your consecutive working day(s) will be reset to 0.'}
             <br />
-            {'- Leave cannot have overlapping dates (Even if start and end date is same) '} <br />
+            {'- Leave cannot have overlapping dates (Even if start and end date is same) '} 
+            <br />
             {
               '- Start and end date starts and ends at 8am respectively. Eg: If you want to take leave on Monday 11th January 2020, '
-            }{' '}
+            }
+            {' '}
             <br />
             {'you have put it as FROM: 11/01/2020 TO: 12/01/2020 (Not TO: 11/01/2020)'}
           </p>
