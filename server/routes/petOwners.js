@@ -5,6 +5,6 @@ const router = express.Router();
 
 router.get('/', petOwners.index);
 router.post('/', petOwners.new);
-router.get('/:email', petOwners.view);
+router.get('/:username', petOwners.view);
 
 module.exports = router;
