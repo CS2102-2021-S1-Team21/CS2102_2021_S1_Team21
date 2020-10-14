@@ -3,15 +3,7 @@ import { Formik, Form, Field } from 'formik';
 import { Container } from '@material-ui/core';
 
 const ProfileSettings = () => {
-  return (
-    <Container>
-      <Formik onSubmit={}>
-        <Form>
-          hello
-        </Form>
-      </Formik>
-    </Container>
-  );
+  return <Container />;
 };
 
 export default ProfileSettings;
