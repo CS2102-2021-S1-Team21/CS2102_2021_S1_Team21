@@ -58,20 +58,15 @@ const Leaves = () => {
       <h1>{'Leave Application\r'}</h1>
       <Card>
         <CardContent>
-          <h4>{'Consecutive working day(s):'}</h4>
-          <h4>{'Total set of 150 days achieved since *date of appuser created at*:'}</h4>
           <p>{'Note:'}</p>
           <p>{'- You must work for a minimum of 2 sets of 150 consecutive days a year. '}</p>
-          <p>
-            {'- Once your leave is approved, your consecutive working day(s) will be reset to 0.'}
-          </p>
-          <p>{'- Leave cannot have overlapping dates (Even if start and end date is same)'}</p>
+          <p>{'- Leave cannot have overlapping dates'}</p>
           <p>
             {
               '- Start and end date starts and ends at 8am respectively. Eg: If you want to take leave on Monday 11th January 2020,'
             }
           </p>
-          <p>{'you have put it as FROM: 11/01/2020 TO: 12/01/2020 (Not TO: 11/01/2020)'}</p>
+          <p>{'  you have put it as FROM: 11/01/2020 TO: 12/01/2020 (Not TO: 11/01/2020)'}</p>
         </CardContent>
       </Card>
       <br />
