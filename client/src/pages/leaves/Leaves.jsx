@@ -1,8 +1,9 @@
-import { Button, Container } from '@material-ui/core';
+import { Button, CardContent, Container, Card } from '@material-ui/core';
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
+
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
@@ -54,7 +55,20 @@ const Leaves = () => {
 
   return (
     <Container>
-      <h1>{'Leaves taken: __ days\r'}</h1>
+      <h1>{'Leave Application\r'}</h1>
+      <Card>
+        <CardContent>
+          <p>{'Note:'}</p>
+          <p>{'- You must work for a minimum of 2 sets of 150 consecutive days a year. '}</p>
+          <p>{'- Leave cannot have overlapping dates'}</p>
+          <p>
+            {
+              '- Start and end date starts and ends at 8am respectively. Eg: If you want to take leave on Monday 11th January 2020,'
+            }
+          </p>
+          <p>{'  you have put it as FROM: 11/01/2020 TO: 12/01/2020 (Not TO: 11/01/2020)'}</p>
+        </CardContent>
+      </Card>
       <br />
       <Button variant="contained" color="primary" onClick={handleClickOpen} style={style}>
         {'Apply Leave\r'}
@@ -72,7 +86,7 @@ const Leaves = () => {
           </TableHead>
           <TableBody>
             {leaves.map((row, index) => (
-              <TableRow key={row.index}>
+              <TableRow key={index}>
                 <TableCell align="left">{row.start}</TableCell>
                 <TableCell align="right">{row.end}</TableCell>
                 <TableCell align="right">{renderEmergency(row.isemergency)}</TableCell>

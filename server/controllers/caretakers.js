@@ -13,7 +13,7 @@ exports.view = async (req, res) => {
   const { username } = req.params;
   try {
     const result = await db.query(
-      'SELECT * FROM AppUser WHERE username = $1 AND $1 IN (SELECT caretakerUsername from Caretaker)',
+      'SELECT * FROM App_User WHERE username = $1 AND $1 IN (SELECT caretakerUsername from Caretaker)',
       [username],
     );
     if (result.rowCount === 0) {
