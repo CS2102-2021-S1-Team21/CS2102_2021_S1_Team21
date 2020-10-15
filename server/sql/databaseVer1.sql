@@ -1,5 +1,14 @@
 -- psql -U postgres cs2102 < server/node_modules/connect-pg-simple/table.sql
 
+------------------------------------------ DROPS ALL TABLES (EXCEPT ENUMS) ------------------------------------------
+DO $$ DECLARE
+  r RECORD;
+BEGIN
+  FOR r IN (SELECT tablename FROM pg_tables WHERE schemaname = current_schema()) LOOP
+    EXECUTE 'DROP TABLE ' || quote_ident(r.tablename) || ' CASCADE';
+  END LOOP;
+END $$;
+
 CREATE TABLE PCS_Administrator(
     username VARCHAR PRIMARY KEY,
     email VARCHAR NOT NULL UNIQUE,
@@ -103,7 +112,7 @@ CREATE TABLE Applies_For_Leave_Period(
     isEmergency BOOLEAN NOT NULL,
     isApproved BOOLEAN DEFAULT FALSE,
     CHECK (startDate <= endDate),
-    CONSTRAINT overlapping_date EXCLUDE USING GIST (daterange(startDate, endDate) WITH &&),
+    CONSTRAINT overlapping_date2 EXCLUDE USING GIST (daterange(startDate, endDate) WITH &&),
     PRIMARY KEY(caretakerUsername, startDate, endDate)
 );
 
@@ -126,7 +135,6 @@ CREATE TYPE TRANSFER_TYPE AS ENUM (
     'On-site transfer'
 );
 
-
 CREATE TABLE Bids(
     petName VARCHAR,
     petOwnerUsername VARCHAR,
@@ -138,18 +146,20 @@ CREATE TABLE Bids(
     endDate DATE,
     transferType TRANSFER_TYPE NOT NULL,
     remarks VARCHAR,
-    transactionDateTime TIMESTAMP CHECK (status = 'Accepted'),
-    paymentMethod PAYMENT_METHOD CHECK (status = 'Accepted'),
-    totalAmount DECIMAL(10,2) CHECK (status = 'Accepted'),
-    rating INTEGER CHECK ((rating >= 1) AND (rating <=5) AND (transactionDateTime IS NOT NULL) AND (status = 'Completed')),
-    comment VARCHAR CHECK ((transactionDateTime IS NOT NULL) AND status = 'Completed'),
-    reviewDateTime TIMESTAMP CHECK ((transactionDateTime IS NOT NULL) AND status = 'Completed'),
+    transactionDateTime TIMESTAMP,
+    paymentMethod PAYMENT_METHOD,
+    totalAmount DECIMAL(10,2),
+    rating INTEGER CHECK (rating BETWEEN 1 AND 5),
+    comment VARCHAR,
+    reviewDateTime TIMESTAMP,
+    CONSTRAINT statusAccepted CHECK(status IN ('Accepted','Completed') OR (transactionDateTime IS NULL AND paymentMethod IS NULL AND totalAmount IS NULL)),
+    CONSTRAINT transactionCompleted CHECK((transactionDATEtIME IS NOT NULL AND status = 'Completed') OR (rating IS NULL AND comment IS NULL AND reviewDateTime IS NULL)),
     PRIMARY KEY(petName, petOwnerUsername, caretakerUsername, submittedAt, startDate, endDate),
     FOREIGN KEY(petName, petOwnerUsername) REFERENCES Pet(name, petOwnerUsername) ON DELETE CASCADE
 );
 
 
--- TRIGGERS
+-------------------------------------------- TRIGGERS ------------------------------------------
 -- CREATE TRIGGER tr_check_leave()
 -- BEFORE INSERT ON applies_for_leave_period
 -- EXECUTE PROCEDURE check_leave_validity;
@@ -175,9 +185,9 @@ CREATE TABLE Bids(
 --     FROM with_new w1 INNER JOIN with_new w2 ON w1.ROW_NUMBER = w2.ROW_NUMBER - 1
 
     
-    select (generate_series('2020-01-01', '2020-12-31', '1 day'::interval))::date, count(*)
-    EXCEPT
-    select (generate_series(
-        (select startdate from applies_for_leave_period where caretakerusername = 'wincent'),
-        (select enddate from applies_for_leave_period where caretakerusername = 'wincent'),
-         '1 day'::interval))::date, count(*);
+    -- select (generate_series('2020-01-01', '2020-12-31', '1 day'::interval))::date, count(*)
+    -- EXCEPT
+    -- select (generate_series(
+    --     (select startdate from applies_for_leave_period where caretakerusername = 'wincent'),
+    --     (select enddate from applies_for_leave_period where caretakerusername = 'wincent'),
+    --      '1 day'::interval))::date, count(*);
