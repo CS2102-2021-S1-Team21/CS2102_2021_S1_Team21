@@ -137,7 +137,7 @@ const NavBar = ({ children }) => {
               )}
 
               <div className={classes.space} />
-              <Tooltip title="Edit Account Settings" onClick={() => history.push('/edit-profile')}>
+              <Tooltip title="Edit Account Settings" onClick={() => history.push('/profile-settings')}>
                 <IconButton color="inherit">
                   <SettingsIcon />
                 </IconButton>

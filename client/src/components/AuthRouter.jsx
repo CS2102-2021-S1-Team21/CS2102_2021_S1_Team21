@@ -3,7 +3,6 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import api from '../api';
 import Availability from '../pages/availabilities/Availability';
 import CaretakerProfile from '../pages/CaretakerProfile';
-import EditProfile from '../pages/EditProfile';
 import Leaves from '../pages/leaves/Leaves';
 import PetOwnerProfile from '../pages/PetOwnerProfile';
 import { getSessionCookie } from '../utilities/sessionCookie';
@@ -46,13 +45,13 @@ const AuthRouter = () => {
       <NavBar>
         <Switch>
           {/* <Route path="/pet-owner" component={PetOwnerListing} /> */}
-          <Route path="/profile-settings" component={ProfileSettings} />
           <Route exact path="/my-leaves" component={Leaves} />
           <Route exact path="/my-availability" component={Availability} />
-          <Route exact path="/edit-profile" component={EditProfile} />
           <Route path="/pet-owners/:username" component={PetOwnerProfile} />
           <Route path="/caretakers/:username" component={CaretakerProfile} />
           <Route path="/pcs-admin" component={PcsAdmin} />
+          <Route path="/profile-settings" component={ProfileSettings} />
+
         </Switch>
       </NavBar>
     </StoreProvider>

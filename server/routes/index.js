@@ -7,6 +7,8 @@ const leaves = require('./leaves');
 const availability = require('./availability');
 const caretakers = require('./caretakers');
 const reviews = require('./reviews');
+const profileSettings = require('./profileSettings');
+
 
 router.use('/', auth);
 
@@ -17,6 +19,8 @@ router.use('/availability', ensureAuthenticated, availability);
 router.use('/pet-owners', ensureAuthenticated, petOwners);
 router.use('/caretakers', ensureAuthenticated, caretakers);
 router.use('/reviews', ensureAuthenticated, reviews);
+router.use('/profile-settings', ensureAuthenticated, profileSettings);
+
 
 // Catch-all route (used for error handling)
 
