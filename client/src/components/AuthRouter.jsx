@@ -51,7 +51,6 @@ const AuthRouter = () => {
           <Route path="/caretakers/:username" component={CaretakerProfile} />
           <Route path="/pcs-admin" component={PcsAdmin} />
           <Route path="/profile-settings" component={ProfileSettings} />
-
         </Switch>
       </NavBar>
     </StoreProvider>

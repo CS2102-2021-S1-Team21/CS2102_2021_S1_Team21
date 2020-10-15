@@ -1,6 +1,6 @@
-import { useStore } from '../utilities/store';
 import React, { useEffect, useState } from 'react';
 import { Container, TextField, Typography, Card, CardContent } from '@material-ui/core';
+import { useStore } from '../utilities/store';
 import api from '../api';
 
 const ProfileSettings = () => {
@@ -33,7 +33,7 @@ const ProfileSettings = () => {
             <Typography variant="h4" style={{ marginTop: 30, marginBottom: 30 }}>
               {'Edit Profile'}
             </Typography>
-            {/* Find a way to rerender after state change*/}
+            {/* Find a way to rerender after state change */}
             <TextField
               id="profileName"
               style={{ marginBottom: 34 }}
@@ -81,7 +81,7 @@ const ProfileSettings = () => {
               style={{ marginBottom: 34 }}
               label="New Password"
               variant="outlined"
-              defaultValue={'FakePassword'}
+              defaultValue="FakePassword"
               type="password"
               fullWidth
             />
@@ -90,7 +90,7 @@ const ProfileSettings = () => {
               style={{ marginBottom: 34 }}
               label="Confirm New Password"
               variant="outlined"
-              defaultValue={'FakePassword'}
+              defaultValue="FakePassword"
               type="password"
               fullWidth
             />
