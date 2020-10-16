@@ -117,7 +117,7 @@ const ProfileSettings = () => {
             )}
             <Button variant="contained" color="primary" onClick={handleUpdate} style={style}>
               {'Update\r'}
-            </Button>{' '}
+            </Button>
           </form>
         </CardContent>
       </Card>
