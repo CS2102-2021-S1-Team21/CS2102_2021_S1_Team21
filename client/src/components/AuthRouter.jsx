@@ -9,7 +9,7 @@ import { getSessionCookie } from '../utilities/sessionCookie';
 import { StoreProvider } from '../utilities/store';
 import Loading from './Loading';
 import NavBar from './NavBar';
-import ProfileSettings from '../pages/ProfileSettings';
+import ProfileSettings from '../pages/profileSettings/ProfileSettings';
 import PcsAdmin from '../pages/pcsAdmin/PcsAdmin';
 
 const AuthRouter = () => {

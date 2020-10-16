@@ -4,9 +4,9 @@ const profileSettings = {
   getUserDetails: async (username) => {
     return baseAPI.get(`profile-settings/${username}`);
   },
-  // editUserDetails: async (username) => {
-  //   return baseAPI.post(`profile-settings/edit/${username}`);
-  // },
+  updateUserDetails: async (body) => {
+    return baseAPI.post(`profile-settings/update/${body.username}`, body);
+  },
 };
 
 export default profileSettings;

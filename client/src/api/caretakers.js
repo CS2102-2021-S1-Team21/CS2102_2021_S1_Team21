@@ -7,6 +7,9 @@ const caretakers = {
   getCaretaker: async (username) => {
     return baseAPI.get(`caretakers/${username}`);
   },
+  getCaretakerCaresFor: async (username) => {
+    return baseAPI.get(`caretakers/caresFor/${username}`);
+  },
 };
 
 export default caretakers;
