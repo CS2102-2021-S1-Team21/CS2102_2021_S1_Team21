@@ -16,9 +16,10 @@ const Upcoming = () => {
   const username = 'ladygaga';
 
   useEffect(() => {
-    api.bids.getBids(username).then((x) => setBids(x));
-  }, [username]);
+    api.bids.getBids(store.user.username).then((x) => setBids(x));
+  }, [store.user.username]);
 
+  console.log(bids);
 
 
 //   const fetchPetOwner = async () => {

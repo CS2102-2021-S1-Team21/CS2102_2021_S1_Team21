@@ -4,6 +4,7 @@ import leaves from './leaves';
 import availability from './availability';
 import caretakers from './caretakers';
 import reviews from './reviews';
+import bids from './bids';
 
 /* ====================================
  * Index of all API request routes
@@ -17,6 +18,7 @@ const api = {
   availability,
   caretakers,
   reviews,
+  bids,
   // pets,
 };
 
