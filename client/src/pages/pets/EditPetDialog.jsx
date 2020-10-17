@@ -50,7 +50,6 @@ const EditPetDialog = ({ pet, petCategories, onClose, handleSubmit }) => {
                 />
               </Grid>
               <Grid item xs={12}>
-                {/* FIXME: dates are getting shifted */}
                 <Field
                   name="yearofbirth"
                   label="Year of Birth"
