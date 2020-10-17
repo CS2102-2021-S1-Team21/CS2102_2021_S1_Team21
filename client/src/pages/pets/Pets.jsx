@@ -17,17 +17,21 @@ import React, { useCallback, useEffect, useState } from 'react';
 import api from '../../api';
 import { getYear } from '../../utilities/datetime';
 import { useStore } from '../../utilities/store';
-import EditPetDialog from './EditPetDialog';
+import PetFormDialog from './PetFormDialog';
 
 const DEFAULT_PET = {
   name: '',
   breed: '',
+  requirements: [],
 };
 
 const useStyles = makeStyles((theme) => ({
   avatar: {
     color: theme.palette.getContrastText(theme.palette.secondary.dark),
     backgroundColor: theme.palette.secondary.dark,
+  },
+  editButton: {
+    color: theme.palette.primary.light, // TODO: change this colour
   },
 }));
 
@@ -42,7 +46,6 @@ const Pets = () => {
 
   const updatePets = useCallback(() => {
     api.pets.getPets(petOwnerUsername).then((response) => {
-      console.log(response.rows);
       setPets(response.rows);
     });
   }, [petOwnerUsername]);
@@ -64,17 +67,29 @@ const Pets = () => {
   };
 
   const handleSubmitEdit = async (originalPetName, updatedPet) => {
-    api.pets.editPet(petOwnerUsername, originalPetName, updatedPet).then(() => {
-      updatePets();
-      setSelectedPet(null);
-    });
+    api.pets
+      .editPet(petOwnerUsername, originalPetName, updatedPet)
+      .then(() => {
+        updatePets();
+        setSelectedPet(null);
+      })
+      .catch((err) => {
+        // TODO: error handling
+        console.error(err);
+      });
   };
 
   const handleSubmitAdd = async (originalPetName, newPet) => {
-    api.pets.addPet({ ...newPet, petOwnerUsername }).then(() => {
-      updatePets();
-      setSelectedPet(null);
-    });
+    api.pets
+      .addPet({ ...newPet, petOwnerUsername })
+      .then(() => {
+        updatePets();
+        setSelectedPet(null);
+      })
+      .catch((err) => {
+        // TODO: error handling
+        console.error(err);
+      });
   };
 
   const handleDialogClose = () => setSelectedPet(null);
@@ -91,7 +106,7 @@ const Pets = () => {
                 </Typography>
               </Grid>
               <Grid item>
-                <Button variant="outlined" onClick={handleClickAdd}>
+                <Button variant="contained" color="primary" onClick={handleClickAdd}>
                   {'Add Pet'}
                 </Button>
               </Grid>
@@ -106,28 +121,51 @@ const Pets = () => {
                 action={[
                   <IconButton
                     key="edit"
+                    className={classes.editButton}
                     onClick={() => {
                       setSelectedPet(pet);
                     }}
                   >
                     <EditIcon />
                   </IconButton>,
-                  <IconButton key="delete" onClick={() => handleClickDelete(pet.name)}>
+                  <IconButton
+                    key="delete"
+                    color="secondary"
+                    onClick={() => handleClickDelete(pet.name)}
+                  >
                     <DeleteIcon />
                   </IconButton>,
                 ]}
               />
               <CardContent>
-                <Typography>{pet.categoryname}</Typography>
-                <Typography>{pet.breed}</Typography>
-                <Typography>{pet.gender}</Typography>
-                <Typography>{`Year of Birth: ${getYear(pet.yearofbirth)}`}</Typography>
+                <Grid container>
+                  <Grid item xs={12} md={4}>
+                    <Typography color="primary">{'Profile Info'}</Typography>
+                    <Typography>{pet.categoryname}</Typography>
+                    <Typography>{pet.breed}</Typography>
+                    <Typography>{pet.gender}</Typography>
+                    <Typography gutterBottom>
+                      {`Year of Birth: ${getYear(pet.yearofbirth)}`}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12} md={8}>
+                    <Typography color="primary">{'Special Requirements'}</Typography>
+                    {pet.requirements.length === 0 ? (
+                      <Typography>{'None'}</Typography>
+                    ) : (
+                      pet.requirements.map((requirement) => (
+                        <Typography>{`${requirement.requirementtype} – ${requirement.description}`}</Typography>
+                      ))
+                    )}
+                  </Grid>
+                </Grid>
               </CardContent>
             </Card>
           ))}
         </CardContent>
       </Card>
-      <EditPetDialog
+      <PetFormDialog
+        title={selectedPet === 'default' ? 'New Pet' : 'Edit Pet'}
         pet={selectedPet === 'default' ? DEFAULT_PET : selectedPet}
         petCategories={petCategories}
         onClose={handleDialogClose}

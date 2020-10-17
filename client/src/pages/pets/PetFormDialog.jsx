@@ -1,20 +1,49 @@
-import { Dialog, DialogContent, DialogTitle, Grid } from '@material-ui/core';
-import { Field, Form, Formik } from 'formik';
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  Grid,
+  IconButton,
+  makeStyles,
+  Typography,
+} from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
+import { Field, FieldArray, Form, Formik } from 'formik';
 import React from 'react';
 import FormDatePicker from '../../components/forms/FormDatePicker';
 import FormRadioGroup from '../../components/forms/FormRadioGroup';
 import FormSelect from '../../components/forms/FormSelect';
 import FormTextField from '../../components/forms/FormTextField';
 import SubmitButton from '../../components/forms/SubmitButton';
+import PetRequirementsFieldArray from './PetRequirementFieldArray';
 
-const EditPetDialog = ({ pet, petCategories, onClose, handleSubmit }) => {
+const useStyles = makeStyles((theme) => ({
+  title: {
+    textAlign: 'center',
+  },
+}));
+
+const PetFormDialog = ({ title, pet, petCategories, onClose, handleSubmit }) => {
+  const classes = useStyles();
+
   if (!pet) return null;
 
   const initialValues = pet;
 
   return (
-    <Dialog open={!!pet} onClose={onClose}>
-      <DialogTitle>{'Edit Pet'}</DialogTitle>
+    <Dialog open={!!pet} onClose={onClose} maxWidth="md">
+      <DialogTitle>
+        <Grid container justify="space-between" alignItems="center">
+          <Grid item>
+            <Typography variant="h5">{title}</Typography>
+          </Grid>
+          <Grid item>
+            <IconButton onClick={onClose}>
+              <CloseIcon />
+            </IconButton>
+          </Grid>
+        </Grid>
+      </DialogTitle>
       <DialogContent>
         <Formik initialValues={initialValues} onSubmit={(values) => handleSubmit(pet.name, values)}>
           <Form>
@@ -22,10 +51,10 @@ const EditPetDialog = ({ pet, petCategories, onClose, handleSubmit }) => {
               <Grid item xs={12}>
                 <Field name="name" label="Pet Name" component={FormTextField} required />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={12} md={6}>
                 <Field name="breed" label="Breed" component={FormTextField} required />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={12} md={6}>
                 <Field
                   name="categoryname"
                   label="Category"
@@ -59,6 +88,17 @@ const EditPetDialog = ({ pet, petCategories, onClose, handleSubmit }) => {
                   required
                 />
               </Grid>
+
+              <hr />
+
+              <Grid item xs={12}>
+                <Typography component="h2" variant="h6" className={classes.title}>
+                  {'Pet Requirements'}
+                </Typography>
+              </Grid>
+              <Grid item xs={12}>
+                <FieldArray name="requirements" component={PetRequirementsFieldArray} />
+              </Grid>
               <Grid item xs={12}>
                 <SubmitButton />
               </Grid>
@@ -70,4 +110,4 @@ const EditPetDialog = ({ pet, petCategories, onClose, handleSubmit }) => {
   );
 };
 
-export default EditPetDialog;
+export default PetFormDialog;
