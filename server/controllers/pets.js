@@ -5,6 +5,7 @@ const {
   DUPLICATE_KEY_VALUE_ERR_CODE,
   PET_DUPLICATE_KEY_ERR_DETAIL,
   REQUIREMENT_DUPLICATE_KEY_ERR_DETAIL,
+  messages,
 } = require('../constants');
 
 exports.index = async (req, res, next) => {
@@ -47,7 +48,7 @@ exports.view = async (req, res, next) => {
       [petOwnerUsername, petName],
     );
     if (result.rowCount === 0) {
-      res.status(404).json({ error: 'Pet not found' });
+      res.status(404).json({ error: messages.PET_NOT_FOUND });
       return;
     }
     const requirementsResult = await db.query(
@@ -102,11 +103,9 @@ exports.new = async (req, res, next) => {
     if (err.code === DUPLICATE_KEY_VALUE_ERR_CODE) {
       if (err.detail.startsWith(PET_DUPLICATE_KEY_ERR_DETAIL)) {
         // Assumption: Only pet owners will add pets for themselves
-        res.status(400).json({ error: 'Pet with same name already exists' });
+        res.status(400).json({ error: messages.DUPLICATE_PET });
       } else if (err.detail.startsWith(REQUIREMENT_DUPLICATE_KEY_ERR_DETAIL)) {
-        res
-          .status(400)
-          .json({ error: 'Pet cannot have two requirements with the same requirement type' });
+        res.status(400).json({ error: messages.DUPLICATE_PET_REQUIREMENT });
       }
       return;
     }
@@ -138,7 +137,7 @@ exports.edit = async (req, res, next) => {
     );
     if (petResult.rowCount === 0) {
       await client.query('ROLLBACK');
-      res.status(404).json({ error: 'Pet not found' });
+      res.status(404).json({ error: messages.PET_NOT_FOUND });
       return;
     }
 
@@ -170,11 +169,9 @@ exports.edit = async (req, res, next) => {
     await client.query('ROLLBACK');
     if (err.code === DUPLICATE_KEY_VALUE_ERR_CODE) {
       if (err.detail.startsWith(PET_DUPLICATE_KEY_ERR_DETAIL)) {
-        res.status(400).json({ error: 'Pet with same name already exists' });
+        res.status(400).json({ error: messages.DUPLICATE_PET });
       } else if (err.detail.startsWith(REQUIREMENT_DUPLICATE_KEY_ERR_DETAIL)) {
-        res
-          .status(400)
-          .json({ error: 'Pet cannot have two requirements with the same requirement type' });
+        res.status(400).json({ error: messages.DUPLICATE_PET_REQUIREMENT });
       }
       return;
     }
@@ -195,7 +192,7 @@ exports.delete = async (req, res, next) => {
       [petOwnerUsername, petName],
     );
     if (result.rowCount === 0) {
-      res.status(404).json({ error: 'Pet not found' });
+      res.status(404).json({ error: messages.PET_NOT_FOUND });
       return;
     }
     res.json(result.rows[0]);

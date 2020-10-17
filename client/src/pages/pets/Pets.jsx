@@ -9,12 +9,14 @@ import {
   Grid,
   IconButton,
   makeStyles,
+  Snackbar,
   Typography,
 } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import React, { useCallback, useEffect, useState } from 'react';
 import api from '../../api';
+import Alert from '../../components/Alert';
 import { getYear } from '../../utilities/datetime';
 import { useStore } from '../../utilities/store';
 import PetFormDialog from './PetFormDialog';
@@ -38,16 +40,32 @@ const useStyles = makeStyles((theme) => ({
 const Pets = () => {
   const classes = useStyles();
   const store = useStore();
+
   const [petCategories, setPetCategories] = useState([]);
   const [pets, setPets] = useState([]);
   const [selectedPet, setSelectedPet] = useState(null);
+  // TODO: move snackbar state management into App or AppRouter
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarContent, setSnackbarContent] = useState({ message: '', severity: '' });
 
   const { username: petOwnerUsername } = store.user;
 
-  const updatePets = useCallback(() => {
-    api.pets.getPets(petOwnerUsername).then((response) => {
-      setPets(response.rows);
+  const handleResponseError = (promise) =>
+    promise.then((response) => {
+      if (response.error) {
+        setSnackbarContent({ message: response.error, severity: 'error' });
+        setSnackbarOpen(true);
+        throw Error(response.error);
+      }
+      return response;
     });
+
+  const updatePets = useCallback(() => {
+    handleResponseError(api.pets.getPets(petOwnerUsername))
+      .then((response) => {
+        setPets(response.rows);
+      })
+      .catch(console.error);
   }, [petOwnerUsername]);
 
   useEffect(updatePets, [updatePets]);
@@ -63,36 +81,34 @@ const Pets = () => {
     // TODO: make a prettier dialog
     // eslint-disable-next-line
     if (!confirm(`Are you sure you want to delete ${petName}?`)) return;
-    api.pets.deletePet(petOwnerUsername, petName).then(updatePets);
+    handleResponseError(api.pets.deletePet(petOwnerUsername, petName))
+      .then(updatePets)
+      .catch(console.error);
   };
 
   const handleSubmitEdit = async (originalPetName, updatedPet) => {
-    api.pets
-      .editPet(petOwnerUsername, originalPetName, updatedPet)
+    handleResponseError(api.pets.editPet(petOwnerUsername, originalPetName, updatedPet))
       .then(() => {
         updatePets();
         setSelectedPet(null);
       })
-      .catch((err) => {
-        // TODO: error handling
-        console.error(err);
-      });
+      .catch(console.error);
   };
 
   const handleSubmitAdd = async (originalPetName, newPet) => {
-    api.pets
-      .addPet({ ...newPet, petOwnerUsername })
+    handleResponseError(api.pets.addPet({ ...newPet, petOwnerUsername }))
       .then(() => {
         updatePets();
         setSelectedPet(null);
       })
-      .catch((err) => {
-        // TODO: error handling
-        console.error(err);
-      });
+      .catch(console.error);
   };
 
   const handleDialogClose = () => setSelectedPet(null);
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === 'clickaway') return;
+    setSnackbarOpen(false);
+  };
 
   return (
     <Container>
@@ -164,6 +180,16 @@ const Pets = () => {
           ))}
         </CardContent>
       </Card>
+      <Snackbar
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+        autoHideDuration={10_000}
+        open={snackbarOpen}
+        onClose={handleSnackbarClose}
+      >
+        <Alert severity={snackbarContent.severity} onClose={handleSnackbarClose}>
+          {snackbarContent.message}
+        </Alert>
+      </Snackbar>
       <PetFormDialog
         title={selectedPet === 'default' ? 'New Pet' : 'Edit Pet'}
         pet={selectedPet === 'default' ? DEFAULT_PET : selectedPet}
