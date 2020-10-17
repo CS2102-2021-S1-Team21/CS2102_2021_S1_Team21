@@ -141,38 +141,16 @@ exports.edit = async (req, res, next) => {
       res.status(404).json({ error: 'Pet not found' });
       return;
     }
-    const updatedPet = petResult.rows[0];
 
-    // Delete any requirements that were not sent in API request
-    await client.query(
-      `DELETE FROM Requirement WHERE petOwnerUsername = $1 AND petName = $2 AND NOT requirementtype = ANY ($3)`,
-      [
-        updatedPet.petownerusername,
-        updatedPet.name,
-        requirements.map((requirement) => requirement.requirementtype),
-      ],
-    );
-    // Update all other requirements based on API request
+    const updatedPet = petResult.rows[0];
+    // Delete all existing requirements (to avoid duplicate entries)
+    await client.query(`DELETE FROM Requirement WHERE petOwnerUsername = $1 AND petName = $2`, [
+      updatedPet.petownerusername,
+      updatedPet.name,
+    ]);
+    // Add new/updated requirements based on API request
     const updatedRequirements = await Promise.all(
       requirements.map(async (requirement) => {
-        // FIXME: duplicate updates
-        const updateResult = await client.query(
-          `
-              UPDATE Requirement 
-              SET requirementType = $3, description = $4 
-              WHERE petOwnerUsername = $1 AND petName = $2 AND requirementType = $3
-              RETURNING requirementtype, description
-            `,
-          [
-            updatedPet.petownerusername,
-            updatedPet.name,
-            requirement.requirementtype,
-            requirement.description,
-          ],
-        );
-        if (updateResult.rowCount !== 0) {
-          return updateResult.rows[0];
-        }
         const insertResult = await client.query(
           'INSERT INTO Requirement VALUES ($1, $2, $3, $4) RETURNING requirementtype, description',
           [
