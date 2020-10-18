@@ -207,17 +207,20 @@ $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION leave_care_no_pet() RETURNS TRIGGER AS $$
 DECLARE 
-pet_under_care text;
+pet_under_care INTEGER;
 BEGIN
     -- Check that caretaker currently not taking care of any pets
-    SELECT caretakerusername INTO pet_under_care FROM Bids 
-    WHERE caretakerusername = NEW.caretakerusername
-        AND now()::date >= startdate 
-        AND now()::date <= endDate 
-        AND Bids.status = 'Accepted'
-        LIMIT 1;
-    IF pet_under_care IS NOT NULL THEN
-        RAISE EXCEPTION 'You cannot apply leave you are currently in charge of a pet';
+    WITH overlap(date) AS (
+        select (generate_series(NEW.startdate, NEW.enddate, '1 day'::interval))::date
+        INTERSECT
+        select generate_series(
+        startdate, enddate, '1 day') FROM Bids where caretakerusername = NEW.caretakerusername AND status = 'Accepted'
+    )
+
+    SELECT COUNT(*) INTO pet_under_care FROM overlap;
+
+    IF pet_under_care > 0 THEN
+        RAISE EXCEPTION 'You cannot apply leave you are / will be in charge of one or more pets during the leave';
     ELSE RETURN NEW;
     END IF;
 END;
