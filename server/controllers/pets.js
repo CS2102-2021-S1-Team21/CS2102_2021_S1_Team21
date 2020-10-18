@@ -1,12 +1,7 @@
 const _ = require('lodash');
 
 const db = require('../db');
-const {
-  DUPLICATE_KEY_VALUE_ERR_CODE,
-  PET_DUPLICATE_KEY_ERR_DETAIL,
-  REQUIREMENT_DUPLICATE_KEY_ERR_DETAIL,
-  messages,
-} = require('../constants');
+const { errorCodes, errorDetails, messages } = require('../constants');
 
 exports.index = async (req, res, next) => {
   // Assumption: petOwnerUsername exists in database
@@ -100,11 +95,11 @@ exports.new = async (req, res, next) => {
     res.json({ ..._.omit(insertedPet, 'deletedat'), requirements: insertedRequirements });
   } catch (err) {
     await client.query('ROLLBACK');
-    if (err.code === DUPLICATE_KEY_VALUE_ERR_CODE) {
-      if (err.detail.startsWith(PET_DUPLICATE_KEY_ERR_DETAIL)) {
+    if (err.code === errorCodes.DUPLICATE_KEY_VALUE) {
+      if (err.detail.startsWith(errorDetails.PET_DUPLICATE_KEY)) {
         // Assumption: Only pet owners will add pets for themselves
         res.status(400).json({ error: messages.DUPLICATE_PET });
-      } else if (err.detail.startsWith(REQUIREMENT_DUPLICATE_KEY_ERR_DETAIL)) {
+      } else if (err.detail.startsWith(errorDetails.REQUIREMENT_DUPLICATE_KEY)) {
         res.status(400).json({ error: messages.DUPLICATE_PET_REQUIREMENT });
       }
       return;
@@ -167,10 +162,10 @@ exports.edit = async (req, res, next) => {
     res.json({ ..._.omit(updatedPet, 'deletedat'), requirements: updatedRequirements });
   } catch (err) {
     await client.query('ROLLBACK');
-    if (err.code === DUPLICATE_KEY_VALUE_ERR_CODE) {
-      if (err.detail.startsWith(PET_DUPLICATE_KEY_ERR_DETAIL)) {
+    if (err.code === errorCodes.DUPLICATE_KEY_VALUE) {
+      if (err.detail.startsWith(errorDetails.PET_DUPLICATE_KEY)) {
         res.status(400).json({ error: messages.DUPLICATE_PET });
-      } else if (err.detail.startsWith(REQUIREMENT_DUPLICATE_KEY_ERR_DETAIL)) {
+      } else if (err.detail.startsWith(errorDetails.REQUIREMENT_DUPLICATE_KEY)) {
         res.status(400).json({ error: messages.DUPLICATE_PET_REQUIREMENT });
       }
       return;

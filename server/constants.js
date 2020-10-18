@@ -1,6 +1,11 @@
-exports.DUPLICATE_KEY_VALUE_ERR_CODE = '23505';
-exports.PET_DUPLICATE_KEY_ERR_DETAIL = 'Key (petownerusername, name)=';
-exports.REQUIREMENT_DUPLICATE_KEY_ERR_DETAIL = 'Key (requirementtype, petname, petownerusername)=';
+exports.errorCodes = {
+  DUPLICATE_KEY_VALUE: '23505',
+};
+
+exports.errorDetails = {
+  PET_DUPLICATE_KEY: 'Key (petownerusername, name)=',
+  REQUIREMENT_DUPLICATE_KEY: 'Key (requirementtype, petname, petownerusername)=',
+};
 
 exports.messages = {
   PET_NOT_FOUND: 'Sorry, we could not find a pet with this name',
