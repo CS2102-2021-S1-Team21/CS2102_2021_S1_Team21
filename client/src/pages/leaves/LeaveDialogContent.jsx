@@ -5,6 +5,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import { KeyboardDatePicker } from '@material-ui/pickers';
 import DialogActions from '@material-ui/core/DialogActions';
 import { Button, Dialog } from '@material-ui/core';
+import { addDays } from 'date-fns';
 import api from '../../api';
 import { useStore } from '../../utilities/store';
 
@@ -22,8 +23,8 @@ const LeaveDialogContent = ({ open, setOpen }) => {
     setOpen(false);
     try {
       const body = {
-        startDate: selectedDateFrom,
-        endDate: selectedDateTo,
+        startDate: addDays(selectedDateFrom, 1),
+        endDate: addDays(selectedDateTo, 1),
         caretakerUsername: store.user.username,
         isEmergency: 'FALSE',
       };

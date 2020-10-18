@@ -11,6 +11,7 @@ import { getSessionCookie } from '../utilities/sessionCookie';
 import { StoreProvider } from '../utilities/store';
 import Loading from './Loading';
 import NavBar from './NavBar';
+import PcsAdmin from '../pages/pcsAdmin/PcsAdmin';
 
 const AuthRouter = () => {
   const sessionCookie = getSessionCookie();
@@ -50,6 +51,7 @@ const AuthRouter = () => {
           <Route exact path="/my-bookings" component={Bookings} />
           <Route path="/pet-owners/:username" component={PetOwnerProfile} />
           <Route path="/caretakers/:username" component={CaretakerProfile} />
+          <Route path="/pcs-admin" component={PcsAdmin} />
         </Switch>
       </NavBar>
     </StoreProvider>
