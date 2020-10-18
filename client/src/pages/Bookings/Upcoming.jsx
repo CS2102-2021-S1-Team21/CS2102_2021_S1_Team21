@@ -7,8 +7,7 @@ import { useStore } from '../../utilities/store';
 
 
 const Upcoming = () => {
-  const [petOwner, setPetOwner] = useState({ name: 'Bugs Bunny', email: 'hello@world.org', pet: 'porky' });
-  const [bids, setBids] = useState([]);
+  const [allBids, setAllBids] = useState([]);
   const [rating, setRating] = React.useState(2);
   const [dateFrom, setDateFrom] = useState(new Date());
   const [dateTo, setDateTo] = useState(new Date());
@@ -16,10 +15,10 @@ const Upcoming = () => {
   const username = 'ladygaga';
 
   useEffect(() => {
-    api.bids.getBids(store.user.username).then((x) => setBids(x));
+    api.bids.getBids(store.user.username).then((x) => setAllBids(x));
   }, [store.user.username]);
 
-  console.log(bids);
+  console.log("all bids" + allBids);
 
 
 //   const fetchPetOwner = async () => {
@@ -61,7 +60,7 @@ const Upcoming = () => {
     return (
         <>
             <List>
-                { bids.filter((caretaker) => caretaker.rating >= rating).map((caretaker) => {
+                { allBids.filter((caretaker) => caretaker.rating >= rating).map((caretaker) => {
                     return (
                         <Paper style={{ margin: 30 , padding: 30}} key={caretaker.id}>   
                             <ListItem alignItems="flex-start">
