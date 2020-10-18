@@ -32,16 +32,23 @@ const Upcoming = () => {
                         <Paper style={{ margin: 30 , padding: 30}} key={bids.id}>   
                             <ListItem alignItems="flex-start">
                                 <ListItemText
-                                primary={`${bids.caretakerusername}`}
+                                primary={
+                                    <Typography
+                                            component="span"
+                                            variant="h3"
+                                            color="Primary"
+                                            >
+                                            {`${bids.petname}`}
+                                        </Typography>
+                                        }
                                 secondary={
                                     <React.Fragment>
                                         <Typography
                                             component="span"
                                             variant="body2"
-                                            // className={classes.inline}
                                             color="textPrimary"
                                             >
-                                            {`Secondary text `}
+                                            {`${bids.caretakerusername}`}
                                         </Typography>
                                         {`Secondary`}
                                     </React.Fragment>
@@ -49,7 +56,7 @@ const Upcoming = () => {
                                 <ListItemSecondaryAction>
                                     <Button onClick={
                                         () => {console.log(bids.id)}}>
-                                            {'BOOK ME'}
+                                            {'Cancel'}
                                     </Button>
                                 </ListItemSecondaryAction>
                             </ListItem>

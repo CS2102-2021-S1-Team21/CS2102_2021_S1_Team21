@@ -117,7 +117,15 @@ const Browse = () => {
                         <Paper style={{ margin: 30 , padding: 30}} key={caretaker.caretakerusername}>   
                             <ListItem alignItems="flex-start">
                                 <ListItemText
-                                primary={`${caretaker.caretakerusername}`}
+                                primary={
+                                    <Typography
+                                            component="span"
+                                            variant="h3"
+                                            color="Primary"
+                                            >
+                                            {`${caretaker.caretakerusername}`}
+                                        </Typography>
+                                        }
                                 secondary={
                                     <React.Fragment>
                                         <Typography

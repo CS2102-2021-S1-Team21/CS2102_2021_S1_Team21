@@ -58,6 +58,12 @@ const Upcoming = () => {
                                         }
                                     />
                                 <ListItemText/> 
+                                <ListItemSecondaryAction>
+                                    <Button onClick={
+                                        () => {console.log(bids.id)}}>
+                                            {'Cancel'}
+                                    </Button>
+                                </ListItemSecondaryAction>
                             </ListItem>
                         </Paper>
                     );
