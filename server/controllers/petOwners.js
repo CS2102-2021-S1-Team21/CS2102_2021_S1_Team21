@@ -1,3 +1,5 @@
+const _ = require('lodash');
+
 const db = require('../db');
 
 // TODO: reduce boilerplate code
@@ -30,14 +32,15 @@ exports.view = async (req, res, next) => {
   const { username } = req.params;
   try {
     const result = await db.query(
-      'SELECT * FROM App_User WHERE username = $1 AND $1 IN (SELECT petOwnerUsername from Pet_Owner)',
+      'SELECT * FROM App_User WHERE username = $1 AND deletedAt IS NULL AND $1 IN (SELECT petOwnerUsername from Pet_Owner)',
       [username],
     );
     if (result.rowCount === 0) {
       res.status(404).json({ error: 'Pet owner not found' });
       return;
     }
-    res.json(result);
+    const petOwner = result.rows[0];
+    res.json(_.omit(petOwner, ['passworddigest', 'deletedat']));
   } catch (err) {
     console.error('ERROR: ', err.message);
     next(err);
