@@ -8,6 +8,9 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import Browse from './Bookings/Browse';
 import Upcoming from './Bookings/Upcoming';
+import Failed from './Bookings/Failed';
+import Past from './Bookings/Past';
+import Pending from './Bookings/Pending';
 
 
 function TabPanel(props) {
@@ -79,13 +82,13 @@ const Bookings = () => {
         <Upcoming/>
       </TabPanel>
       <TabPanel value={value} index={2}>
-        Pending
+        <Pending/>
       </TabPanel>
       <TabPanel value={value} index={3}>
-        Past
+        <Past/>
       </TabPanel>
       <TabPanel value={value} index={4}>
-        Failed
+        <Failed/>
       </TabPanel>
     </div>
   );

@@ -1,7 +1,7 @@
 import baseAPI from './baseAPI';
 
 const bids = {
-  addBids: async (body) => {
+  applyBids: async (body) => {
     return baseAPI.post('bids', body);
   },
   getBids: async (petOwnerUsername) => {

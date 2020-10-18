@@ -3,19 +3,18 @@ import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 
-export default function SelectPet() {
+export default function SelectPet(props) {
+  
   return (
     <Autocomplete
       id="Select Pet"
-      options={Pets}
+      onChange={(event, newValue) => {
+        props.setPet(newValue);
+      }}      
+      options={props.petOptions}
       getOptionLabel={(pet) => pet.name}
-      style={{ width: 300 }}
       renderInput={(params) => <TextField {...params} label="Pet"/>}
     />
   );
 }
 
-const Pets = [
-  { name: 'porky', year: 1994 },
-  { name: 'bacony', year: 1975 },
-];

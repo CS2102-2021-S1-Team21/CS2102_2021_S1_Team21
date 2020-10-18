@@ -7,6 +7,7 @@ exports.apply = async (req, res) => {
       'INSERT INTO Bids (petName, petOwnerUsername, caretakerUsername, dailyPrice, submittedAt, startDate, endDate, transferType, remarks) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *',
       [petName, petOwnerUsername, caretakerUsername, dailyPrice, submittedAt, startDate, endDate, transferType, remarks],
     );
+    console.log(result.rows)
     res.json(result.rows);
   } catch (err) {
     console.error(err);
@@ -20,6 +21,7 @@ exports.retrieve = async (req, res) => {
       `SELECT * FROM Bids WHERE petOwnerUsername = $1`,
       [petOwnerUsername],
     );
+    console.log(result.rows)
     res.json(result.rows);
   } catch (err) {
     console.error('ERROR: ', err.message);
