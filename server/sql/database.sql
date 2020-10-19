@@ -273,7 +273,7 @@ BEGIN
     SELECT COUNT(*) INTO overlapping_date FROM overlap;
   
     IF overlapping_date > 0 THEN
-        RAISE EXCEPTION 'You cannot apply overlapping dates of availability';
+        RAISE EXCEPTION 'You cannot indicate overlapping availability periods';
     ELSE RETURN NEW;
     END IF;
 END;
