@@ -1,8 +1,10 @@
 import auth from './auth';
-import petOwners from './petOwners';
-import leaves from './leaves';
 import availability from './availability';
 import caretakers from './caretakers';
+import leaves from './leaves';
+import petCategories from './petCategories';
+import petOwners from './petOwners';
+import pets from './pets';
 import reviews from './reviews';
 import profileSettings from './profileSettings';
 
@@ -19,7 +21,8 @@ const api = {
   caretakers,
   reviews,
   profileSettings,
-  // pets,
+  pets,
+  petCategories,
 };
 
 export default api;

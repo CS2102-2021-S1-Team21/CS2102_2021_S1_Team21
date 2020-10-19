@@ -4,7 +4,10 @@ import api from '../api';
 import Availability from '../pages/availabilities/Availability';
 import CaretakerProfile from '../pages/CaretakerProfile';
 import Leaves from '../pages/leaves/Leaves';
+import PcsAdmin from '../pages/pcsAdmin/PcsAdmin';
 import PetOwnerProfile from '../pages/PetOwnerProfile';
+import PetProfile from '../pages/pets/PetProfile';
+import Pets from '../pages/pets/Pets';
 import { getSessionCookie } from '../utilities/sessionCookie';
 import { StoreProvider } from '../utilities/store';
 import Loading from './Loading';
@@ -47,6 +50,12 @@ const AuthRouter = () => {
           {/* <Route path="/pet-owner" component={PetOwnerListing} /> */}
           <Route exact path="/my-leaves" component={Leaves} />
           <Route exact path="/my-availability" component={Availability} />
+<<<<<<< HEAD
+=======
+          <Route exact path="/my-pets" component={Pets} />
+          <Route exact path="/edit-profile" component={EditProfile} />
+          <Route path="/pet-owners/:petOwnerUsername/pets/:petName" component={PetProfile} />
+>>>>>>> master
           <Route path="/pet-owners/:username" component={PetOwnerProfile} />
           <Route path="/caretakers/:username" component={CaretakerProfile} />
           <Route path="/pcs-admin" component={PcsAdmin} />

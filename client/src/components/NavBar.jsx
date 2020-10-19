@@ -55,7 +55,7 @@ const NavBar = ({ children }) => {
       password: accountType === '1' ? 'pcsadmin' : 'password',
     });
     console.log(response);
-    history.push('/pet-owners/oompaloompa');
+    history.push('/');
     // to change to this eventually
     // history.push('/login');
   };
