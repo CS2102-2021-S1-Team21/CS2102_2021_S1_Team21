@@ -283,7 +283,7 @@ CREATE TRIGGER check_availability_overlap
 BEFORE INSERT ON indicates_availability_period
 FOR EACH ROW EXECUTE PROCEDURE availability_overlapping_date();
 
--- Triggers for non-overlapping ISA relationship 
+-- Triggers for non-overlapping ISA relationship admin/ user
 CREATE OR REPLACE FUNCTION not_admin()
 RETURNS TRIGGER AS $$
 DECLARE app_user NUMERIC;
@@ -320,6 +320,7 @@ BEFORE INSERT ON PCS_Administrator
 FOR EACH ROW EXECUTE PROCEDURE not_user();
 
 
+-- Triggers for part time employee
 CREATE OR REPLACE FUNCTION not_full_time_employee()
 RETURNS TRIGGER AS $$
 DECLARE full_time NUMERIC;
@@ -337,7 +338,7 @@ CREATE TRIGGER check_not_full_time_employee
 BEFORE INSERT ON Part_Time_Employee
 FOR EACH ROW EXECUTE PROCEDURE not_full_time_employee();
 
-
+-- Triggers for full time employee
 CREATE OR REPLACE FUNCTION not_part_time_employee()
 RETURNS TRIGGER AS $$
 DECLARE part_time NUMERIC;
@@ -354,3 +355,32 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER check_not_part_time_employee
 BEFORE INSERT ON Full_Time_Employee
 FOR EACH ROW EXECUTE PROCEDURE not_part_time_employee();
+
+-- Triggers for Bids
+CREATE OR REPLACE FUNCTION full_time_max_jobs()
+RETURNS TRIGGER AS $$
+DECLARE max_jobs INTEGER;
+BEGIN
+    -- If caretaker is a full timer
+    IF (NEW.caretakerusername IN (SELECT F.caretakerusername FROM Full_Time_Employee F)) THEN
+        WITH total_number_each_day AS (
+            SELECT as_of_date, COUNT(*) as n
+            FROM (SELECT d::date AS as_of_date FROM generate_series(NEW.startdate::timestamp, NEW.enddate::timestamp, '1 day') d) as dates
+            LEFT JOIN Bids ON dates.as_of_date BETWEEN Bids.startdate AND Bids.enddate
+            WHERE Bids.status = 'Accepted'
+            GROUP BY 1
+            ORDER BY 1
+        )
+        SELECT MAX(n) INTO max_jobs FROM total_number_each_day;
+        IF max_jobs > 5 THEN
+            RAISE EXCEPTION 'Caretaker is unable to receive more pets during this period';
+        ELSE
+        RETURN NEW;
+        END IF;
+    END IF; END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER check_full_time_max_jobs
+BEFORE INSERT ON Bids
+FOR EACH ROW 
+EXECUTE PROCEDURE full_time_max_jobs();
