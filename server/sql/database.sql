@@ -357,7 +357,7 @@ BEFORE INSERT ON Full_Time_Employee
 FOR EACH ROW EXECUTE PROCEDURE not_part_time_employee();
 
 -- Triggers for Bids
-CREATE OR REPLACE FUNCTION full_time_max_jobs()
+CREATE OR REPLACE FUNCTION bids_constraint()
 RETURNS TRIGGER AS $$
 DECLARE max_jobs INTEGER;
 BEGIN
@@ -368,8 +368,7 @@ BEGIN
             FROM (SELECT d::date AS as_of_date FROM generate_series(NEW.startdate::timestamp, NEW.enddate::timestamp, '1 day') d) as dates
             LEFT JOIN Bids ON dates.as_of_date BETWEEN Bids.startdate AND Bids.enddate
             WHERE Bids.status = 'Accepted'
-            GROUP BY 1
-            ORDER BY 1
+            GROUP BY as_of_date
         )
         SELECT MAX(n) INTO max_jobs FROM total_number_each_day;
         IF max_jobs > 5 THEN
@@ -383,4 +382,4 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER check_full_time_max_jobs
 BEFORE INSERT ON Bids
 FOR EACH ROW 
-EXECUTE PROCEDURE full_time_max_jobs();
+EXECUTE PROCEDURE bids_constraint();
