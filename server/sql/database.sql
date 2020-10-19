@@ -78,7 +78,7 @@ CREATE TABLE Requirement(
     petName VARCHAR,
     petOwnerUsername VARCHAR,
     PRIMARY KEY(requirementType, petName, petOwnerUsername),
-    FOREIGN KEY(petName, petOwnerUsername) REFERENCES Pet(name, petOwnerUsername) ON DELETE CASCADE ON UPDATE CASCADE
+    FOREIGN KEY(petName, petOwnerUsername) REFERENCES Pet(name, petOwnerUsername) ON DELETE CASCADE
 );
 
 CREATE TABLE Cares_For(
@@ -161,34 +161,124 @@ CREATE TABLE Bids(
 
 
 -------------------------------------------- TRIGGERS ------------------------------------------
--- CREATE TRIGGER tr_check_leave()
--- BEFORE INSERT ON applies_for_leave_period
--- EXECUTE PROCEDURE check_leave_validity;
 
--- CREATE OR REPLACE FUNCTION check_leave_validity()
--- RETURNS TRIGGER as $$ BEGIN
+-- Triggers for leave application
+CREATE OR REPLACE FUNCTION leave_consecutive() RETURNS TRIGGER AS $$
+DECLARE 
+total_set INTEGER;
+BEGIN
+    WITH dates(date) AS (
+    -- This table contains all the distinct date 
+    -- instances in the data set
+    select (generate_series('2020-01-01', '2020-12-31', '1 day'::interval))::date
+    EXCEPT
+    -- EXCEPT the insert of new row here
+    select (generate_series(NEW.startdate, NEW.enddate, '1 day'::interval))::date
+    EXCEPT
+    -- DATA that are already existing in the table beforehand
+    select generate_series(
+        startdate, enddate, '1 day') FROM applies_for_leave_period where caretakerusername = NEW.caretakerusername
+    ),
+    -- Generate "consecutive_leave_groups" of dates by subtracting the
+    -- date's row number (no gaps) from the date itself
+    -- (with potential gaps). Whenever there is a gap,
+    -- there will be a new group
+    consecutive_leave_groups AS (
+        SELECT
+        ROW_NUMBER() OVER (ORDER BY date) AS rn,
+        date + (-ROW_NUMBER() OVER (ORDER BY date)) * INTERVAL '1 day' AS grp,
+        date
+        FROM dates
+    )
 
---     EXEC('CREATE VIEW with_new AS (
---         SELECT startDate, endDate FROM applies_for_leave_period leave
---         WHERE NEW.caretakerusername = leave.caretakerusername
---         ORDER BY startDate
---         UNION 
---         SELECT * FROM NEW
---         '
---     )
+    SELECT sum(sets) INTO total_set FROM (
+        SELECT
+        COUNT(*) / 150 AS sets
+        FROM consecutive_leave_groups
+        GROUP BY grp
+    ) AS consecutive;
 
---     WITH addRowNumber AS
---     SELECT ROW_NUMBER() OVER (), *
---         FROM with_new
-    
---     WITH consecutive_working AS 
---     SELECT w1.startDate, w1.endDate, w2.startDate, w2.startDate - w1.endDate AS consecutive_working_days
---     FROM with_new w1 INNER JOIN with_new w2 ON w1.ROW_NUMBER = w2.ROW_NUMBER - 1
+    IF (total_set = 2) THEN RETURN NEW;
+    ELSE RAISE exception 'You cannot take this leave because you will not be able to fulfill minimum requirements of consecutive working days';
+    END IF;
+    RETURN NULL;
+END;
+$$ LANGUAGE plpgsql;
 
-    
-    -- select (generate_series('2020-01-01', '2020-12-31', '1 day'::interval))::date, count(*)
-    -- EXCEPT
-    -- select (generate_series(
-    --     (select startdate from applies_for_leave_period where caretakerusername = 'wincent'),
-    --     (select enddate from applies_for_leave_period where caretakerusername = 'wincent'),
-    --      '1 day'::interval))::date, count(*);
+CREATE OR REPLACE FUNCTION leave_care_no_pet() RETURNS TRIGGER AS $$
+DECLARE 
+pet_under_care INTEGER;
+BEGIN
+    -- Check that caretaker currently not taking care of any pets
+    WITH overlap(date) AS (
+        select (generate_series(NEW.startdate, NEW.enddate, '1 day'::interval))::date
+        INTERSECT
+        select generate_series(
+        startdate, enddate, '1 day') FROM Bids where caretakerusername = NEW.caretakerusername AND status = 'Accepted'
+    )
+
+    SELECT COUNT(*) INTO pet_under_care FROM overlap;
+
+    IF pet_under_care > 0 THEN
+        RAISE EXCEPTION 'You cannot apply leave you are / will be in charge of one or more pets during the leave';
+    ELSE RETURN NEW;
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION leave_overlapping_date() RETURNS TRIGGER AS $$
+DECLARE 
+overlapping_date INTEGER;
+BEGIN
+    WITH overlap(date) AS (
+        select (generate_series(NEW.startdate, NEW.enddate, '1 day'::interval))::date
+        INTERSECT
+        select generate_series(
+        startdate, enddate, '1 day') FROM applies_for_leave_period where caretakerusername = NEW.caretakerusername
+    )
+
+    SELECT COUNT(*) INTO overlapping_date FROM overlap;
+  
+    IF overlapping_date > 0 THEN
+        RAISE EXCEPTION 'You cannot apply for overlapping leaves';
+    ELSE RETURN NEW;
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER check_leave_consecutive
+BEFORE INSERT ON applies_for_leave_period
+FOR EACH ROW EXECUTE PROCEDURE leave_consecutive();
+
+CREATE TRIGGER check_leave_care_no_pet
+BEFORE INSERT ON applies_for_leave_period
+FOR EACH ROW EXECUTE PROCEDURE leave_care_no_pet();
+
+CREATE TRIGGER check_leave_overlap
+BEFORE INSERT ON applies_for_leave_period
+FOR EACH ROW EXECUTE PROCEDURE leave_overlapping_date();
+
+-- -- Triggers for availability application
+CREATE OR REPLACE FUNCTION availability_overlapping_date() RETURNS TRIGGER AS $$
+DECLARE 
+overlapping_date INTEGER;
+BEGIN
+    WITH overlap(date) AS (
+        select (generate_series(NEW.startdate, NEW.enddate, '1 day'::interval))::date
+        INTERSECT
+        select generate_series(
+        startdate, enddate, '1 day') FROM indicates_availability_period where caretakerusername = NEW.caretakerusername
+    )
+
+    SELECT COUNT(*) INTO overlapping_date FROM overlap;
+  
+    IF overlapping_date > 0 THEN
+        RAISE EXCEPTION 'You cannot indicate overlapping availability periods';
+    ELSE RETURN NEW;
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER check_availability_overlap
+BEFORE INSERT ON indicates_availability_period
+FOR EACH ROW EXECUTE PROCEDURE availability_overlapping_date();

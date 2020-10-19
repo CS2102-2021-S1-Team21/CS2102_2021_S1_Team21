@@ -1,3 +1,24 @@
+-- DROP TABLE IF EXISTS pet_owners;
+-- DROP TABLE IF EXISTS PCS_Administrator;
+-- DROP TABLE IF EXISTS App_User;
+-- DROP TABLE IF EXISTS Pet_Owner;
+-- DROP TABLE IF EXISTS Caretaker;
+-- DROP TABLE IF EXISTS Full_Time_Employee;
+-- DROP TABLE IF EXISTS Part_Time_Employee;
+-- DROP TABLE IF EXISTS Pet
+-- DROP TABLE IF EXISTS Requirement;
+-- DROP TABLE IF EXISTS Cares_For;
+-- DROP TABLE IF EXISTS Records_Monthly_Summary;
+-- DROP TABLE IF EXISTS Indicates_Availability_Period;
+-- DROP TABLE IF EXISTS Applies_For_Leave_Period;
+-- DROP TABLE IF EXISTS Bids;
+ -- INSERT INTO pet_owners
+-- VALUES ('notaphoenix@gmail.com',
+--         'mushu');
+ -- INSERT INTO pet_owners
+-- VALUES('theexplorer@gmail.com',
+--        'dora');
+
 INSERT INTO PCS_Administrator
 VALUES
   (
@@ -137,8 +158,6 @@ VALUES ('Dietary Needs',
         'he usually goes out around 9am and 5pm everyday',
         'Mario',
         'oompaloompa');
-
-
 INSERT INTO Cares_For
 VALUES ('Small dog',
         'wincent');
@@ -148,12 +167,12 @@ VALUES ('Large dog',
 INSERT INTO Cares_For
 VALUES ('Small dog',
         'harambe');
-        
 INSERT INTO applies_for_leave_period
 VALUES ('harambe',
         '10/10/2020',
         '11/10/2020',
         FALSE);
+
 
 INSERT INTO applies_for_leave_period
 VALUES ('wincent',
@@ -162,23 +181,50 @@ VALUES ('wincent',
         FALSE);
 
 
-INSERT INTO Bids
+INSERT INTO Bids(petName, petOwnerUsername, caretakerUsername, dailyPrice, submittedAt, startDate, endDate, transferType, rating, comment, reviewDateTime)
 VALUES('Gougou',
        'ladygaga',
        'wincent',
        25,
-       'Completed',
        '1/1/20',
        '12/10/19',
        '12/12/19',
        'On-site transfer',
-       null,
-       '1/1/20',
-       'Cash',
-       200,
        5,
        'Amazing, my dog came back pregnant',
-       '1/1/20'),
+       '1/1/20');
+
+
+INSERT INTO Bids(petName, petOwnerUsername, caretakerUsername, dailyPrice, submittedAt, startDate, endDate, transferType, rating, comment, reviewDateTime)
+VALUES('Gougou',
+       'ladygaga',
+       'wincent',
+       25,
+       '1/1/20',
+       '3/3/20',
+       '3/6/20',
+       'On-site transfer',
+       2,
+       'Terrible, my dog came back obese',
+       '1/1/20');
+
+       INSERT INTO Bids
+VALUES('Gougou',
+       'ladygaga',
+       'wincent',
+       25,
+       'Accepted',
+       '1/1/20',
+       '12/01/20',
+       '20/01/20',
+       'On-site transfer',
+       null,
+       NULL,
+       NULL,
+       NULL,
+       null,
+      null,
+      null),
         
        ('Gougou',
        'ladygaga',
