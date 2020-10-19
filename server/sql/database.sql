@@ -254,7 +254,7 @@ CREATE TRIGGER check_leave_care_no_pet
 BEFORE INSERT ON applies_for_leave_period
 FOR EACH ROW EXECUTE PROCEDURE leave_care_no_pet();
 
-CREATE TRIGGER check_overlapping_date
+CREATE TRIGGER check_leave_overlap
 BEFORE INSERT ON applies_for_leave_period
 FOR EACH ROW EXECUTE PROCEDURE leave_overlapping_date();
 
