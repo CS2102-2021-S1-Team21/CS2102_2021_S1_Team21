@@ -240,7 +240,7 @@ BEGIN
     SELECT COUNT(*) INTO overlapping_date FROM overlap;
   
     IF overlapping_date > 0 THEN
-        RAISE EXCEPTION 'You cannot apply overlapping leaves';
+        RAISE EXCEPTION 'You cannot apply for overlapping leaves';
     ELSE RETURN NEW;
     END IF;
 END;
@@ -254,7 +254,7 @@ CREATE TRIGGER check_leave_care_no_pet
 BEFORE INSERT ON applies_for_leave_period
 FOR EACH ROW EXECUTE PROCEDURE leave_care_no_pet();
 
-CREATE TRIGGER check_overlapping_date
+CREATE TRIGGER check_leave_overlap
 BEFORE INSERT ON applies_for_leave_period
 FOR EACH ROW EXECUTE PROCEDURE leave_overlapping_date();
 
@@ -273,7 +273,7 @@ BEGIN
     SELECT COUNT(*) INTO overlapping_date FROM overlap;
   
     IF overlapping_date > 0 THEN
-        RAISE EXCEPTION 'You cannot apply overlapping dates of availability';
+        RAISE EXCEPTION 'You cannot indicate overlapping availability periods';
     ELSE RETURN NEW;
     END IF;
 END;
