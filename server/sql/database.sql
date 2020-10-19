@@ -240,7 +240,7 @@ BEGIN
     SELECT COUNT(*) INTO overlapping_date FROM overlap;
   
     IF overlapping_date > 0 THEN
-        RAISE EXCEPTION 'You cannot apply overlapping leaves';
+        RAISE EXCEPTION 'You cannot apply for overlapping leaves';
     ELSE RETURN NEW;
     END IF;
 END;
