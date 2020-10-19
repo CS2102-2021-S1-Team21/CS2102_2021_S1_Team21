@@ -123,6 +123,22 @@ VALUES ('oompaloompa',
         null,
         'Male',
         'Large dog');
+
+INSERT INTO Requirement
+VALUES ('Dietary Needs',
+        'No chocolate!!',
+        'Gougou',
+        'ladygaga'),
+       ('Dietary Needs',
+        'Allergic to peanuts',
+        'Mario',
+        'oompaloompa'),
+       ('Daily Walks',
+        'he usually goes out around 9am and 5pm everyday',
+        'Mario',
+        'oompaloompa');
+
+
 INSERT INTO Cares_For
 VALUES ('Small dog',
         'wincent');

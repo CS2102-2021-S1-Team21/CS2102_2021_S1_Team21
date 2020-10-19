@@ -42,6 +42,7 @@ const FormRadioGroup = ({
   form,
   label,
   options,
+  useRowLayout = true,
   FormControlLabelProps,
   RadioProps,
   ...otherProps
@@ -58,7 +59,7 @@ const FormRadioGroup = ({
     <Paper variant="outlined" className={classes.outlinedCheckboxGroup}>
       <FormControl disabled={form.isSubmitting} {...otherProps} error={shouldShowError} fullWidth>
         <FormLabel id={`${field.name}-label`}>{label}</FormLabel>
-        <RadioGroup {...field} aria-labelledby={`${field.name}-label`}>
+        <RadioGroup {...field} aria-labelledby={`${field.name}-label`} row={useRowLayout}>
           {options.map((option) => (
             <FormControlLabel
               {...FormControlLabelProps}

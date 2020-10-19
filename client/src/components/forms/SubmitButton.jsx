@@ -2,7 +2,7 @@ import { Button } from '@material-ui/core';
 import { useFormikContext } from 'formik';
 import React from 'react';
 
-const SubmitButton = ({ children, props }) => {
+const SubmitButton = ({ children = 'Submit', props }) => {
   const formik = useFormikContext();
   return (
     <Button
