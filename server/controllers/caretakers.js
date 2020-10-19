@@ -9,6 +9,49 @@ exports.index = async (req, res) => {
   }
 };
 
+exports.browse = async (req, res) => {
+  try {
+    const { startDate, endDate, petCategory, rating} = req.body;
+    const result = await db.query(
+      `SELECT t0.caretakerusername, startdate, enddate, totalaveragerating, categoryname
+        FROM
+        full_time_employee AS t0
+        LEFT JOIN 
+        applies_for_leave_period AS t1 
+          ON t0.caretakerusername = t1.caretakerusername
+        INNER JOIN 
+        caretaker AS t2 
+          ON t0.caretakerusername = t2.caretakerusername
+        INNER JOIN 
+        Cares_for as t3 
+          ON t0.caretakerusername = t3.caretakerusername
+        WHERE (($1 < t1.startdate AND $2 < t1.startdate ) OR (t1.startdate IS NULL OR t1.enddate IS NULL)
+        OR ($1 > t1.enddate AND $2 > t1.enddate)) AND $4 > t2.totalAverageRating AND $3 = t3.categoryname
+      UNION
+      SELECT t0.caretakerusername, startdate, enddate, totalaveragerating, categoryname
+        FROM
+        part_time_employee AS t0
+        LEFT JOIN 
+        indicates_availability_period AS t1 
+          ON t0.caretakerusername = t1.caretakerusername
+        INNER JOIN 
+        caretaker AS t2 
+          ON t0.caretakerusername = t2.caretakerusername
+        INNER JOIN 
+        Cares_for as t3 
+          ON t0.caretakerusername = t3.caretakerusername
+        WHERE $4 > t2.totalAverageRating AND $3 = t3.categoryname
+        ;`,
+        [startDate, endDate, petCategory, rating]
+        
+      );
+    console.log(result.rows)
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 exports.view = async (req, res) => {
   const { username } = req.params;
   try {

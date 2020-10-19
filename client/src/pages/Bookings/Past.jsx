@@ -27,7 +27,7 @@ const Upcoming = () => {
                 <Typography>{'Status: Completed'}</Typography>
             </Paper>
             <List>
-                { allBids.filter((bids) => bids.status == 'Completed').map((bids) => {
+                { allBids.filter((bids) => bids.status === 'Completed').map((bids) => {
                     return (
                         <Paper style={{ margin: 30 , padding: 30}} key={bids.id}>   
                             <ListItem alignItems="flex-start">

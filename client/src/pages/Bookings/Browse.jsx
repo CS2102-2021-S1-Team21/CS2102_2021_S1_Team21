@@ -8,6 +8,7 @@ import SelectPet from './Browse/SelectPet';
 import api from '../../api';
 import { useStore } from '../../utilities/store';
 import SelectTransferType from './Browse/SelectTransferType';
+import { isUndefined } from 'lodash';
 
 const Browse = () => {
     const [rating, setRating] = React.useState(2);
@@ -30,8 +31,6 @@ const Browse = () => {
     useEffect(() => {
         api.pet.getPet(store.user.username).then((x) => setPetOptions(x));
         api.transfer_type.getTransfer_types().then((x) => setTransferTypeOptions(x));
-        api.caretakers.getCaretakers().then((x) => setCaretakers(x.entries));
-        console.log(transferTypeOptions)
     }, [store.user.username]);
 
 //   useEffect(() => {
@@ -103,8 +102,29 @@ const Browse = () => {
                     variant="outlined"
                     color="primary"
                     onClick={() => {
+                        if (isUndefined(pet)) {
+                            //TODO ADD ERROR MSG
+                        }
+                        if (isUndefined(transferType)) {
+                            //TODO ADD ERROR MSG
+                        }
+
+                        try {
+                            const body = {
+                              startDate: dateFrom,
+                              endDate: dateTo,
+                              petCategory: pet.categoryname,
+                              rating: rating,
+                            };
+                            api.caretakers.browseCaretakers(body).then((x) => setCaretakers(x));                          } catch (err) {
+                            console.log(err.message);
+                          }
+
+
                         console.log('rating:' + rating +
                         'Pet:' + pet.name + pet.categoryname + dailyPrice + 'start date: ' + dateFrom + "remarks" +remarks)
+                    
+                        
                     }}
                     >
                     {'SEARCH'}
