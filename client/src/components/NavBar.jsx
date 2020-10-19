@@ -135,6 +135,17 @@ const NavBar = ({ children }) => {
                   {'My Availability'}
                 </Button>
               )}
+              {
+                (!user.isPartTimeCaretaker && !user.isFullTimeCaretaker && !user.isPetOwner) && (
+                  <Button
+                  color="inherit"
+                  className={classes.navItem}
+                  onClick={() => history.push('/pcs-admin/leave-request')}
+                >
+                  {'Leave Application'}
+                </Button>
+                )
+              }
 
               <div className={classes.space} />
               <Tooltip title="Edit Account Settings" onClick={() => history.push('/edit-profile')}>
