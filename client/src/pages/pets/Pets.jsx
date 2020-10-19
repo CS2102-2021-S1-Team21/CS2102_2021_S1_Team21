@@ -9,6 +9,7 @@ import {
   Grid,
   IconButton,
   makeStyles,
+  Paper,
   Snackbar,
   Typography,
 } from '@material-ui/core';
@@ -34,6 +35,9 @@ const useStyles = makeStyles((theme) => ({
   },
   editButton: {
     color: theme.palette.primary.light, // TODO: change this colour
+  },
+  paper: {
+    padding: theme.spacing(2),
   },
 }));
 
@@ -112,74 +116,72 @@ const Pets = () => {
 
   return (
     <Container>
-      <Card>
-        <CardContent>
-          <Box mb={2}>
-            <Grid container justify="space-between">
-              <Grid item>
-                <Typography component="h1" variant="h4">
-                  {'My Pets'}
-                </Typography>
-              </Grid>
-              <Grid item>
-                <Button variant="contained" color="primary" onClick={handleClickAdd}>
-                  {'Add Pet'}
-                </Button>
-              </Grid>
+      <Paper className={classes.paper}>
+        <Box mb={2}>
+          <Grid container justify="space-between">
+            <Grid item>
+              <Typography component="h1" variant="h4">
+                {'My Pets'}
+              </Typography>
             </Grid>
-          </Box>
+            <Grid item>
+              <Button variant="contained" color="primary" onClick={handleClickAdd}>
+                {'Add Pet'}
+              </Button>
+            </Grid>
+          </Grid>
+        </Box>
 
-          {pets.map((pet) => (
-            <Card key={pet.name}>
-              <CardHeader
-                avatar={<Avatar className={classes.avatar}>{pet.name[0]}</Avatar>}
-                title={pet.name}
-                action={[
-                  <IconButton
-                    key="edit"
-                    className={classes.editButton}
-                    onClick={() => {
-                      setSelectedPet(pet);
-                    }}
-                  >
-                    <EditIcon />
-                  </IconButton>,
-                  <IconButton
-                    key="delete"
-                    color="secondary"
-                    onClick={() => handleClickDelete(pet.name)}
-                  >
-                    <DeleteIcon />
-                  </IconButton>,
-                ]}
-              />
-              <CardContent>
-                <Grid container>
-                  <Grid item xs={12} md={4}>
-                    <Typography color="primary">{'Profile Info'}</Typography>
-                    <Typography>{pet.categoryname}</Typography>
-                    <Typography>{pet.breed}</Typography>
-                    <Typography>{pet.gender}</Typography>
-                    <Typography gutterBottom>
-                      {`Year of Birth: ${getYear(pet.yearofbirth)}`}
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={12} md={8}>
-                    <Typography color="primary">{'Special Requirements'}</Typography>
-                    {pet.requirements.length === 0 ? (
-                      <Typography>{'None'}</Typography>
-                    ) : (
-                      pet.requirements.map((requirement) => (
-                        <Typography>{`${requirement.requirementtype} – ${requirement.description}`}</Typography>
-                      ))
-                    )}
-                  </Grid>
+        {pets.map((pet) => (
+          <Card key={pet.name}>
+            <CardHeader
+              avatar={<Avatar className={classes.avatar}>{pet.name[0]}</Avatar>}
+              title={pet.name}
+              action={[
+                <IconButton
+                  key="edit"
+                  className={classes.editButton}
+                  onClick={() => {
+                    setSelectedPet(pet);
+                  }}
+                >
+                  <EditIcon />
+                </IconButton>,
+                <IconButton
+                  key="delete"
+                  color="secondary"
+                  onClick={() => handleClickDelete(pet.name)}
+                >
+                  <DeleteIcon />
+                </IconButton>,
+              ]}
+            />
+            <CardContent>
+              <Grid container>
+                <Grid item xs={12} md={4}>
+                  <Typography color="primary">{'Profile Info'}</Typography>
+                  <Typography>{pet.categoryname}</Typography>
+                  <Typography>{pet.breed}</Typography>
+                  <Typography>{pet.gender}</Typography>
+                  <Typography gutterBottom>
+                    {`Year of Birth: ${getYear(pet.yearofbirth)}`}
+                  </Typography>
                 </Grid>
-              </CardContent>
-            </Card>
-          ))}
-        </CardContent>
-      </Card>
+                <Grid item xs={12} md={8}>
+                  <Typography color="primary">{'Special Requirements'}</Typography>
+                  {pet.requirements.length === 0 ? (
+                    <Typography>{'None'}</Typography>
+                  ) : (
+                    pet.requirements.map((requirement) => (
+                      <Typography>{`${requirement.requirementtype} – ${requirement.description}`}</Typography>
+                    ))
+                  )}
+                </Grid>
+              </Grid>
+            </CardContent>
+          </Card>
+        ))}
+      </Paper>
       <Snackbar
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
         autoHideDuration={10_000}

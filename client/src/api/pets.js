@@ -4,6 +4,9 @@ const pets = {
   getPets: async (petOwnerUsername) => {
     return baseAPI.get(`pets/${petOwnerUsername}`);
   },
+  getPet: async (petOwnerUsername, petName) => {
+    return baseAPI.get(`pets/${petOwnerUsername}/${petName}`);
+  },
   addPet: async (body) => {
     return baseAPI.post('pets', body);
   },

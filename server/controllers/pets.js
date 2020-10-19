@@ -34,12 +34,11 @@ exports.index = async (req, res, next) => {
   }
 };
 
-// Note: Unused method
 exports.view = async (req, res, next) => {
   const { petOwnerUsername, petName } = req.params;
   try {
     const result = await db.query(
-      'SELECT * FROM Pet WHERE petOwnerUsername = $1 AND name = $2 AND deletedAt IS NULL',
+      'SELECT *, age(yearOfBirth) FROM Pet WHERE petOwnerUsername = $1 AND name = $2 AND deletedAt IS NULL',
       [petOwnerUsername, petName],
     );
     if (result.rowCount === 0) {
