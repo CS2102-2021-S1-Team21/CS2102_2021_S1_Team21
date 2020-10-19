@@ -78,7 +78,7 @@ CREATE TABLE Requirement(
     petName VARCHAR,
     petOwnerUsername VARCHAR,
     PRIMARY KEY(requirementType, petName, petOwnerUsername),
-    FOREIGN KEY(petName, petOwnerUsername) REFERENCES Pet(name, petOwnerUsername) ON DELETE CASCADE
+    FOREIGN KEY(petName, petOwnerUsername) REFERENCES Pet(name, petOwnerUsername) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE Cares_For(
@@ -282,3 +282,75 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER check_availability_overlap
 BEFORE INSERT ON indicates_availability_period
 FOR EACH ROW EXECUTE PROCEDURE availability_overlapping_date();
+
+-- Triggers for non-overlapping ISA relationship 
+CREATE OR REPLACE FUNCTION not_admin()
+RETURNS TRIGGER AS $$
+DECLARE app_user NUMERIC;
+BEGIN
+    SELECT COUNT(*) INTO app_user FROM PCS_Administrator A
+    WHERE NEW.username = A.username;
+    IF app_user > 0 THEN 
+        RAISE EXCEPTION 'Username is already used, please use a different username.';
+    ELSE 
+    RETURN NEW;
+    END IF; END;
+$$ LANGUAGE plpgsql; 
+
+CREATE TRIGGER check_not_admin
+BEFORE INSERT ON App_User
+FOR EACH ROW EXECUTE PROCEDURE not_admin();
+
+
+CREATE OR REPLACE FUNCTION not_user()
+RETURNS TRIGGER AS $$
+DECLARE isAdmin NUMERIC;
+BEGIN
+    SELECT COUNT(*) INTO isAdmin FROM App_User A
+    WHERE NEW.username = A.username;
+    IF isAdmin > 0 THEN 
+        RAISE EXCEPTION 'Username is already used, please use a different username.';
+    ELSE 
+    RETURN NEW;
+    END IF; END;
+$$ LANGUAGE plpgsql; 
+
+CREATE TRIGGER check_not_user
+BEFORE INSERT ON PCS_Administrator
+FOR EACH ROW EXECUTE PROCEDURE not_user();
+
+
+CREATE OR REPLACE FUNCTION not_full_time_employee()
+RETURNS TRIGGER AS $$
+DECLARE full_time NUMERIC;
+BEGIN
+    SELECT COUNT(*) INTO full_time FROM Full_Time_Employee F
+    WHERE NEW.caretakerusername = F.caretakerusername;
+    IF full_time > 0 THEN 
+        RAISE EXCEPTION 'You cannot apply for Part Time Employment if you are a Full timer';
+    ELSE 
+    RETURN NEW;
+    END IF; END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER check_not_full_time_employee
+BEFORE INSERT ON Part_Time_Employee
+FOR EACH ROW EXECUTE PROCEDURE not_full_time_employee();
+
+
+CREATE OR REPLACE FUNCTION not_part_time_employee()
+RETURNS TRIGGER AS $$
+DECLARE part_time NUMERIC;
+BEGIN
+    SELECT COUNT(*) INTO part_time FROM Part_Time_Employee P
+    WHERE NEW.caretakerusername = P.caretakerusername;
+    IF part_time > 0 THEN 
+        RAISE EXCEPTION 'You cannot apply for Full Time Employment if you are a Part timer';
+    ELSE 
+    RETURN NEW;
+    END IF; END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER check_not_part_time_employee
+BEFORE INSERT ON Full_Time_Employee
+FOR EACH ROW EXECUTE PROCEDURE not_part_time_employee();
