@@ -6,6 +6,7 @@ exports.index = async (req, res) => {
     res.json({ totalCount: result.rowCount, entries: result.rows });
   } catch (err) {
     console.error(err);
+    res.json({ error: 'An unexpected error occurred' });
   }
 };
 
@@ -25,18 +26,5 @@ exports.view = async (req, res) => {
   } catch (err) {
     console.error('ERROR: ', err.message);
     res.json({ error: 'An unexpected error occurred' });
-  }
-};
-
-exports.viewCares = async (req, res) => {
-  try {
-    const { username } = req.params;
-    const result = await db.query(
-      'SELECT categoryname FROM cares_for WHERE caretakerUsername = $1',
-      [username],
-    );
-    res.json(result.rows);
-  } catch (err) {
-    console.error(err);
   }
 };

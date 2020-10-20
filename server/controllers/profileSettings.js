@@ -29,6 +29,7 @@ exports.edit = async (req, res) => {
     res.json(result.rows);
   } catch (err) {
     console.error(err);
+    res.json({ error: 'An unexpected error occurred' });
   }
 };
 
@@ -40,5 +41,6 @@ exports.putCares = async (req, res) => {
     res.json(result.rows);
   } catch (err) {
     console.error(err);
+    res.json({ error: 'An unexpected error occurred' });
   }
 };

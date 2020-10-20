@@ -79,14 +79,14 @@ const ProfileSettings = () => {
                 </Grid>
                 <SubmitButton>{'Update'}</SubmitButton>
               </Grid>
-              {/* If PetOwner, render PetOwnerForm */}
-              {userAccount.isPetOwner && <PetOwnerForm username={userAccount.username} />}
-              {/* If Caretaker, render CaretakerForm */}
-              {(userAccount.isPartTimeCaretaker || userAccount.isFullTimeCaretaker) && (
-                <CaretakerForm username={userAccount.username} />
-              )}
             </Form>
           </Formik>
+          {/* If PetOwner, render PetOwnerForm */}
+          {userAccount.isPetOwner && <PetOwnerForm username={userAccount.username} />}
+          {/* If Caretaker, render CaretakerForm */}
+          {(userAccount.isPartTimeCaretaker || userAccount.isFullTimeCaretaker) && (
+            <CaretakerForm username={userAccount.username} />
+          )}
         </CardContent>
       </Card>
     </Container>

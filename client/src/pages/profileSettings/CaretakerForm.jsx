@@ -1,25 +1,37 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Typography } from '@material-ui/core';
+import { Box, Typography } from '@material-ui/core';
 import api from '../../api';
+import TransferList from './TransferList';
 
-const PetOwnerForm = (props) => {
-  const { username } = props;
-  const [petCategories, setPetCategories] = useState(['test']);
+const CaretakerForm = ({ username }) => {
+  const [petCategories, setPetCategories] = useState([]);
 
   useEffect(() => {
-    api.caretakers.getCaretakerCaresFor(username).then((res) => {
+    api.caresFor.getCaretakerCaresFor(username).then((res) => {
       setPetCategories(res);
     });
-  }, []);
+  }, [username]);
 
-  const handleUpdate = async (cc) => {
+  const handleSubmit = async (values) => {
     try {
-      await api.profileSettings.updateCc(cc);
+      await api.caresFor.editCaretakerCaresFor(username, values);
     } catch (err) {
       console.log(err.message);
     }
   };
-  return <h1>{'Caretaker Form'}</h1>;
+
+  // hacky solution..
+  if (petCategories.length === 0) {
+    return null;
+  }
+  return (
+    <Box>
+      <Typography variant="h6" style={{ marginTop: 30, marginBottom: 30 }}>
+        {'Update Suitable Pets'}
+      </Typography>{' '}
+      <TransferList categories={petCategories} handleSubmit={handleSubmit} />
+    </Box>
+  );
 };
 
-export default PetOwnerForm;
+export default CaretakerForm;
