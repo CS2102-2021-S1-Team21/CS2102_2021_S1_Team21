@@ -50,11 +50,28 @@ exports.view = async (req, res, next) => {
 exports.viewCc = async (req, res) => {
   try {
     const { username } = req.params;
-    console.log(username);
-
     const result = await db.query('SELECT * FROM pet_owner WHERE petownerusername = $1', [
       username,
     ]);
+    if (result.rowCount === 0) {
+      res.status(404).json({ error: 'Pet owner not found' });
+      return;
+    }
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+exports.editCc = async (req, res) => {
+  try {
+    const { petownerusername, ccnumber, ccname, ccexpirydate, cccvvcode } = req.body;
+    const result = await db.query(
+      `UPDATE pet_owner SET ccNumber = $2, ccName = $3, ccExpiryDate = $4, ccCvvCode = $5 
+      WHERE petownerusername = $1
+      RETURNING *`,
+      [petownerusername, ccnumber, ccname, ccexpirydate, cccvvcode],
+    );
     if (result.rowCount === 0) {
       res.status(404).json({ error: 'Pet owner not found' });
       return;
