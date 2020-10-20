@@ -28,7 +28,7 @@ const CaretakerForm = ({ username }) => {
     <Box>
       <Typography variant="h6" style={{ marginTop: 30, marginBottom: 30 }}>
         {'Update Suitable Pets'}
-      </Typography>{' '}
+      </Typography>
       <TransferList categories={petCategories} handleSubmit={handleSubmit} />
     </Box>
   );

@@ -37,7 +37,7 @@ exports.edit = async (req, res) => {
   try {
     const { username } = req.params;
     // Delete all existing associated categories
-    const clear = await db.query('DELETE FROM cares_for WHERE caretakerusername = $1', [username]);
+    await db.query('DELETE FROM cares_for WHERE caretakerusername = $1', [username]);
     // Insert each selected category
     const updatedCategories = await Promise.all(
       req.body.map(async (category) => {
