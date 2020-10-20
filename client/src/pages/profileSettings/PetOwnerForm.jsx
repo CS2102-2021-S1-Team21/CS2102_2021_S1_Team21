@@ -33,7 +33,7 @@ const PetOwnerForm = (username) => {
         <Form>
           <Typography variant="h6" style={{ marginTop: 30, marginBottom: 30 }}>
             {'Update Credit Card'}
-          </Typography>{' '}
+          </Typography>
           <Grid container spacing={2}>
             <Grid item xs={6}>
               <Field name="ccname" label="Cardholder Name" component={FormTextField} required />
