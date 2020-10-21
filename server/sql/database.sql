@@ -370,7 +370,7 @@ BEGIN
     IF max_jobs >= 5 THEN
         RAISE EXCEPTION 'Caretaker is unable to receive more pets during this period';
     ELSEIF (NEW.caretakerusername IN (SELECT P.caretakerusername FROM Part_Time_Employee P) 
-        AND ((SELECT totalAverageRating FROM Caretaker WHERE Caretakerusername = NEW.caretakerusername) <= 4.8) AND max_jobs >= 2) THEN
+        AND ((SELECT totalAverageRating FROM Caretaker WHERE Caretakerusername = NEW.caretakerusername) <= 4) AND max_jobs >= 2) THEN
             RAISE EXCEPTION 'Part time Caretaker is unable to receive more pets during this period';
     ELSE
         RETURN NEW;
@@ -379,17 +379,7 @@ BEGIN
     END;
 $$ LANGUAGE plpgsql;
 
-DROP TRIGGER IF EXISTS check_full_time_max_jobs ON Bids;
 CREATE TRIGGER check_full_time_max_jobs
 BEFORE INSERT ON Bids
 FOR EACH ROW 
 EXECUTE PROCEDURE bids_constraint();
-
-WITH total_number_each_day AS (
-    SELECT caretakerusername, as_of_date, COUNT(*) as n
-    FROM (SELECT d::date AS as_of_date FROM generate_series('2020-03-10'::timestamp, '2020-03-30'::timestamp, '1 day') d) as dates
-    LEFT JOIN Bids ON dates.as_of_date BETWEEN Bids.startdate AND Bids.enddate
-    WHERE Bids.status = 'Accepted'
-    GROUP BY caretakerusername, as_of_date
-)
-select * from total_number_each_day;
