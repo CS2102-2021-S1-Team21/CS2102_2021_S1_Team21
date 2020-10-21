@@ -8,7 +8,7 @@ router.post('/', pets.new);
 router.get('/:petOwnerUsername', pets.index);
 
 //temp
-router.get('/retrieve/:petOwnerUsername', bids.retrieve);
+router.get('/retrieve/:petOwnerUsername', pets.retrieve);
 
 router.get('/:petOwnerUsername/:petName', pets.view);
 router.put('/:petOwnerUsername/:petName', pets.edit);

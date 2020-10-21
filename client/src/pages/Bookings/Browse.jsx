@@ -38,7 +38,7 @@ const Browse = () => {
   const store = useStore();
 
   useEffect(() => {
-    api.pet.getPet(store.user.username).then((x) => setPetOptions(x));
+    api.pets.getPetPet(store.user.username).then((x) => setPetOptions(x));
     api.transferType.getTransferTypes().then((x) => setTransferTypeOptions(x));
   }, [store.user.username]);
 
@@ -48,7 +48,7 @@ const Browse = () => {
 
   useEffect(() => {
     if (pet) {
-      api.petCategory.getDailyPrice(pet.categoryname).then((x) => setDailyPrice(x[0].dailyprice));
+      api.petCategories.getDailyPrice(pet.categoryname).then((x) => setDailyPrice(x[0].dailyprice));
     }
   }, [pet]);
 
