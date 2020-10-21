@@ -6,11 +6,10 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-import Browse from './Bookings/Browse';
 import Upcoming from './Bookings/Upcoming';
 import Failed from './Bookings/Failed';
 import Past from './Bookings/Past';
-import Pending from './Bookings/Pending';
+import Pending from './Jobs/Pending';
 
 
 function TabPanel(props) {
@@ -64,30 +63,26 @@ const Bookings = () => {
 
   return (
     <div className={classes.root}>
-        <h1> My Bookings </h1>
+        <h1> My Jobs </h1>
       <AppBar position="static">
         <Tabs value={value} onChange={handleChange}  variant="scrollable"
           scrollButtons="auto" aria-label="PetOwner Tabs">
-          <Tab label="Browse" {...a11yProps(0)} />
-          <Tab label="Pending" {...a11yProps(1)} />
-          <Tab label="Upcoming" {...a11yProps(2)} />
-          <Tab label="Past" {...a11yProps(3)} />
-          <Tab label="Failed" {...a11yProps(4)} />
+          <Tab label="Pending" {...a11yProps(0)} />
+          <Tab label="Upcoming" {...a11yProps(1)} />
+          <Tab label="Past" {...a11yProps(2)} />
+          <Tab label="Failed" {...a11yProps(3)} />
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
-        <Browse/>
+        <Pending/>
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <Pending/>  
-      </TabPanel>
-      <TabPanel value={value} index={2}>
         <Upcoming/>
       </TabPanel>
-      <TabPanel value={value} index={3}>
+      <TabPanel value={value} index={2}>
         <Past/>
       </TabPanel>
-      <TabPanel value={value} index={4}>
+      <TabPanel value={value} index={3}>
         <Failed/>
       </TabPanel>
     </div>

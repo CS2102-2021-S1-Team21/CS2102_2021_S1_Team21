@@ -102,29 +102,21 @@ const Browse = () => {
                     variant="outlined"
                     color="primary"
                     onClick={() => {
-                        if (isUndefined(pet)) {
-                            //TODO ADD ERROR MSG
-                        }
-                        if (isUndefined(transferType)) {
-                            //TODO ADD ERROR MSG
-                        }
-
                         try {
-                            const body = {
-                              startDate: dateFrom,
-                              endDate: dateTo,
-                              petCategory: pet.categoryname,
-                              rating: rating,
-                            };
-                            api.caretakers.browseCaretakers(body).then((x) => setCaretakers(x));                          } catch (err) {
+                            // const body = {
+                            //   startDate: dateFrom,
+                            //   endDate: dateTo,
+                            //   petCategory: pet.categoryname,
+                            //   rating: rating,
+                            // };
+                            // api.caretakers.browseCaretakers(body).then((x) => setCaretakers(x));   
+                            api.caretakers.getCaretakers().then((x) => setCaretakers(x.entries))
+
+                        } catch (err) {
                             console.log(err.message);
-                          }
-
-
+                        }
                         console.log('rating:' + rating +
                         'Pet:' + pet.name + pet.categoryname + dailyPrice + 'start date: ' + dateFrom + "remarks" +remarks)
-                    
-                        
                     }}
                     >
                     {'SEARCH'}
@@ -132,7 +124,7 @@ const Browse = () => {
                 </CardActions>
             </Card>
             <List>
-                { caretakers.filter((caretaker) => caretaker.totalaveragerating >= rating).map((caretaker) => {
+                { caretakers.map((caretaker) => {
                     return (
                         <Paper style={{ margin: 30 , padding: 30}} key={caretaker.caretakerusername}>   
                             <ListItem alignItems="flex-start">

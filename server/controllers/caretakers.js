@@ -4,6 +4,7 @@ exports.index = async (req, res) => {
   try {
     const result = await db.query('SELECT * FROM Caretaker');
     res.json({ totalCount: result.rowCount, entries: result.rows });
+    console.log(result.rows)
   } catch (err) {
     console.error(err);
   }

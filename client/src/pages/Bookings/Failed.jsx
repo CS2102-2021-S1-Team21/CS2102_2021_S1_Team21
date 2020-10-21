@@ -14,10 +14,8 @@ const Upcoming = () => {
   const store = useStore();
 
   useEffect(() => {
-    api.bids.getBids(store.user.username).then((x) => setAllBids(x));
+    api.bids.getPetOwnerBids(store.user.username).then((x) => setAllBids(x));
   }, [store.user.username]);
-
-
 
   console.log("all bids" + allBids);
 

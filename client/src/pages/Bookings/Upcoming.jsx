@@ -14,7 +14,7 @@ const Upcoming = () => {
   const store = useStore();
 
   useEffect(() => {
-    api.bids.getBids(store.user.username).then((x) => setAllBids(x));
+    api.bids.getPetOwnerBids(store.user.username).then((x) => setAllBids(x));
   }, [store.user.username]);
 
 
@@ -61,7 +61,7 @@ const Upcoming = () => {
                                 <ListItemSecondaryAction>
                                     <Button onClick={
                                         () => {console.log(bids.id)}}>
-                                            {'Cancel'}
+                                            {'Make Payment'}
                                     </Button>
                                 </ListItemSecondaryAction>
                             </ListItem>

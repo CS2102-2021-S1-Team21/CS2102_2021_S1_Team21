@@ -7,6 +7,7 @@ import EditProfile from '../pages/EditProfile';
 import Leaves from '../pages/leaves/Leaves';
 import PetOwnerProfile from '../pages/PetOwnerProfile';
 import Bookings from '../pages/Bookings';
+import Jobs from '../pages/Jobs';
 import { getSessionCookie } from '../utilities/sessionCookie';
 import { StoreProvider } from '../utilities/store';
 import Loading from './Loading';
@@ -49,6 +50,7 @@ const AuthRouter = () => {
           <Route exact path="/my-availability" component={Availability} />
           <Route exact path="/edit-profile" component={EditProfile} />
           <Route exact path="/my-bookings" component={Bookings} />
+          <Route exact path="/my-jobs" component={Jobs} />
           <Route path="/pet-owners/:username" component={PetOwnerProfile} />
           <Route path="/caretakers/:username" component={CaretakerProfile} />
           <Route path="/pcs-admin" component={PcsAdmin} />
