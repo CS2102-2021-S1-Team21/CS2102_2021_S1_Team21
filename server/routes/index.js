@@ -9,9 +9,8 @@ const caretakers = require('./caretakers');
 const reviews = require('./reviews');
 const bids = require('./bids');
 const pet = require('./pet');
-const pet_category = require('./pet_category');
-const transfer_type = require('./transfer_type');
-
+const petCategory = require('./petCategory');
+const transferType = require('./transferType');
 
 router.use('/', auth);
 
@@ -24,9 +23,8 @@ router.use('/caretakers', ensureAuthenticated, caretakers);
 router.use('/reviews', ensureAuthenticated, reviews);
 router.use('/bids', ensureAuthenticated, bids);
 router.use('/pet', ensureAuthenticated, pet);
-router.use('/pet_category', ensureAuthenticated, pet_category);
-router.use('/transfer_type', ensureAuthenticated, transfer_type);
-
+router.use('/petCategory', ensureAuthenticated, petCategory);
+router.use('/transferType', ensureAuthenticated, transferType);
 
 // Catch-all route (used for error handling)
 

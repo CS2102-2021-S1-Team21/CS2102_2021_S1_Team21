@@ -12,11 +12,10 @@ exports.index = async (req, res) => {
 exports.retrieve = async (req, res) => {
   try {
     const { categoryName } = req.params;
-    const result = await db.query(
-      `SELECT dailyPrice FROM Pet_Category WHERE categoryName = $1`,
-      [categoryName],
-    );
-    console.log(result.rows)
+    const result = await db.query(`SELECT dailyPrice FROM Pet_Category WHERE categoryName = $1`, [
+      categoryName,
+    ]);
+    console.log(result.rows);
     res.json(result.rows);
   } catch (err) {
     console.error('ERROR: ', err.message);

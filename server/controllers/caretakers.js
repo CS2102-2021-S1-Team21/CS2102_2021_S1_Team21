@@ -4,7 +4,7 @@ exports.index = async (req, res) => {
   try {
     const result = await db.query('SELECT * FROM Caretaker');
     res.json({ totalCount: result.rowCount, entries: result.rows });
-    console.log(result.rows)
+    console.log(result.rows);
   } catch (err) {
     console.error(err);
   }
@@ -12,7 +12,7 @@ exports.index = async (req, res) => {
 
 exports.browse = async (req, res) => {
   try {
-    const { startDate, endDate, petCategory, rating} = req.body;
+    const { startDate, endDate, petCategory, rating } = req.body;
     const result = await db.query(
       `SELECT t0.caretakerusername, startdate, enddate, totalaveragerating, categoryname
         FROM
@@ -43,10 +43,9 @@ exports.browse = async (req, res) => {
           ON t0.caretakerusername = t3.caretakerusername
         WHERE $4 > t2.totalAverageRating AND $3 = t3.categoryname
         ;`,
-        [startDate, endDate, petCategory, rating]
-        
-      );
-    console.log(result.rows)
+      [startDate, endDate, petCategory, rating],
+    );
+    console.log(result.rows);
     res.json(result.rows);
   } catch (err) {
     console.error(err);

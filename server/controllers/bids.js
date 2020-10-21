@@ -2,12 +2,32 @@ const db = require('../db');
 
 exports.apply = async (req, res) => {
   try {
-    const { petName, petOwnerUsername, caretakerUsername, dailyPrice, submittedAt, startDate, endDate, transferType, remarks } = req.body;
+    const {
+      petName,
+      petOwnerUsername,
+      caretakerUsername,
+      dailyPrice,
+      submittedAt,
+      startDate,
+      endDate,
+      transferType,
+      remarks,
+    } = req.body;
     const result = await db.query(
       'INSERT INTO Bids (petName, petOwnerUsername, caretakerUsername, dailyPrice, submittedAt, startDate, endDate, transferType, remarks) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *',
-      [petName, petOwnerUsername, caretakerUsername, dailyPrice, submittedAt, startDate, endDate, transferType, remarks],
+      [
+        petName,
+        petOwnerUsername,
+        caretakerUsername,
+        dailyPrice,
+        submittedAt,
+        startDate,
+        endDate,
+        transferType,
+        remarks,
+      ],
     );
-    console.log(result.rows)
+    console.log(result.rows);
     res.json(result.rows);
   } catch (err) {
     console.error(err);
@@ -17,10 +37,9 @@ exports.apply = async (req, res) => {
 exports.petOwnerRetrieve = async (req, res) => {
   try {
     const { petOwnerUsername } = req.params;
-    const result = await db.query(
-      `SELECT * FROM Bids WHERE petOwnerUsername = $1`,
-      [petOwnerUsername],
-    );
+    const result = await db.query(`SELECT * FROM Bids WHERE petOwnerUsername = $1`, [
+      petOwnerUsername,
+    ]);
     res.json(result.rows);
   } catch (err) {
     console.error('ERROR: ', err.message);
@@ -42,10 +61,23 @@ exports.caretakerRetrieve = async (req, res) => {
   }
 };
 
-
 exports.updateBids = async (req, res) => {
   try {
-    const { petName, petOwnerUsername, caretakerUsername, submittedAt, startDate, endDate, status, transactionDateTime, paymentMethod, totalAmount, rating, comment, reviewDateTime  } = req.body;
+    const {
+      petName,
+      petOwnerUsername,
+      caretakerUsername,
+      submittedAt,
+      startDate,
+      endDate,
+      status,
+      transactionDateTime,
+      paymentMethod,
+      totalAmount,
+      rating,
+      comment,
+      reviewDateTime,
+    } = req.body;
     const result = await db.query(
       `UPDATE Bids SET 
         status = $7,
@@ -61,9 +93,23 @@ exports.updateBids = async (req, res) => {
         AND submittedAt = $4
         AND startDate = DATE($5) 
         AND endDate = DATE($6))`,
-      [petName, petOwnerUsername, caretakerUsername, submittedAt, startDate, endDate, status, transactionDateTime, paymentMethod, totalAmount, rating, comment, reviewDateTime],
+      [
+        petName,
+        petOwnerUsername,
+        caretakerUsername,
+        submittedAt,
+        startDate,
+        endDate,
+        status,
+        transactionDateTime,
+        paymentMethod,
+        totalAmount,
+        rating,
+        comment,
+        reviewDateTime,
+      ],
     );
-    console.log(result.rows)
+    console.log(result.rows);
     res.json(result.rows);
   } catch (err) {
     console.error('ERROR: ', err.message);
@@ -73,9 +119,7 @@ exports.updateBids = async (req, res) => {
 
 exports.retrieve = async (req, res) => {
   try {
-    const result = await db.query(
-      `SELECT * FROM Bids;`
-    );
+    const result = await db.query(`SELECT * FROM Bids;`);
     res.json(result.rows);
   } catch (err) {
     console.error('ERROR: ', err.message);
