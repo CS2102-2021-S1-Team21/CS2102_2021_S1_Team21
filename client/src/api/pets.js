@@ -16,7 +16,7 @@ const pets = {
   deletePet: async (petOwnerUsername, petName) => {
     return baseAPI.delete(`pets/${petOwnerUsername}/${petName}`);
   },
-  //temp
+  // temp
   getPetPet: async (petOwnerUsername) => {
     return baseAPI.get(`pets/retrieve/${petOwnerUsername}`);
   },
