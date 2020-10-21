@@ -362,33 +362,19 @@ RETURNS TRIGGER AS $$
 DECLARE max_jobs INTEGER;
 BEGIN
     -- If caretaker is a full timer
-    IF (NEW.caretakerusername IN (SELECT F.caretakerusername FROM Full_Time_Employee F)) THEN
-        SELECT MAX(n) INTO max_jobs FROM (SELECT caretakerusername, as_of_date, COUNT(*) as n
-            FROM (SELECT d::date AS as_of_date FROM generate_series(NEW.startdate::timestamp, NEW.enddate::timestamp, '1 day') d) as dates
-            INNER JOIN Bids ON dates.as_of_date BETWEEN Bids.startdate AND Bids.enddate
-            WHERE Bids.status = 'Accepted'
-            GROUP BY caretakerusername, as_of_date) T WHERE NEW.caretakerusername = T.caretakerusername;
-        IF max_jobs  >= 5 AND (NEW.caretakerusername IN (SELECT F.caretakerusername FROM Full_Time_Employee F) THEN
-            RAISE EXCEPTION 'Caretaker is unable to receive more pets during this period';
-        ELSE 
-            RETURN NEW;
-        END IF;
-    -- If caretaker is a part timer
-    ELSEIF (NEW.caretakerusername IN (SELECT P.caretakerusername FROM Part_Time_Employee P)) THEN
-        SELECT MAX(n) INTO max_jobs FROM (SELECT caretakerusername, as_of_date, COUNT(*) as n
-            FROM (SELECT d::date AS as_of_date FROM generate_series(NEW.startdate::timestamp, NEW.enddate::timestamp, '1 day') d) as dates
-            INNER JOIN Bids ON dates.as_of_date BETWEEN Bids.startdate AND Bids.enddate
-            WHERE Bids.status = 'Accepted'
-            GROUP BY caretakerusername, as_of_date) T WHERE NEW.caretakerusername = T.caretakerusername;
-        IF max_jobs >= 5 THEN
-            RAISE EXCEPTION 'Part time max > 5 Caretaker is unable to receive more pets during this period';
-        ELSEIF (SELECT totalAverageRating FROM Caretaker WHERE Caretakerusername = NEW.caretakerusername) <= 4 AND max_jobs >= 2 THEN
-            RAISE EXCEPTION 'Part time rating cui Caretaker is unable to receive more pets during this period';
-        ELSE 
-            RETURN NEW;
-        END IF;
+    SELECT MAX(n) INTO max_jobs FROM (SELECT caretakerusername, as_of_date, COUNT(*) as n
+        FROM (SELECT d::date AS as_of_date FROM generate_series(NEW.startdate::timestamp, NEW.enddate::timestamp, '1 day') d) as dates
+        INNER JOIN Bids ON dates.as_of_date BETWEEN Bids.startdate AND Bids.enddate
+        WHERE Bids.status = 'Accepted'
+        GROUP BY caretakerusername, as_of_date) T WHERE NEW.caretakerusername = T.caretakerusername;
+    IF max_jobs >= 5 THEN
+        RAISE EXCEPTION 'Caretaker is unable to receive more pets during this period';
+    ELSEIF (NEW.caretakerusername IN (SELECT P.caretakerusername FROM Part_Time_Employee P) 
+        AND ((SELECT totalAverageRating FROM Caretaker WHERE Caretakerusername = NEW.caretakerusername) <= 4.8) AND max_jobs >= 2) THEN
+            RAISE EXCEPTION 'Part time Caretaker is unable to receive more pets during this period';
+    ELSE
+        RETURN NEW;
     END IF;
-
     RETURN NULL;
     END;
 $$ LANGUAGE plpgsql;
