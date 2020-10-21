@@ -379,7 +379,7 @@ BEGIN
     END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER check_full_time_max_jobs
+CREATE TRIGGER check_bids_constraint
 BEFORE INSERT ON Bids
 FOR EACH ROW 
 EXECUTE PROCEDURE bids_constraint();
