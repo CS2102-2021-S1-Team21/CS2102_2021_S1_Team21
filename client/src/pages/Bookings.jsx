@@ -12,9 +12,8 @@ import Failed from './Bookings/Failed';
 import Past from './Bookings/Past';
 import Pending from './Bookings/Pending';
 
-
 function TabPanel(props) {
-  const { children, value, index, ...other } = props;
+  const { children, value, index } = props;
 
   return (
     <div
@@ -22,7 +21,6 @@ function TabPanel(props) {
       hidden={value !== index}
       id={`simple-tabpanel-${index}`}
       aria-labelledby={`simple-tab-${index}`}
-      {...other}
     >
       {value === index && (
         <Box p={3}>
@@ -34,9 +32,8 @@ function TabPanel(props) {
 }
 
 TabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.any.isRequired,
-  value: PropTypes.any.isRequired,
+  index: PropTypes.isRequired,
+  value: PropTypes.isRequired,
 };
 
 function a11yProps(index) {
@@ -64,10 +61,15 @@ const Bookings = () => {
 
   return (
     <div className={classes.root}>
-        <h1> My Bookings </h1>
+      <h1>{' My Bookings '}</h1>
       <AppBar position="static">
-        <Tabs value={value} onChange={handleChange}  variant="scrollable"
-          scrollButtons="auto" aria-label="PetOwner Tabs">
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          variant="scrollable"
+          scrollButtons="auto"
+          aria-label="PetOwner Tabs"
+        >
           <Tab label="Browse" {...a11yProps(0)} />
           <Tab label="Pending" {...a11yProps(1)} />
           <Tab label="Upcoming" {...a11yProps(2)} />
@@ -76,22 +78,22 @@ const Bookings = () => {
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
-        <Browse/>
+        <Browse />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <Pending/>  
+        <Pending />
       </TabPanel>
       <TabPanel value={value} index={2}>
-        <Upcoming/>
+        <Upcoming />
       </TabPanel>
       <TabPanel value={value} index={3}>
-        <Past/>
+        <Past />
       </TabPanel>
       <TabPanel value={value} index={4}>
-        <Failed/>
+        <Failed />
       </TabPanel>
     </div>
   );
-}
+};
 
 export default Bookings;

@@ -6,11 +6,8 @@ import caretakers from './caretakers';
 import reviews from './reviews';
 import bids from './bids';
 import pet from './pet';
-import pet_category from './pet_category';
-import transfer_type from './transfer_type';
-
-
-
+import petCategory from './petCategory';
+import transferType from './transferType';
 
 /* ====================================
  * Index of all API request routes
@@ -26,8 +23,8 @@ const api = {
   reviews,
   bids,
   pet,
-  pet_category,
-  transfer_type
+  petCategory,
+  transferType,
 };
 
 export default api;
