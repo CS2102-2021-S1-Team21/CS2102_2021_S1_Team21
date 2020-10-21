@@ -78,7 +78,7 @@ CREATE TABLE Requirement(
     petName VARCHAR,
     petOwnerUsername VARCHAR,
     PRIMARY KEY(requirementType, petName, petOwnerUsername),
-    FOREIGN KEY(petName, petOwnerUsername) REFERENCES Pet(name, petOwnerUsername) ON DELETE CASCADE
+    FOREIGN KEY(petName, petOwnerUsername) REFERENCES Pet(name, petOwnerUsername) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE Cares_For(
@@ -156,7 +156,7 @@ CREATE TABLE Bids(
     CONSTRAINT statusAccepted CHECK(status IN ('Accepted','Completed') OR (transactionDateTime IS NULL AND paymentMethod IS NULL AND totalAmount IS NULL)),
     CONSTRAINT transactionCompleted CHECK((transactionDATEtIME IS NOT NULL AND status = 'Completed') OR (rating IS NULL AND comment IS NULL AND reviewDateTime IS NULL)),
     PRIMARY KEY(petName, petOwnerUsername, caretakerUsername, submittedAt, startDate, endDate),
-    FOREIGN KEY(petName, petOwnerUsername) REFERENCES Pet(name, petOwnerUsername) ON DELETE CASCADE
+    FOREIGN KEY(petName, petOwnerUsername) REFERENCES Pet(name, petOwnerUsername) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 

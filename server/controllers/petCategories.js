@@ -1,11 +1,14 @@
 const db = require('../db');
 
-exports.index = async (req, res) => {
+exports.index = async (req, res, next) => {
   try {
     const result = await db.query('SELECT * FROM Pet_Category');
-    res.json(result.rows);
+    res.json({
+      totalCount: result.rowCount,
+      rows: result.rows,
+    });
   } catch (err) {
-    console.error(err);
+    next(err);
   }
 };
 

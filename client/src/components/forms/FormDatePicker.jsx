@@ -1,4 +1,5 @@
 import { KeyboardDatePicker } from '@material-ui/pickers';
+import { format } from 'date-fns';
 import React from 'react';
 import { DATE_INPUT_FORMAT } from '../../utilities/datetime';
 
@@ -17,7 +18,8 @@ import { DATE_INPUT_FORMAT } from '../../utilities/datetime';
  */
 const FormDatePicker = ({ field, form, ...otherProps }) => {
   const handleChange = (date) => {
-    form.setFieldValue(field.name, date);
+    // format date as string to avoid timezone errors when sending API request
+    form.setFieldValue(field.name, format(date, 'yyyy-MM-dd'));
   };
 
   // TODO: upgrade to MUI Pickers 4.0 (once it's stable) to improve accessibility

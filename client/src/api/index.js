@@ -1,12 +1,12 @@
 import auth from './auth';
-import petOwners from './petOwners';
-import leaves from './leaves';
 import availability from './availability';
 import caretakers from './caretakers';
+import leaves from './leaves';
+import petCategories from './petCategories';
+import petOwners from './petOwners';
+import pets from './pets';
 import reviews from './reviews';
 import bids from './bids';
-import pet from './pet';
-import petCategory from './petCategory';
 import transferType from './transferType';
 
 /* ====================================
@@ -22,9 +22,10 @@ const api = {
   caretakers,
   reviews,
   bids,
-  pet,
-  petCategory,
+  pets,
+  petCategories,
   transferType,
-};
+}
+
 
 export default api;

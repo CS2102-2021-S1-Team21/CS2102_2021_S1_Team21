@@ -5,14 +5,19 @@ import Availability from '../pages/availabilities/Availability';
 import CaretakerProfile from '../pages/CaretakerProfile';
 import EditProfile from '../pages/EditProfile';
 import Leaves from '../pages/leaves/Leaves';
+import PcsAdmin from '../pages/pcsAdmin/PcsAdmin';
 import PetOwnerProfile from '../pages/PetOwnerProfile';
+<<<<<<< HEAD
 import Bookings from '../pages/Bookings';
 import Jobs from '../pages/Jobs';
+=======
+import PetProfile from '../pages/pets/PetProfile';
+import Pets from '../pages/pets/Pets';
+>>>>>>> master
 import { getSessionCookie } from '../utilities/sessionCookie';
 import { StoreProvider } from '../utilities/store';
 import Loading from './Loading';
 import NavBar from './NavBar';
-import PcsAdmin from '../pages/pcsAdmin/PcsAdmin';
 
 const AuthRouter = () => {
   const sessionCookie = getSessionCookie();
@@ -48,9 +53,14 @@ const AuthRouter = () => {
         <Switch>
           <Route exact path="/my-leaves" component={Leaves} />
           <Route exact path="/my-availability" component={Availability} />
+          <Route exact path="/my-pets" component={Pets} />
           <Route exact path="/edit-profile" component={EditProfile} />
+<<<<<<< HEAD
           <Route exact path="/my-bookings" component={Bookings} />
           <Route exact path="/my-jobs" component={Jobs} />
+=======
+          <Route path="/pet-owners/:petOwnerUsername/pets/:petName" component={PetProfile} />
+>>>>>>> master
           <Route path="/pet-owners/:username" component={PetOwnerProfile} />
           <Route path="/caretakers/:username" component={CaretakerProfile} />
           <Route path="/pcs-admin" component={PcsAdmin} />
