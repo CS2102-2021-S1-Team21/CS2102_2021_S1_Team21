@@ -15,7 +15,8 @@ CREATE TABLE PCS_Administrator(
     email VARCHAR NOT NULL UNIQUE,
     passwordDigest VARCHAR NOT NULL,
     name VARCHAR NOT NULL,
-    deletedAt TIMESTAMP
+    deletedAt TIMESTAMP,
+    createdAt DATE NOT NULL
 );
 
 CREATE TABLE App_User(
@@ -27,7 +28,8 @@ CREATE TABLE App_User(
     bio VARCHAR,
     phoneNumber VARCHAR NOT NULL,
     address VARCHAR NOT NULL,
-    postalCode VARCHAR NOT NULL
+    postalCode VARCHAR NOT NULL,
+    createdAt DATE NOT NULL
 );
 
 CREATE TABLE Pet_Owner(
@@ -102,7 +104,6 @@ CREATE TABLE Indicates_Availability_Period(
     startDate DATE,
     endDate DATE,
     CHECK (startDate <= endDate),
-    CONSTRAINT overlapping_date EXCLUDE USING GIST (daterange(startDate, endDate) WITH &&),
     PRIMARY KEY(caretakerUsername, startDate, endDate)
 );
 
@@ -113,7 +114,6 @@ CREATE TABLE Applies_For_Leave_Period(
     isEmergency BOOLEAN NOT NULL,
     isApproved BOOLEAN DEFAULT FALSE,
     CHECK (startDate <= endDate),
-    CONSTRAINT overlapping_date2 EXCLUDE USING GIST (daterange(startDate, endDate) WITH &&),
     PRIMARY KEY(caretakerUsername, startDate, endDate)
 );
 
@@ -205,72 +205,49 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION leave_care_no_pet() RETURNS TRIGGER AS $$
-DECLARE 
-pet_under_care INTEGER;
-BEGIN
-    -- Check that caretaker currently not taking care of any pets
-    WITH overlap(date) AS (
-        select (generate_series(NEW.startdate, NEW.enddate, '1 day'::interval))::date
-        INTERSECT
-        select generate_series(
-        startdate, enddate, '1 day') FROM Bids where caretakerusername = NEW.caretakerusername AND status = 'Accepted'
-    )
-
-    SELECT COUNT(*) INTO pet_under_care FROM overlap;
-
-    IF pet_under_care > 0 THEN
-        RAISE EXCEPTION 'You cannot apply leave you are / will be in charge of one or more pets during the leave';
-    ELSE RETURN NEW;
-    END IF;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE OR REPLACE FUNCTION leave_overlapping_date() RETURNS TRIGGER AS $$
+CREATE OR REPLACE FUNCTION leave_constraints() RETURNS TRIGGER AS $$
 DECLARE 
 overlapping_date INTEGER;
+pet_under_care INTEGER;
 BEGIN
-    WITH overlap(date) AS (
-        select (generate_series(NEW.startdate, NEW.enddate, '1 day'::interval))::date
+    SELECT COUNT(*) INTO overlapping_date FROM (select (generate_series(NEW.startdate, NEW.enddate, '1 day'::interval))::date
         INTERSECT
         select generate_series(
-        startdate, enddate, '1 day') FROM applies_for_leave_period where caretakerusername = NEW.caretakerusername
-    )
-
-    SELECT COUNT(*) INTO overlapping_date FROM overlap;
+        startdate, enddate, '1 day') FROM applies_for_leave_period where caretakerusername = NEW.caretakerusername) as intersect_dates;
   
     IF overlapping_date > 0 THEN
         RAISE EXCEPTION 'You cannot apply for overlapping leaves';
-    ELSE RETURN NEW;
     END IF;
+
+    SELECT COUNT(*) INTO pet_under_care FROM (select (generate_series(NEW.startdate, NEW.enddate, '1 day'::interval))::date
+        INTERSECT
+        select generate_series(
+        startdate, enddate, '1 day') FROM Bids where caretakerusername = NEW.caretakerusername AND status = 'Accepted') as pet_being_cared;
+
+    IF pet_under_care > 0 THEN
+        RAISE EXCEPTION 'You cannot apply leave you are / will be in charge of one or more pets during the leave';
+    END IF;
+    RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER check_leave_consecutive
 BEFORE INSERT ON applies_for_leave_period
-FOR EACH ROW EXECUTE PROCEDURE leave_consecutive();
+FOR EACH ROW EXECUTE PROCEDURE leave_consecutive_date();
 
-CREATE TRIGGER check_leave_care_no_pet
+CREATE TRIGGER check_leave_constraints
 BEFORE INSERT ON applies_for_leave_period
-FOR EACH ROW EXECUTE PROCEDURE leave_care_no_pet();
-
-CREATE TRIGGER check_leave_overlap
-BEFORE INSERT ON applies_for_leave_period
-FOR EACH ROW EXECUTE PROCEDURE leave_overlapping_date();
+FOR EACH ROW EXECUTE PROCEDURE leave_constraints();
 
 -- -- Triggers for availability application
 CREATE OR REPLACE FUNCTION availability_overlapping_date() RETURNS TRIGGER AS $$
 DECLARE 
 overlapping_date INTEGER;
 BEGIN
-    WITH overlap(date) AS (
-        select (generate_series(NEW.startdate, NEW.enddate, '1 day'::interval))::date
+    SELECT COUNT(*) INTO overlapping_date FROM (select (generate_series(NEW.startdate, NEW.enddate, '1 day'::interval))::date
         INTERSECT
         select generate_series(
-        startdate, enddate, '1 day') FROM indicates_availability_period where caretakerusername = NEW.caretakerusername
-    )
-
-    SELECT COUNT(*) INTO overlapping_date FROM overlap;
+        startdate, enddate, '1 day') FROM indicates_availability_period where caretakerusername = NEW.caretakerusername) as dates;
   
     IF overlapping_date > 0 THEN
         RAISE EXCEPTION 'You cannot indicate overlapping availability periods';
