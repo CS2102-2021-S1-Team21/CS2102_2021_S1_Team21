@@ -26,7 +26,6 @@ router.use('/pets', ensureAuthenticated, pets);
 router.use('/pet-categories', ensureAuthenticated, petCategories);
 router.use('/transferType', ensureAuthenticated, transferType);
 
-
 // Catch-all route (used for error handling)
 
 router.get('/', (req, res) => {
