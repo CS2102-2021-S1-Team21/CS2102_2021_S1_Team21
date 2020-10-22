@@ -1,5 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
 import Card from '@material-ui/core/Card';
@@ -19,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1, 2),
   },
   list: {
-    width: 300,
+    width: 540,
     height: 230,
     backgroundColor: theme.palette.background.paper,
     overflow: 'auto',
@@ -123,42 +124,48 @@ export default function TransferList({ categories, handleSubmit }) {
     </Card>
   );
   return (
-    <Grid container spacing={2} justify="center" alignItems="center" className={classes.root}>
-      <Grid item>{customList('Unsuitable', left)}</Grid>
-      <Grid item>
-        <Grid container direction="column" alignItems="center">
+    <Box>
+      <Grid container spacing={3} justify="center" alignItems="center" className={classes.root}>
+        <Grid item>{customList('Unsuitable', left)}</Grid>
+        <Grid>
+          <Grid container direction="column" alignItems="center">
+            <Button
+              variant="outlined"
+              size="small"
+              className={classes.button}
+              onClick={handleCheckedRight}
+              disabled={leftChecked.length === 0}
+              aria-label="move selected right"
+            >
+              &gt;
+            </Button>
+            <Button
+              variant="outlined"
+              size="small"
+              className={classes.button}
+              onClick={handleCheckedLeft}
+              disabled={rightChecked.length === 0}
+              aria-label="move selected left"
+            >
+              &lt;
+            </Button>
+          </Grid>
+        </Grid>
+        <Grid item>{customList('Suitable', right)}</Grid>
+      </Grid>
+      <Grid container justify="flex-end">
+        <Grid xs={3} item>
           <Button
-            variant="outlined"
-            size="small"
-            className={classes.button}
-            onClick={handleCheckedRight}
-            disabled={leftChecked.length === 0}
-            aria-label="move selected right"
+            variant="contained"
+            color="primary"
+            onClick={() => handleSubmit(right)}
+            type="submit"
+            fullWidth
           >
-            &gt;
-          </Button>
-          <Button
-            variant="outlined"
-            size="small"
-            className={classes.button}
-            onClick={handleCheckedLeft}
-            disabled={rightChecked.length === 0}
-            aria-label="move selected left"
-          >
-            &lt;
+            {'Update\r'}
           </Button>
         </Grid>
       </Grid>
-      <Grid item>{customList('Suitable', right)}</Grid>
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={() => handleSubmit(right)}
-        type="submit"
-        fullWidth
-      >
-        {'Update\r'}
-      </Button>
-    </Grid>
+    </Box>
   );
 }
