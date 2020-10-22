@@ -32,15 +32,3 @@ exports.edit = async (req, res) => {
     res.json({ error: 'An unexpected error occurred' });
   }
 };
-
-// Not yet sure how to insert multiple rows from petCategories
-exports.putCares = async (req, res) => {
-  try {
-    const { username, petCategories } = req.body;
-    const result = await db.query('DELETE FROM cares_for WHERE username = $1', [username]);
-    res.json(result.rows);
-  } catch (err) {
-    console.error(err);
-    res.json({ error: 'An unexpected error occurred' });
-  }
-};

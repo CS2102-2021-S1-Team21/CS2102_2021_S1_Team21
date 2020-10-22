@@ -5,7 +5,7 @@ const profileSettings = {
     return baseAPI.get(`profile-settings/${username}`);
   },
   updateUserDetails: async (body) => {
-    return baseAPI.put(`profile-settings/update/${body.username}`, body);
+    return baseAPI.put(`profile-settings/${body.username}`, body);
   },
 };
 

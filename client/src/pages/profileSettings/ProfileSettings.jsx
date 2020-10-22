@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Grid, Container, Typography, Card, CardContent } from '@material-ui/core';
+import { Button, Grid, Container, Typography, Card, CardContent } from '@material-ui/core';
 import { Field, Form, Formik } from 'formik';
+import { useHistory } from 'react-router-dom';
 import { useStore } from '../../utilities/store';
 import api from '../../api';
 import PetOwnerForm from './PetOwnerForm';
@@ -9,12 +10,25 @@ import FormTextField from '../../components/forms/FormTextField';
 import SubmitButton from '../../components/forms/SubmitButton';
 
 const ProfileSettings = () => {
+  const history = useHistory();
   const { user: userAccount } = useStore();
   const [user, setUser] = useState();
 
   const handleSubmit = async (input) => {
     try {
       await api.profileSettings.updateUserDetails(input.values);
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+
+  const handleClickDelete = async () => {
+    try {
+      if (!window.confirm(`Are you sure you want to delete your account?`)) return;
+      await api.auth
+        .deleteUser({ username: userAccount.username, deletedAt: new Date() })
+        .then(api.auth.logout());
+      history.push('/login');
     } catch (err) {
       console.log(err.message);
     }
@@ -77,7 +91,19 @@ const ProfileSettings = () => {
                     type="password"
                   />
                 </Grid>
-                <SubmitButton>{'Update'}</SubmitButton>
+                <Grid item xs={6}>
+                  <SubmitButton>{'Update'}</SubmitButton>
+                </Grid>
+                <Grid item xs={6}>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    fullWidth
+                    onClick={() => handleClickDelete()}
+                  >
+                    {'Delete Account'}
+                  </Button>
+                </Grid>
               </Grid>
             </Form>
           </Formik>
