@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import api from '../api';
 import Availability from '../pages/availabilities/Availability';
-import UserProfile from '../pages/UserProfile';
 import Leaves from '../pages/leaves/Leaves';
 import PcsAdmin from '../pages/pcsAdmin/PcsAdmin';
 import PetProfile from '../pages/pets/PetProfile';
 import Pets from '../pages/pets/Pets';
+import UserProfile from '../pages/userProfiles/UserProfile';
 import { getSessionCookie } from '../utilities/sessionCookie';
 import { StoreProvider } from '../utilities/store';
 import Loading from './Loading';
@@ -50,9 +50,9 @@ const AuthRouter = () => {
           <Route exact path="/my-availability" component={Availability} />
           <Route exact path="/my-pets" component={Pets} />
           <Route path="/pet-owners/:petOwnerUsername/pets/:petName" component={PetProfile} />
-          <Route path="/profile/:username" component={UserProfile} />
           <Route path="/pcs-admin" component={PcsAdmin} />
           <Route path="/profile-settings" component={ProfileSettings} />
+          <Route path="/profile/:username" component={UserProfile} />
         </Switch>
       </NavBar>
     </StoreProvider>

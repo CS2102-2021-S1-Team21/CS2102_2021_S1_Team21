@@ -32,19 +32,19 @@ const PetOwnerForm = (username) => {
     <Formik initialValues={creditCard} onSubmit={(values) => handleSubmit({ values })}>
       <Form>
         <Typography variant="h6" style={{ marginTop: 30, marginBottom: 30 }}>
-          {'Update Credit Card'}
+          {'Update Payment Info'}
         </Typography>
-        <Grid container spacing={2}>
-          <Grid item xs={6}>
+        <Grid container justify="flex-end" spacing={2}>
+          <Grid item xs={6} md={4}>
             <Field name="ccname" label="Cardholder Name" component={FormTextField} required />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={6} md={4}>
             <Field name="ccnumber" label="Credit Card Number" component={FormTextField} required />
           </Grid>
-          <Grid item xs={2}>
+          <Grid item xs={4} md={2}>
             <Field name="cccvvcode" label="CVV Code" component={FormTextField} required />
           </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={5} md={2}>
             <Field
               name="ccexpirydate"
               label="Expiry Date"
@@ -54,7 +54,9 @@ const PetOwnerForm = (username) => {
               required
             />
           </Grid>
-          <SubmitButton>{'Update'}</SubmitButton>
+          <Grid item xs={3}>
+            <SubmitButton>{'Update Payment Info'}</SubmitButton>
+          </Grid>
         </Grid>
       </Form>
     </Formik>

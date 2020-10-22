@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { DataGrid } from '@material-ui/data-grid';
 import { Box, Chip, Typography } from '@material-ui/core';
 import Rating from '@material-ui/lab/Rating';
-import api from '../api';
+import api from '../../api';
 
 const ReviewsSection = (props) => {
   const { handle } = props;
@@ -75,7 +75,7 @@ const ReviewsSection = (props) => {
   return (
     <Box mt={3}>
       <Typography variant="h6">{'Services I offer'}</Typography>
-      <Box mt={1}>{services}</Box>
+      <Box mb={3}>{services}</Box>
       <Typography variant="h5">{'Reviews'}</Typography>
       <Box display="flex">
         <Typography variant="subtitle1">{'Average Rating: '}</Typography>

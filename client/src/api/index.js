@@ -1,14 +1,14 @@
 import auth from './auth';
 import availability from './availability';
 import caretakers from './caretakers';
-import profiles from './profiles';
 import caresFor from './caresFor';
 import leaves from './leaves';
 import petCategories from './petCategories';
 import petOwners from './petOwners';
 import pets from './pets';
-import reviews from './reviews';
 import profileSettings from './profileSettings';
+import reviews from './reviews';
+import userProfiles from './userProfiles';
 
 /* ====================================
  * Index of all API request routes
@@ -26,7 +26,7 @@ const api = {
   pets,
   petCategories,
   caresFor,
-  profiles,
+  userProfiles,
 };
 
 export default api;

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Card, Box, CardContent, Container, Typography } from '@material-ui/core';
-import api from '../api';
+import api from '../../api';
 import CaretakerSection from './CaretakerSection';
 
 const UserProfile = (props) => {
@@ -18,7 +18,7 @@ const UserProfile = (props) => {
   }));
 
   useEffect(() => {
-    api.profiles.getProfile(handle).then((res) => {
+    api.userProfiles.getUserProfile(handle).then((res) => {
       setUser(res);
     });
   }, []);

@@ -46,19 +46,19 @@ const ProfileSettings = () => {
     return 'loading..';
   }
   return (
-    <Container maxWidth="md">
+    <Container>
       <Card>
         <CardContent>
-          <Typography variant="h6" style={{ marginTop: 30, marginBottom: 30 }}>
-            {'Edit Profile'}
-          </Typography>
           <Formik initialValues={user} onSubmit={(values) => handleSubmit({ values })}>
             <Form>
-              <Grid container spacing={2}>
-                <Grid item xs={6}>
+              <Typography variant="h6" style={{ marginTop: 30, marginBottom: 30 }}>
+                {'Update Profile'}
+              </Typography>
+              <Grid container spacing={2} justify="flex-end">
+                <Grid item xs={12} md={6}>
                   <Field name="name" label="Profile Name" component={FormTextField} required />
                 </Grid>
-                <Grid item xs={3}>
+                <Grid item xs={6} md={3}>
                   <Field
                     name="username"
                     label="Username"
@@ -67,7 +67,7 @@ const ProfileSettings = () => {
                     required
                   />
                 </Grid>
-                <Grid item xs={3}>
+                <Grid item xs={6} md={3}>
                   <Field
                     name="phonenumber"
                     label="Phone Number"
@@ -78,13 +78,13 @@ const ProfileSettings = () => {
                 <Grid item xs={12}>
                   <Field name="bio" label="About" multiline component={FormTextField} required />
                 </Grid>
-                <Grid item xs={8}>
+                <Grid item xs={12} md={8}>
                   <Field name="address" label="Address" component={FormTextField} required />
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item xs={6} md={4}>
                   <Field name="postalcode" label="Postal Code" component={FormTextField} required />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={6} md={12}>
                   <Field
                     name="passworddigest"
                     label="New Password"
@@ -93,10 +93,7 @@ const ProfileSettings = () => {
                     initialValue=""
                   />
                 </Grid>
-                <Grid item xs={6}>
-                  <SubmitButton>{'Update'}</SubmitButton>
-                </Grid>
-                <Grid item xs={6}>
+                <Grid item xs={3}>
                   <Button
                     variant="contained"
                     color="secondary"
@@ -105,6 +102,9 @@ const ProfileSettings = () => {
                   >
                     {'Delete Account'}
                   </Button>
+                </Grid>
+                <Grid item xs={3}>
+                  <SubmitButton>{'Update Profile'}</SubmitButton>
                 </Grid>
               </Grid>
             </Form>

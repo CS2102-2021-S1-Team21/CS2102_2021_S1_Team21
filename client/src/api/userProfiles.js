@@ -1,12 +1,12 @@
 import baseAPI from './baseAPI';
 
-const profiles = {
-  getProfiles: async () => {
+const userProfiles = {
+  getUserProfiles: async () => {
     return baseAPI.get('profile');
   },
-  getProfile: async (username) => {
+  getUserProfile: async (username) => {
     return baseAPI.get(`profile/${username}`);
   },
 };
 
-export default profiles;
+export default userProfiles;
