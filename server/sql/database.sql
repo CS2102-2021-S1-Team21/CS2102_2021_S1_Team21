@@ -213,7 +213,7 @@ BEGIN
     consecutive_leave_groups AS (
         SELECT
         ROW_NUMBER() OVER (ORDER BY date) AS rn,
-        date + (-ROW_NUMBER() OVER (ORDER BY date)) * INTERVAL '1 day' AS grp,
+        date - (ROW_NUMBER() OVER (ORDER BY date)) * INTERVAL '1 day' AS grp,
         date
         FROM dates
     )
