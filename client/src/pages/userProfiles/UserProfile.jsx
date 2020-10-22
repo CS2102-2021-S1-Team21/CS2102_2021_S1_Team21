@@ -21,7 +21,7 @@ const UserProfile = (props) => {
     api.userProfiles.getUserProfile(handle).then((res) => {
       setUser(res);
     });
-  }, []);
+  }, [handle]);
 
   return (
     <Container>

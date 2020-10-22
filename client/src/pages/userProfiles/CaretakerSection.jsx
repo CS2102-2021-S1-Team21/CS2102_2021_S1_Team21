@@ -46,7 +46,7 @@ const ReviewsSection = (props) => {
         setServices(service);
       }
     });
-  }, [handle]);
+  }, [service, handle]);
 
   const columns = [
     { field: 'id', headerName: 'ID', width: 70, hide: true },

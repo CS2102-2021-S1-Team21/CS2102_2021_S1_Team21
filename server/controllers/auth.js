@@ -62,9 +62,9 @@ exports.session_info = (req, res) => {
 };
 
 // Signup
-exports.create_user = (req, res, next) => {
+// exports.create_user = (req, res, next) => {
   // TODO: registration
-};
+// };
 
 exports.delete_user = async (req, res) => {
   try {
