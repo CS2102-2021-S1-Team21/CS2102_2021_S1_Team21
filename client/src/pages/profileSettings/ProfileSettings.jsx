@@ -25,6 +25,7 @@ const ProfileSettings = () => {
   const handleClickDelete = async () => {
     try {
       if (!window.confirm(`Are you sure you want to delete your account?`)) return;
+      // set deletedAt, then delete session and finally push to login page
       await api.auth
         .deleteUser({ username: userAccount.username, deletedAt: new Date() })
         .then(api.auth.logout());
@@ -89,6 +90,7 @@ const ProfileSettings = () => {
                     label="New Password"
                     component={FormTextField}
                     type="password"
+                    initialValue=""
                   />
                 </Grid>
                 <Grid item xs={6}>

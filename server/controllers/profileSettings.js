@@ -4,7 +4,10 @@ const db = require('../db');
 exports.view = async (req, res) => {
   try {
     const { username } = req.params;
-    const result = await db.query(`SELECT * FROM app_user WHERE username = $1`, [username]);
+    const result = await db.query(
+      `SELECT address, bio, deletedat, email, name, phonenumber, postalcode, username FROM app_user WHERE username = $1`,
+      [username],
+    );
     res.json(result.rows[0]);
   } catch (err) {
     console.error('ERROR: ', err.message);
@@ -15,13 +18,23 @@ exports.view = async (req, res) => {
 exports.edit = async (req, res) => {
   try {
     const { username, passworddigest, bio, phonenumber, address, postalcode } = req.body;
-    const hashPwd = await bcrypt.hash(passworddigest, 10);
-    const result = await db.query(
-      `UPDATE app_user SET passworddigest = $2, bio = $3, phonenumber = $4, address = $5, postalcode = $6 
+    let result;
+    if (passworddigest) {
+      const hashPwd = await bcrypt.hash(passworddigest, 10);
+      result = await db.query(
+        `UPDATE app_user SET passworddigest = $2, bio = $3, phonenumber = $4, address = $5, postalcode = $6 
       WHERE username = $1
       RETURNING *`,
-      [username, hashPwd, bio, phonenumber, address, postalcode],
-    );
+        [username, hashPwd, bio, phonenumber, address, postalcode],
+      );
+    } else {
+      result = await db.query(
+        `UPDATE app_user SET bio = $2, phonenumber = $3, address = $4, postalcode = $5
+        WHERE username = $1
+        RETURNING *`,
+        [username, bio, phonenumber, address, postalcode],
+      );
+    }
     if (result.rowCount === 0) {
       res.status(404).json({ error: 'User not found' });
       return;
