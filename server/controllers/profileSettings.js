@@ -1,14 +1,16 @@
 const bcrypt = require('bcrypt');
+const _ = require('lodash');
 const db = require('../db');
 
 exports.view = async (req, res) => {
   try {
     const { username } = req.params;
     const result = await db.query(
-      `SELECT address, bio, deletedat, email, name, phonenumber, postalcode, username FROM app_user WHERE username = $1`,
+      `SELECT * FROM app_user WHERE username = $1`,
       [username],
     );
-    res.json(result.rows[0]);
+    const accountDetails = result.rows[0];
+    res.json(_.omit(accountDetails, ['passworddigest']));
   } catch (err) {
     console.error('ERROR: ', err.message);
     res.json({ error: 'An unexpected error occurred' });

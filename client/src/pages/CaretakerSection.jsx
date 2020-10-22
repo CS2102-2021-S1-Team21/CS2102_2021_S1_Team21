@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { DataGrid } from '@material-ui/data-grid';
-import { Box, Typography } from '@material-ui/core';
+import { Box, Chip, Typography } from '@material-ui/core';
 import Rating from '@material-ui/lab/Rating';
 import api from '../api';
 
 const ReviewsSection = (props) => {
   const { handle } = props;
   const [reviews, setReviews] = useState([]);
+  const [services, setServices] = useState([]);
   const [avg, setAverage] = useState(0);
 
   makeStyles((theme) => ({
@@ -18,11 +19,32 @@ const ReviewsSection = (props) => {
     },
   }));
 
+  function fetchServices() {
+    return [
+      { name: 'grooming', petCategory: 'dog' },
+      { name: 'grooming', petCategory: 'cat' },
+      { name: 'walk', petCategory: 'dog' },
+    ];
+  }
+
+  const service = fetchServices().map((s) => {
+      if (!s.message) {
+        s.message = `${s.name} for ${s.petCategory}`; // eslint-disable-line no-param-reassign
+      }
+      return (
+        <Box component="span" mr={1}>
+          <Chip label={s.message} />
+        </Box>
+      );
+    }
+  );
+
   useEffect(() => {
     api.reviews.getReview(handle).then((res) => {
       if (res[1]) {
         setReviews(res[1]);
         setAverage(res[0]);
+        setServices(service);
       }
     });
   }, [handle]);
@@ -53,6 +75,8 @@ const ReviewsSection = (props) => {
 
   return (
     <Box mt={3}>
+      <Typography variant="h6">{'Services I offer'}</Typography>
+      <Box mt={1}>{services}</Box>
       <Typography variant="h5">{'Reviews'}</Typography>
       <Box display="flex">
         <Typography variant="subtitle1">{'Average Rating: '}</Typography>
