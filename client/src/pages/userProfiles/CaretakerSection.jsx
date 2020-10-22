@@ -3,12 +3,13 @@ import { makeStyles } from '@material-ui/core/styles';
 import { DataGrid } from '@material-ui/data-grid';
 import { Box, Chip, Typography } from '@material-ui/core';
 import Rating from '@material-ui/lab/Rating';
+import PetsIcon from '@material-ui/icons/Pets';
 import api from '../../api';
 
-const ReviewsSection = (props) => {
+const CaretakerSection = (props) => {
   const { handle } = props;
+  const [petCategories, setPetCategories] = useState([]);
   const [reviews, setReviews] = useState([]);
-  const [services, setServices] = useState([]);
   const [avg, setAverage] = useState(0);
 
   makeStyles((theme) => ({
@@ -19,34 +20,30 @@ const ReviewsSection = (props) => {
     },
   }));
 
-  function fetchServices() {
-    return [
-      { name: 'grooming', petCategory: 'dog' },
-      { name: 'grooming', petCategory: 'cat' },
-      { name: 'walk', petCategory: 'dog' },
-    ];
-  }
+  const convertToPetChips = (categories) =>
+    categories.map((s) => {
+      return (
+        <Box component="span" mr={1}>
+          <Chip label={s.categoryname} variant="outlined" color="secondary" icon={<PetsIcon />} />
+        </Box>
+      );
+    });
 
-  const service = fetchServices().map((s) => {
-    if (!s.message) {
-      s.message = `${s.name} for ${s.petCategory}`; // eslint-disable-line no-param-reassign
-    }
-    return (
-      <Box component="span" mr={1}>
-        <Chip label={s.message} />
-      </Box>
-    );
-  });
+  useEffect(() => {
+    api.caresFor.getCaretakerCaresFor(handle).then((res) => {
+      const registeredCategories = res.selectedResult;
+      setPetCategories(convertToPetChips(registeredCategories));
+    });
+  }, [handle]);
 
   useEffect(() => {
     api.reviews.getReview(handle).then((res) => {
       if (res[1]) {
         setReviews(res[1]);
         setAverage(res[0]);
-        setServices(service);
       }
     });
-  }, [service, handle]);
+  }, [handle]);
 
   const columns = [
     { field: 'id', headerName: 'ID', width: 70, hide: true },
@@ -73,10 +70,10 @@ const ReviewsSection = (props) => {
   ];
 
   return (
-    <Box mt={3}>
-      <Typography variant="h6">{'Services I offer'}</Typography>
-      <Box mb={3}>{services}</Box>
-      <Typography variant="h5">{'Reviews'}</Typography>
+    <Box>
+      <Typography variant="h6">{'Pet Categories I take care of'}</Typography>
+      <Box my={1}>{petCategories}</Box>
+      <Typography variant="h6">{'Reviews'}</Typography>
       <Box display="flex">
         <Typography variant="subtitle1">{'Average Rating: '}</Typography>
         <Rating name="read-only" value={avg} precision={0.5} readOnly />
@@ -95,4 +92,4 @@ const ReviewsSection = (props) => {
   );
 };
 
-export default ReviewsSection;
+export default CaretakerSection;
