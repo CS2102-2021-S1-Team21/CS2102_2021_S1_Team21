@@ -163,6 +163,7 @@ CREATE TABLE Bids(
 -------------------------------------------- TRIGGERS ------------------------------------------
 
 -- Triggers for leave application
+<<<<<<< HEAD
 CREATE OR REPLACE FUNCTION leave_constraints() RETURNS TRIGGER AS $$
 DECLARE 
 overlapping_date INTEGER;
@@ -214,6 +215,32 @@ BEGIN
         SELECT
         ROW_NUMBER() OVER (ORDER BY date) AS rn,
         date - (ROW_NUMBER() OVER (ORDER BY date)) * INTERVAL '1 day' AS grp,
+=======
+CREATE OR REPLACE FUNCTION leave_consecutive() RETURNS TRIGGER AS $$
+DECLARE 
+total_set INTEGER;
+BEGIN
+    WITH dates(date) AS (
+    -- This table contains all the distinct date 
+    -- instances in the data set
+    select (generate_series('2020-01-01', '2020-12-31', '1 day'::interval))::date
+    EXCEPT
+    -- EXCEPT the insert of new row here
+    select (generate_series(NEW.startdate, NEW.enddate, '1 day'::interval))::date
+    EXCEPT
+    -- DATA that are already existing in the table beforehand
+    select generate_series(
+        startdate, enddate, '1 day') FROM applies_for_leave_period where caretakerusername = NEW.caretakerusername
+    ),
+    -- Generate "groups" of dates by subtracting the
+    -- date's row number (no gaps) from the date itself
+    -- (with potential gaps). Whenever there is a gap,
+    -- there will be a new group
+    groups AS (
+        SELECT
+        ROW_NUMBER() OVER (ORDER BY date) AS rn,
+        date + (-ROW_NUMBER() OVER (ORDER BY date)) * INTERVAL '1 day' AS grp,
+>>>>>>> master
         date
         FROM dates
     )
@@ -221,6 +248,7 @@ BEGIN
     SELECT sum(sets) INTO total_set FROM (
         SELECT
         COUNT(*) / 150 AS sets
+<<<<<<< HEAD
         FROM consecutive_leave_groups
         GROUP BY grp
     ) AS consecutive;
@@ -249,11 +277,61 @@ BEGIN
   
     IF overlapping_date > 0 THEN
         RAISE EXCEPTION 'You cannot indicate overlapping availability periods';
+=======
+        FROM groups
+        GROUP BY grp
+    ) AS consecutive;
+
+    IF (total_set = 2) THEN RETURN NEW;
+    ELSE RAISE exception 'You cannot take this leave because you will not be able to fulfill minimum requirements of consecutive working days';
+    END IF;
+    RETURN NULL;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION leave_care_no_pet() RETURNS TRIGGER AS $$
+DECLARE 
+pet_under_care INTEGER;
+BEGIN
+    -- Check that caretaker currently not taking care of any pets
+    WITH overlap(date) AS (
+        select (generate_series(NEW.startdate, NEW.enddate, '1 day'::interval))::date
+        INTERSECT
+        select generate_series(
+        startdate, enddate, '1 day') FROM Bids where caretakerusername = NEW.caretakerusername AND status = 'Accepted'
+    )
+
+    SELECT COUNT(*) INTO pet_under_care FROM overlap;
+
+    IF pet_under_care > 0 THEN
+        RAISE EXCEPTION 'You cannot apply leave you are / will be in charge of one or more pets during the leave';
     ELSE RETURN NEW;
     END IF;
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION leave_overlapping_date() RETURNS TRIGGER AS $$
+DECLARE 
+overlapping_date INTEGER;
+BEGIN
+    WITH overlap(date) AS (
+        select (generate_series(NEW.startdate, NEW.enddate, '1 day'::interval))::date
+        INTERSECT
+        select generate_series(
+        startdate, enddate, '1 day') FROM applies_for_leave_period where caretakerusername = NEW.caretakerusername
+    )
+
+    SELECT COUNT(*) INTO overlapping_date FROM overlap;
+  
+    IF overlapping_date > 0 THEN
+        RAISE EXCEPTION 'You cannot apply for overlapping leaves';
+>>>>>>> master
+    ELSE RETURN NEW;
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+<<<<<<< HEAD
 CREATE TRIGGER check_availability_overlap
 BEFORE INSERT ON indicates_availability_period
 FOR EACH ROW EXECUTE PROCEDURE availability_overlapping_date();
@@ -358,3 +436,41 @@ CREATE TRIGGER check_bids_constraint
 BEFORE INSERT ON Bids
 FOR EACH ROW 
 EXECUTE PROCEDURE bids_constraint();
+=======
+CREATE TRIGGER check_leave_consecutive
+BEFORE INSERT ON applies_for_leave_period
+FOR EACH ROW EXECUTE PROCEDURE leave_consecutive();
+
+CREATE TRIGGER check_leave_care_no_pet
+BEFORE INSERT ON applies_for_leave_period
+FOR EACH ROW EXECUTE PROCEDURE leave_care_no_pet();
+
+CREATE TRIGGER check_leave_overlap
+BEFORE INSERT ON applies_for_leave_period
+FOR EACH ROW EXECUTE PROCEDURE leave_overlapping_date();
+
+-- -- Triggers for availability application
+CREATE OR REPLACE FUNCTION availability_overlapping_date() RETURNS TRIGGER AS $$
+DECLARE 
+overlapping_date INTEGER;
+BEGIN
+    WITH overlap(date) AS (
+        select (generate_series(NEW.startdate, NEW.enddate, '1 day'::interval))::date
+        INTERSECT
+        select generate_series(
+        startdate, enddate, '1 day') FROM indicates_availability_period where caretakerusername = NEW.caretakerusername
+    )
+
+    SELECT COUNT(*) INTO overlapping_date FROM overlap;
+  
+    IF overlapping_date > 0 THEN
+        RAISE EXCEPTION 'You cannot indicate overlapping availability periods';
+    ELSE RETURN NEW;
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER check_availability_overlap
+BEFORE INSERT ON indicates_availability_period
+FOR EACH ROW EXECUTE PROCEDURE availability_overlapping_date();
+>>>>>>> master
