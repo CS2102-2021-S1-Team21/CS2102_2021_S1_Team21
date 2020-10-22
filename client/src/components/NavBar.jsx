@@ -148,7 +148,7 @@ const NavBar = ({ children }) => {
               <Tooltip
                 title={`View Profile (${user.name})`}
                 // TODO: does this mean that pet owners need a profile too?
-                onClick={() => history.push('/my-profile')}
+                onClick={() => history.push(`/profile/${user.username}`)}
               >
                 <IconButton color="inherit">
                   <AccountCircleIcon />
