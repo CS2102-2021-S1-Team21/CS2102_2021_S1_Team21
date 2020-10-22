@@ -28,16 +28,15 @@ const ReviewsSection = (props) => {
   }
 
   const service = fetchServices().map((s) => {
-      if (!s.message) {
-        s.message = `${s.name} for ${s.petCategory}`; // eslint-disable-line no-param-reassign
-      }
-      return (
-        <Box component="span" mr={1}>
-          <Chip label={s.message} />
-        </Box>
-      );
+    if (!s.message) {
+      s.message = `${s.name} for ${s.petCategory}`; // eslint-disable-line no-param-reassign
     }
-  );
+    return (
+      <Box component="span" mr={1}>
+        <Chip label={s.message} />
+      </Box>
+    );
+  });
 
   useEffect(() => {
     api.reviews.getReview(handle).then((res) => {

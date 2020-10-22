@@ -5,10 +5,7 @@ const db = require('../db');
 exports.view = async (req, res) => {
   try {
     const { username } = req.params;
-    const result = await db.query(
-      `SELECT * FROM app_user WHERE username = $1`,
-      [username],
-    );
+    const result = await db.query(`SELECT * FROM app_user WHERE username = $1`, [username]);
     const accountDetails = result.rows[0];
     res.json(_.omit(accountDetails, ['passworddigest']));
   } catch (err) {

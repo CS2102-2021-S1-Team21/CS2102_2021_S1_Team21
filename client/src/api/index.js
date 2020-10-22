@@ -26,7 +26,7 @@ const api = {
   pets,
   petCategories,
   caresFor,
-  profiles
+  profiles,
 };
 
 export default api;

@@ -1,5 +1,5 @@
-const db = require('../db');
 const _ = require('lodash');
+const db = require('../db');
 
 exports.index = async (req, res) => {
   try {

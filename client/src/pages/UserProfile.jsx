@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Card, Chip, Box, CardContent, Container, Typography } from '@material-ui/core';
+import { Card, Box, CardContent, Container, Typography } from '@material-ui/core';
 import api from '../api';
 import CaretakerSection from './CaretakerSection';
 

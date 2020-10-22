@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import api from '../api';
 import Availability from '../pages/availabilities/Availability';
-import UserProfile from '../pages/userProfile';
+import UserProfile from '../pages/UserProfile';
 import Leaves from '../pages/leaves/Leaves';
 import PcsAdmin from '../pages/pcsAdmin/PcsAdmin';
 import PetProfile from '../pages/pets/PetProfile';
