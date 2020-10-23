@@ -6,4 +6,3 @@ const router = express.Router();
 router.get('/', paymentMethod.retrieve);
 
 module.exports = router;
- 

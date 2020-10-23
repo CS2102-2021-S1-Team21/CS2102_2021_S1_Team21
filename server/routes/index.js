@@ -13,7 +13,6 @@ const bids = require('./bids');
 const transferType = require('./transferType');
 const paymentMethod = require('./paymentMethod');
 
-
 router.use('/', auth);
 
 // Routes
@@ -28,7 +27,6 @@ router.use('/pets', ensureAuthenticated, pets);
 router.use('/pet-categories', ensureAuthenticated, petCategories);
 router.use('/transferType', ensureAuthenticated, transferType);
 router.use('/paymentMethod', ensureAuthenticated, paymentMethod);
-
 
 // Catch-all route (used for error handling)
 

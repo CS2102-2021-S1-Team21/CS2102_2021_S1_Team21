@@ -30,7 +30,7 @@ exports.apply = async (req, res) => {
     console.log(result.rows);
     res.json(result.rows);
   } catch (err) {
-    console.error("biddingerr" + err);
+    console.error(`biddingerr${err}`);
   }
 };
 
@@ -79,7 +79,7 @@ exports.updateBids = async (req, res) => {
       comment,
       reviewDateTime,
     } = req.body;
-    console.log("body " + req.body.reviewDateTime)
+    console.log(`body ${req.body.reviewDateTime}`);
     const result = await db.query(
       `UPDATE Bids SET 
         status = $7,

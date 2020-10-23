@@ -25,11 +25,11 @@ const Upcoming = () => {
     api.paymentMethod.getPaymentMethods().then((x) => setPaymentMethodOptions(x));
   }, [store.user.username]);
 
-  console.log(paymentMethod)
+  console.log(paymentMethod);
 
   console.log(`all bids${allBids}`);
 
-  const handleClick = async (paymentMethod, bid) => {
+  const handleClick = async (bidPaymentMethod, bid) => {
     try {
       const body = {
         petName: bid.petname,
@@ -39,8 +39,8 @@ const Upcoming = () => {
         startDate: bid.start,
         endDate: bid.end,
         status: bid.status,
-        transactionDateTime: moment.utc(moment(),'YYYY-MM-DD HH:mm:ss.SSS'),
-        paymentMethod: paymentMethod,
+        transactionDateTime: moment.utc(moment(), 'YYYY-MM-DD HH:mm:ss.SSS'),
+        paymentMethod: bidPaymentMethod,
         totalAmount: null,
         rating: null,
         comment: null,

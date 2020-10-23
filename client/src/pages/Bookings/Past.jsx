@@ -11,11 +11,11 @@ import Paper from '@material-ui/core/Paper';
 import api from '../../api';
 import { useStore } from '../../utilities/store';
 import WriteReviewDialog from './Components/writeReviewDialog';
+
 const moment = require('moment');
 
 // TODO need to ensure that ONLY MARK AS COMPLETED AFTER PAYMENT
 // if not when updating bids cannot fetch transationdatetime and will cause invalid date error
-
 
 const Upcoming = () => {
   const [allBids, setAllBids] = useState([]);
@@ -26,7 +26,7 @@ const Upcoming = () => {
     api.bids.getPetOwnerBids(store.user.username).then((x) => setAllBids(x));
   }, [store.user.username]);
 
-  const handleClick = async (rating, comment, bid) => {
+  const handleClick = async (bidRating, comment, bid) => {
     try {
       const body = {
         petName: bid.petname,
@@ -39,14 +39,14 @@ const Upcoming = () => {
         transactionDateTime: moment(bid.transactiondatetime).format('YYYY-MM-DD HH:mm:ss.SSS'),
         paymentMethod: bid.paymentmethod,
         totalAmount: null,
-        rating: rating,
-        comment: comment,
-        reviewDateTime: moment.utc(moment(),'YYYY-MM-DD HH:mm:ss.SSS')
+        rating: bidRating,
+        comment,
+        reviewDateTime: moment.utc(moment(), 'YYYY-MM-DD HH:mm:ss.SSS'),
       };
-      console.log(body.submittedAt)
-      console.log(bid.transactiondatetime)
-      console.log(body.transactionDateTime)
-      console.log("reviewDateTime" + body.reviewDateTime);
+      console.log(body.submittedAt);
+      console.log(bid.transactiondatetime);
+      console.log(body.transactionDateTime);
+      console.log(`reviewDateTime${body.reviewDateTime}`);
       await api.bids.updateBids(body);
     } catch (err) {
       console.log(`err${err.message}`);
@@ -82,11 +82,11 @@ const Upcoming = () => {
                   <ListItemText />
                   <ListItemSecondaryAction>
                     <WriteReviewDialog
-                    rating = {rating}
-                    setRating = {setRating}
-                    handleUpdateBid = {handleClick}
-                    bids = {bids}
-                    isDisabled = {bids.reviewdatetime}
+                      rating={rating}
+                      setRating={setRating}
+                      handleUpdateBid={handleClick}
+                      bids={bids}
+                      isDisabled={bids.reviewdatetime}
                     />
                   </ListItemSecondaryAction>
                 </ListItem>

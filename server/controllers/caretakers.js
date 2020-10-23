@@ -3,7 +3,7 @@ const db = require('../db');
 exports.index = async (req, res) => {
   try {
     const { minRating, petCategory, startDate, endDate, offset } = req.query;
-    console.log("req" + req.body.petCategory);
+    console.log(`req${req.body.petCategory}`);
     const result = await db.query(
       `
       SELECT username, totalAverageRating, name, bio

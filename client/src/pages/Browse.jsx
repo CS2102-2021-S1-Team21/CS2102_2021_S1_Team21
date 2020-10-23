@@ -20,7 +20,7 @@ import api from '../api';
 import { useStore } from '../utilities/store';
 import SelectTransferType from './Browse/SelectTransferType';
 
-var moment = require('moment');
+const moment = require('moment');
 
 const Browse = () => {
   const [rating, setRating] = React.useState(2);
@@ -57,20 +57,19 @@ const Browse = () => {
         petOwnerUsername: store.user.username,
         caretakerUsername: caretaker.username,
         dailyPrice,
-        submittedAt: moment.utc(moment(),'YYYY-MM-DD HH:mm:ss.SSS'),
+        submittedAt: moment.utc(moment(), 'YYYY-MM-DD HH:mm:ss.SSS'),
         startDate: dateFrom,
         endDate: dateTo,
         transferType,
         remarks,
       };
-      console.log("reviewDateTime" + body.submittedAt);
+      console.log(`reviewDateTime${body.submittedAt}`);
 
       await api.bids.applyBids(body);
     } catch (err) {
       console.log(err.message);
     }
   };
-
 
   return (
     <>
@@ -127,7 +126,7 @@ const Browse = () => {
                   setCaretakers(x.entries);
                   console.log(`total count ${x.entries}`);
                 });
-                console.log(caretakers)
+                console.log(caretakers);
               } catch (err) {
                 console.log(err.message);
               }
@@ -153,11 +152,7 @@ const Browse = () => {
                   }
                   secondary={
                     <>
-                      <Typography
-                        component="span"
-                        variant="body2"
-                        color="textPrimary"
-                      >
+                      <Typography component="span" variant="body2" color="textPrimary">
                         {`Secondary text `}
                       </Typography>
                       {`Secondary`}
@@ -165,12 +160,7 @@ const Browse = () => {
                   }
                 />
                 <ListItemSecondaryAction>
-                  <Button 
-                    variant="outlined"
-                    onClick={ () => 
-                      handleApply(caretaker)
-                    } 
-                    color="primary">
+                  <Button variant="outlined" onClick={() => handleApply(caretaker)} color="primary">
                     {'BOOK ME'}
                   </Button>
                 </ListItemSecondaryAction>

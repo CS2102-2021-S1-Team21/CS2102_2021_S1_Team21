@@ -13,9 +13,19 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import Radio from '@material-ui/core/Radio';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 
-//TODO reformat code? too much props passed in
+// TODO reformat code? too much props passed in
 function ConfirmationDialogRaw(props) {
-  const { onClose, value: valueProp, open, options, setPaymentMethod, handleUpdateBid, bids, keepMounted, classes} = props;
+  const {
+    onClose,
+    value: valueProp,
+    open,
+    options,
+    setPaymentMethod,
+    handleUpdateBid,
+    bids,
+    keepMounted,
+    classes,
+  } = props;
   const [value, setValue] = React.useState(valueProp);
   const radioGroupRef = React.useRef(null);
 
@@ -37,7 +47,7 @@ function ConfirmationDialogRaw(props) {
 
   const handleConfirm = () => {
     setPaymentMethod(value);
-    handleUpdateBid(value, bids)
+    handleUpdateBid(value, bids);
     onClose(value);
   };
 
@@ -54,7 +64,7 @@ function ConfirmationDialogRaw(props) {
       aria-labelledby="confirmation-dialog-title"
       open={open}
     >
-      <DialogTitle id="confirmation-dialog-title">Payment Method</DialogTitle>
+      <DialogTitle id="confirmation-dialog-title">{'Payment Method'}</DialogTitle>
       <DialogContent dividers>
         <RadioGroup
           ref={radioGroupRef}
@@ -64,16 +74,21 @@ function ConfirmationDialogRaw(props) {
           onChange={handleChange}
         >
           {options.map((option) => (
-            <FormControlLabel value={option.unnest} key={option.unnest} control={<Radio />} label={option.unnest} />
+            <FormControlLabel
+              value={option.unnest}
+              key={option.unnest}
+              control={<Radio />}
+              label={option.unnest}
+            />
           ))}
         </RadioGroup>
       </DialogContent>
       <DialogActions>
         <Button autoFocus onClick={handleCancel} color="primary">
-          Cancel
+          {'Cancel\r'}
         </Button>
         <Button onClick={handleConfirm} color="primary">
-          Confirm Payment
+          {'Confirm Payment\r'}
         </Button>
       </DialogActions>
     </Dialog>
@@ -98,7 +113,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SelectPaymentMethod({ paymentMethodOptions, setPaymentMethod, handleUpdateBid, bids, isDisabled }) {
+export default function SelectPaymentMethod({
+  paymentMethodOptions,
+  setPaymentMethod,
+  handleUpdateBid,
+  bids,
+  isDisabled,
+}) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState();
@@ -121,7 +142,10 @@ export default function SelectPaymentMethod({ paymentMethodOptions, setPaymentMe
         variant="outlined"
         color="primary"
         disabled={isDisabled}
-        onClick={handleClickListItem} >Choose Payment Method</Button>
+        onClick={handleClickListItem}
+      >
+        {'Choose Payment Method'}
+      </Button>
       <ConfirmationDialogRaw
         classes={{
           paper: classes.paper,

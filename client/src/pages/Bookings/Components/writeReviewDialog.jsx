@@ -8,13 +8,17 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import SimpleRating from './SimpleRating';
 
-
-export default function WriteReviewDialog({rating, setRating, handleUpdateBid, bids, isDisabled }) {
+export default function WriteReviewDialog({
+  rating,
+  setRating,
+  handleUpdateBid,
+  bids,
+  isDisabled,
+}) {
   const [open, setOpen] = React.useState(false);
   const [comment, setComment] = React.useState();
 
   const handleClickOpen = () => {
-    setRating=(0)
     setOpen(true);
   };
 
@@ -23,22 +27,22 @@ export default function WriteReviewDialog({rating, setRating, handleUpdateBid, b
   };
 
   const handleComment = () => {
-    handleUpdateBid(rating, comment, bids)
+    handleUpdateBid(rating, comment, bids);
     setOpen(false);
   };
 
   return (
     <div>
-      <Button disabled = {isDisabled} variant="outlined" color="primary" onClick={handleClickOpen}>
-        Comment
+      <Button disabled={isDisabled} variant="outlined" color="primary" onClick={handleClickOpen}>
+        {'Comment\r'}
       </Button>
       <Dialog open={open} onClose={handleCancel} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">Comment</DialogTitle>
+        <DialogTitle id="form-dialog-title">{'Comment'}</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Leave a comment for the caretaker after the job has been completed.
+            {'Leave a comment for the caretaker after the job has been completed.\r'}
           </DialogContentText>
-          <SimpleRating rating = {rating} setRating = {setRating}/>
+          <SimpleRating rating={rating} setRating={setRating} />
           <TextField
             autoFocus
             margin="dense"
@@ -53,10 +57,10 @@ export default function WriteReviewDialog({rating, setRating, handleUpdateBid, b
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCancel} color="primary">
-            Cancel
+            {'Cancel\r'}
           </Button>
           <Button onClick={handleComment} color="primary">
-            Comment
+            {'Comment\r'}
           </Button>
         </DialogActions>
       </Dialog>

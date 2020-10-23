@@ -34,7 +34,7 @@ const Pending = () => {
         submittedAt: moment(bid.submittedat).format('YYYY-MM-DD HH:mm:ss.SSS'),
         startDate: bid.start,
         endDate: bid.end,
-        status: status,
+        status,
         transactionDateTime: null,
         paymentMethod: null,
         totalAmount: null,

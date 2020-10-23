@@ -26,7 +26,7 @@ const api = {
   pets,
   petCategories,
   transferType,
-  paymentMethod
+  paymentMethod,
 };
 
 export default api;
