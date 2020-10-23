@@ -9,6 +9,7 @@ import LeaveRequest from '../pages/pcsAdmin/LeaveRequest';
 import PetOwnerProfile from '../pages/PetOwnerProfile';
 import Bookings from '../pages/Bookings';
 import Jobs from '../pages/Jobs';
+import Browse from '../pages/Browse';
 import PetProfile from '../pages/pets/PetProfile';
 import Pets from '../pages/pets/Pets';
 import { getSessionCookie } from '../utilities/sessionCookie';
@@ -53,6 +54,7 @@ const AuthRouter = () => {
           <Route exact path="/my-pets" component={Pets} />
           <Route exact path="/edit-profile" component={EditProfile} />
           <Route exact path="/my-bookings" component={Bookings} />
+          <Route exact path="/browse" component={Browse} />
           <Route exact path="/my-jobs" component={Jobs} />
           <Route path="/pet-owners/:petOwnerUsername/pets/:petName" component={PetProfile} />
           <Route path="/pet-owners/:username" component={PetOwnerProfile} />

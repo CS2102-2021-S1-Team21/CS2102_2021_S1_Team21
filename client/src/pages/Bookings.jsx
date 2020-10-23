@@ -6,7 +6,6 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-import Browse from './Bookings/Browse';
 import Upcoming from './Bookings/Upcoming';
 import Failed from './Bookings/Failed';
 import Past from './Bookings/Past';
@@ -70,26 +69,22 @@ const Bookings = () => {
           scrollButtons="auto"
           aria-label="PetOwner Tabs"
         >
-          <Tab label="Browse" {...a11yProps(0)} />
-          <Tab label="Pending" {...a11yProps(1)} />
-          <Tab label="Upcoming" {...a11yProps(2)} />
-          <Tab label="Past" {...a11yProps(3)} />
-          <Tab label="Failed" {...a11yProps(4)} />
+          <Tab label="Pending" {...a11yProps(0)} />
+          <Tab label="Upcoming" {...a11yProps(1)} />
+          <Tab label="Past" {...a11yProps(2)} />
+          <Tab label="Failed" {...a11yProps(3)} />
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
-        <Browse />
-      </TabPanel>
-      <TabPanel value={value} index={1}>
         <Pending />
       </TabPanel>
-      <TabPanel value={value} index={2}>
+      <TabPanel value={value} index={1}>
         <Upcoming />
       </TabPanel>
-      <TabPanel value={value} index={3}>
+      <TabPanel value={value} index={2}>
         <Past />
       </TabPanel>
-      <TabPanel value={value} index={4}>
+      <TabPanel value={value} index={3}>
         <Failed />
       </TabPanel>
     </div>

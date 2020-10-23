@@ -14,12 +14,13 @@ import React, { useEffect, useState } from 'react';
 import { KeyboardDatePicker } from '@material-ui/pickers';
 import Paper from '@material-ui/core/Paper';
 import { isUndefined } from 'lodash';
-import SimpleRating from './Browse/SimpleRating';
+import SimpleRating from './Bookings/Components/SimpleRating';
 import SelectPet from './Browse/SelectPet';
-import api from '../../api';
-import { useStore } from '../../utilities/store';
+import api from '../api';
+import { useStore } from '../utilities/store';
 import SelectTransferType from './Browse/SelectTransferType';
-var moment = require("moment");
+
+var moment = require('moment');
 
 const Browse = () => {
   const [rating, setRating] = React.useState(2);
@@ -43,10 +44,6 @@ const Browse = () => {
     api.transferType.getTransferTypes().then((x) => setTransferTypeOptions(x));
   }, [store.user.username]);
 
-  //   useEffect(() => {
-  //     api.caretakers.getCaretakers().then((x) => setCaretakers(x.entries));
-  //   }, [store.user.username]);
-
   useEffect(() => {
     if (pet) {
       api.petCategories.getDailyPrice(pet.categoryname).then((x) => setDailyPrice(x[0].dailyprice));
@@ -58,19 +55,22 @@ const Browse = () => {
       const body = {
         petName: pet.name,
         petOwnerUsername: store.user.username,
-        caretakerUsername: caretaker.caretakerusername,
+        caretakerUsername: caretaker.username,
         dailyPrice,
-        submittedAt: moment(new Date(), "YYYY-MM-DD HH:mm:ss"),
+        submittedAt: moment.utc(moment(),'YYYY-MM-DD HH:mm:ss.SSS'),
         startDate: dateFrom,
         endDate: dateTo,
         transferType,
         remarks,
       };
+      console.log("reviewDateTime" + body.submittedAt);
+
       await api.bids.applyBids(body);
     } catch (err) {
       console.log(err.message);
     }
   };
+
 
   return (
     <>
@@ -80,7 +80,6 @@ const Browse = () => {
           <SelectPet petOptions={petOptions} pet={pet} setPet={setPet} />
           <SelectTransferType
             transferTypeOptions={transferTypeOptions}
-            transferType={transferType}
             setTransferType={setTransferType}
           />
           <Typography>{'From:'}</Typography>
@@ -122,15 +121,13 @@ const Browse = () => {
                   petCategory: pet.categoryname,
                   startDate: moment(dateFrom).format('YYYY-MM-DD'),
                   endDate: moment(dateTo).format('YYYY-MM-DD'),
-                  offset: 0
+                  offset: 0,
                 };
-                console.log(body)
-                console.log(moment(new Date()).format("YYYY-MM-DD HH:mm:ss"))
                 api.caretakers.getCaretakers(body).then((x) => {
                   setCaretakers(x.entries);
-                  console.log("total count " + x.totalCount);
-                }
-                );
+                  console.log(`total count ${x.entries}`);
+                });
+                console.log(caretakers)
               } catch (err) {
                 console.log(err.message);
               }
@@ -151,7 +148,7 @@ const Browse = () => {
                 <ListItemText
                   primary={
                     <Typography component="span" variant="h3" color="Primary">
-                      {`${caretaker.caretakerusername}`}
+                      {`${caretaker.username}`}
                     </Typography>
                   }
                   secondary={
@@ -159,7 +156,6 @@ const Browse = () => {
                       <Typography
                         component="span"
                         variant="body2"
-                        // className={classes.inline}
                         color="textPrimary"
                       >
                         {`Secondary text `}
@@ -169,7 +165,12 @@ const Browse = () => {
                   }
                 />
                 <ListItemSecondaryAction>
-                  <Button onClick={() => handleApply(caretaker)} color="primary">
+                  <Button 
+                    variant="outlined"
+                    onClick={ () => 
+                      handleApply(caretaker)
+                    } 
+                    color="primary">
                     {'BOOK ME'}
                   </Button>
                 </ListItemSecondaryAction>

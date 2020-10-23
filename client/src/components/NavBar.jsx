@@ -88,7 +88,7 @@ const NavBar = ({ children }) => {
                   <Button
                     color="inherit"
                     className={classes.navItem}
-                    onClick={() => history.push('/caretakers')}
+                    onClick={() => history.push('/browse')}
                   >
                     {'Find Caretakers'}
                   </Button>

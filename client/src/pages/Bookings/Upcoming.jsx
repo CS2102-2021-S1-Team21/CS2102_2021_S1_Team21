@@ -10,41 +10,42 @@ import React, { useEffect, useState } from 'react';
 import Paper from '@material-ui/core/Paper';
 import api from '../../api';
 import { useStore } from '../../utilities/store';
-var moment = require("moment");
+import SelectPaymentMethod from './Components/selectPaymentMethod';
+
+const moment = require('moment');
 
 const Upcoming = () => {
   const [allBids, setAllBids] = useState([]);
-  const [rating, setRating] = React.useState(2);
-  const [dateFrom, setDateFrom] = useState(new Date());
-  const [dateTo, setDateTo] = useState(new Date());
+  const [paymentMethod, setPaymentMethod] = useState();
+  const [paymentMethodOptions, setPaymentMethodOptions] = useState([]);
   const store = useStore();
 
   useEffect(() => {
     api.bids.getPetOwnerBids(store.user.username).then((x) => setAllBids(x));
+    api.paymentMethod.getPaymentMethods().then((x) => setPaymentMethodOptions(x));
   }, [store.user.username]);
+
+  console.log(paymentMethod)
 
   console.log(`all bids${allBids}`);
 
-  const handleClick = async (bid) => {
+  const handleClick = async (paymentMethod, bid) => {
     try {
       const body = {
         petName: bid.petname,
         petOwnerUsername: bid.petownerusername,
         caretakerUsername: bid.caretakerusername,
-        submittedAt: moment(bid.submittedat).format("YYYY-MM-DD HH:mm:ss"),
+        submittedAt: moment(bid.submittedat).format('YYYY-MM-DD HH:mm:ss.SSS'),
         startDate: bid.start,
         endDate: bid.end,
         status: bid.status,
-        transactionDateTime: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
-        paymentMethod: null,
+        transactionDateTime: moment.utc(moment(),'YYYY-MM-DD HH:mm:ss.SSS'),
+        paymentMethod: paymentMethod,
         totalAmount: null,
         rating: null,
         comment: null,
         reviewDateTime: null,
       };
-      console.log(body)
-      console.log(`bids ${bid.submittedat}`)
-      console.log(moment(bid.submittedat).subtract(8, "hours").format("YYYY-MM-DD HH:mm:ss"));
       await api.bids.updateBids(body);
     } catch (err) {
       console.log(`err${err.message}`);
@@ -65,36 +66,37 @@ const Upcoming = () => {
                 <ListItem alignItems="flex-start">
                   <ListItemText
                     primary={
-                      <Typography component="span" variant="body2" color="Primary">
-                        {`${bids.transactiondatetime}`}
+                      <Typography component="span" variant="h3" color="Primary">
+                        {`${bids.petname}`}
                       </Typography>
                     }
                     secondary={
                       <div>
                         <Typography component="span" variant="body1">
-                          {`Caretaker: ${bids.caretakerusername}
-                                                 Applied on: ${bids.submittedat}
-                                                 Start date: ${bids.startdate} 
-                                                 End date: ${bids.enddate}
-                                                 Transfer type: ${bids.transfertype}
-                                                 Remarks: ${bids.remarks}`}
+                          {`Caretaker: ${bids.caretakerusername}`}
                         </Typography>
                       </div>
                     }
                   />
                   <ListItemText />
                   <ListItemSecondaryAction>
-                    <Button
+                    <SelectPaymentMethod
+                      paymentMethodOptions={paymentMethodOptions}
+                      setPaymentMethod={setPaymentMethod}
+                      handleUpdateBid={handleClick}
+                      bids={bids}
+                      isDisabled={bids.transactiondatetime}
+                    />
+                    {/* <Button
                       size="small"
-                      variant="outlined"
-                      color="primary"
-                      disabled = {bids.transactiondatetime}
+                      
+                      disabled={bids.transactiondatetime}
                       onClick={() => {
                         handleClick(bids);
                       }}
-                    >
-                      {'Make Payment'}
-                    </Button>
+                    > */}
+                    {/* {'Choose Payment Method'} */}
+                    {/* </Button> */}
                   </ListItemSecondaryAction>
                 </ListItem>
               </Paper>

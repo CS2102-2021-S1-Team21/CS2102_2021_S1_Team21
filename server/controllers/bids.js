@@ -30,7 +30,7 @@ exports.apply = async (req, res) => {
     console.log(result.rows);
     res.json(result.rows);
   } catch (err) {
-    console.error(err);
+    console.error("biddingerr" + err);
   }
 };
 
@@ -38,9 +38,9 @@ exports.petOwnerRetrieve = async (req, res) => {
   try {
     const { petOwnerUsername } = req.params;
     const result = await db.query(
-      `SELECT *, to_char(startDate, 'yyyy-MM-dd') AS start, to_char(endDate, 'yyyy-MM-dd') AS end FROM Bids WHERE petOwnerUsername = $1`, [
-      petOwnerUsername,
-    ]);
+      `SELECT *, to_char(startDate, 'yyyy-MM-dd') AS start, to_char(endDate, 'yyyy-MM-dd') AS end FROM Bids WHERE petOwnerUsername = $1`,
+      [petOwnerUsername],
+    );
     res.json(result.rows);
   } catch (err) {
     console.error('ERROR: ', err.message);
@@ -79,6 +79,7 @@ exports.updateBids = async (req, res) => {
       comment,
       reviewDateTime,
     } = req.body;
+    console.log("body " + req.body.reviewDateTime)
     const result = await db.query(
       `UPDATE Bids SET 
         status = $7,

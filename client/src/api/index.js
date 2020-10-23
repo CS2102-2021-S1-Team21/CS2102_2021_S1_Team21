@@ -8,6 +8,7 @@ import pets from './pets';
 import reviews from './reviews';
 import bids from './bids';
 import transferType from './transferType';
+import paymentMethod from './paymentMethod';
 
 /* ====================================
  * Index of all API request routes
@@ -25,6 +26,7 @@ const api = {
   pets,
   petCategories,
   transferType,
+  paymentMethod
 };
 
 export default api;

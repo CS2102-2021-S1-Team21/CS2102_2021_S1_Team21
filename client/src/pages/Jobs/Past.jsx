@@ -11,7 +11,8 @@ import Paper from '@material-ui/core/Paper';
 import { addHours } from 'date-fns/';
 import api from '../../api';
 import { useStore } from '../../utilities/store';
-var moment = require("moment");
+
+const moment = require('moment');
 
 const Upcoming = () => {
   const [bids, setBids] = useState([]);

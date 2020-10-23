@@ -53,6 +53,7 @@ const Upcoming = () => {
                   />
                   <ListItemSecondaryAction>
                     <Button
+                      variant="outlined"
                       onClick={() => {
                         console.log(bids.id);
                       }}

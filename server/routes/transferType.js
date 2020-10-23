@@ -6,3 +6,4 @@ const router = express.Router();
 router.get('/', transferType.retrieve);
 
 module.exports = router;
+ 

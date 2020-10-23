@@ -11,8 +11,8 @@ import Paper from '@material-ui/core/Paper';
 import { addHours } from 'date-fns/';
 import api from '../../api';
 import { useStore } from '../../utilities/store';
-var moment = require("moment");
 
+const moment = require('moment');
 
 const Pending = () => {
   const [bids, setBids] = useState([]);
@@ -31,7 +31,7 @@ const Pending = () => {
         petName: bid.petname,
         petOwnerUsername: bid.petownerusername,
         caretakerUsername: bid.caretakerusername,
-        submittedAt: moment(bid.submittedat).format("YYYY-MM-DD HH:mm:ss"),
+        submittedAt: moment(bid.submittedat).format('YYYY-MM-DD HH:mm:ss.SSS'),
         startDate: bid.start,
         endDate: bid.end,
         status: status,
@@ -42,8 +42,6 @@ const Pending = () => {
         comment: null,
         reviewDateTime: null,
       };
-      console.log(`bids ${bid.submittedat}`)
-      console.log(moment(bid.submittedat).subtract(8, "hours").format("YYYY-MM-DD HH:mm:ss"));
       await api.bids.updateBids(body);
     } catch (err) {
       console.log(`err${err.message}`);
