@@ -6,7 +6,7 @@ const db = require('../db');
 
 exports.index = async (req, res, next) => {
   try {
-    const result = await db.query('SELECT * FROM pet_owners');
+    const result = await db.query('SELECT * FROM pet_owner');
     res.json({ totalCount: result.rowCount, entries: result.rows });
   } catch (err) {
     next(err);
@@ -16,7 +16,7 @@ exports.index = async (req, res, next) => {
 exports.new = async (req, res, next) => {
   const { name, username } = req.body;
   try {
-    const result = await db.query('INSERT INTO pet_owners VALUES ($1, $2)', [name, username]);
+    const result = await db.query('INSERT INTO pet_owner VALUES ($1, $2)', [name, username]);
     res.json(result);
   } catch (err) {
     // handle duplicate key value error
@@ -44,5 +44,40 @@ exports.view = async (req, res, next) => {
   } catch (err) {
     console.error('ERROR: ', err.message);
     next(err);
+  }
+};
+
+exports.viewCc = async (req, res) => {
+  try {
+    const { username } = req.params;
+    const result = await db.query('SELECT * FROM pet_owner WHERE petownerusername = $1', [
+      username,
+    ]);
+    if (result.rowCount === 0) {
+      res.status(404).json({ error: 'Pet owner not found' });
+      return;
+    }
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+exports.editCc = async (req, res) => {
+  try {
+    const { petownerusername, ccnumber, ccname, ccexpirydate, cccvvcode } = req.body;
+    const result = await db.query(
+      `UPDATE pet_owner SET ccNumber = $2, ccName = $3, ccExpiryDate = $4, ccCvvCode = $5 
+      WHERE petownerusername = $1
+      RETURNING *`,
+      [petownerusername, ccnumber, ccname, ccexpirydate, cccvvcode],
+    );
+    if (result.rowCount === 0) {
+      res.status(404).json({ error: 'Pet owner not found' });
+      return;
+    }
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
   }
 };

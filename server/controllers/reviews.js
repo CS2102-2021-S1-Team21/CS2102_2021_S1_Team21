@@ -14,7 +14,8 @@ exports.view = async (req, res) => {
   const { username } = req.params;
   try {
     const result = await db.query(
-      "SELECT ROW_NUMBER() OVER (ORDER BY reviewDateTime) AS id, *, to_char(reviewDateTime, 'DD/MM/YYYY') AS postedOn FROM Bids WHERE caretakerUsername = $1",
+      `SELECT ROW_NUMBER() OVER (ORDER BY reviewDateTime) AS id,
+       *, to_char(reviewDateTime, 'DD/MM/YYYY') AS postedOn FROM Bids WHERE caretakerUsername = $1 AND rating IS NOT NULL`,
       [username],
     );
     if (result.rowCount === 0) {

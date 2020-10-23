@@ -2,17 +2,17 @@ import React, { useState } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import api from '../api';
 import Availability from '../pages/availabilities/Availability';
-import CaretakerProfile from '../pages/CaretakerProfile';
-import EditProfile from '../pages/EditProfile';
 import Leaves from '../pages/leaves/Leaves';
 import LeaveRequest from '../pages/pcsAdmin/LeaveRequest';
-import PetOwnerProfile from '../pages/PetOwnerProfile';
+// import PcsAdmin from '../pages/pcsAdmin/PcsAdmin';
 import PetProfile from '../pages/pets/PetProfile';
 import Pets from '../pages/pets/Pets';
+import UserProfile from '../pages/userProfiles/UserProfile';
 import { getSessionCookie } from '../utilities/sessionCookie';
 import { StoreProvider } from '../utilities/store';
 import Loading from './Loading';
 import NavBar from './NavBar';
+import ProfileSettings from '../pages/profileSettings/ProfileSettings';
 
 const AuthRouter = () => {
   const sessionCookie = getSessionCookie();
@@ -46,13 +46,14 @@ const AuthRouter = () => {
     <StoreProvider value={{ user }}>
       <NavBar>
         <Switch>
+          {/* <Route path="/pet-owner" component={PetOwnerListing} /> */}
           <Route exact path="/my-leaves" component={Leaves} />
           <Route exact path="/my-availability" component={Availability} />
           <Route exact path="/my-pets" component={Pets} />
-          <Route exact path="/edit-profile" component={EditProfile} />
           <Route path="/pet-owners/:petOwnerUsername/pets/:petName" component={PetProfile} />
-          <Route path="/pet-owners/:username" component={PetOwnerProfile} />
-          <Route path="/caretakers/:username" component={CaretakerProfile} />
+          {/* <Route path="/pcs-admin" component={PcsAdmin} /> */}
+          <Route path="/profile-settings" component={ProfileSettings} />
+          <Route path="/profile/:username" component={UserProfile} />
           <Route path="/pcs-admin/leave-request" component={LeaveRequest} />
         </Switch>
       </NavBar>

@@ -8,7 +8,10 @@ const petOwners = require('./petOwners');
 const leaves = require('./leaves');
 const availability = require('./availability');
 const caretakers = require('./caretakers');
+const caresFor = require('./caresFor');
 const reviews = require('./reviews');
+const profileSettings = require('./profileSettings');
+const profile = require('./userProfiles');
 
 router.use('/', auth);
 
@@ -18,7 +21,10 @@ router.use('/leaves', ensureAuthenticated, leaves);
 router.use('/availability', ensureAuthenticated, availability);
 router.use('/pet-owners', ensureAuthenticated, petOwners);
 router.use('/caretakers', ensureAuthenticated, caretakers);
+router.use('/caresfor', ensureAuthenticated, caresFor);
 router.use('/reviews', ensureAuthenticated, reviews);
+router.use('/profile', ensureAuthenticated, profile);
+router.use('/profile-settings', ensureAuthenticated, profileSettings);
 router.use('/pets', ensureAuthenticated, pets);
 router.use('/pet-categories', ensureAuthenticated, petCategories);
 
