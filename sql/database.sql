@@ -177,6 +177,67 @@ END;
 $avg$
 LANGUAGE plpgsql;
 
+-- For convenience during development
+CREATE OR REPLACE FUNCTION delete_user(VARCHAR) RETURNS VARCHAR AS $$
+BEGIN
+    DELETE FROM pet_owner P WHERE P.petownerusername = $1;
+    DELETE FROM cares_for CF WHERE CF.caretakerusername = $1;
+    DELETE FROM caretaker C WHERE C.caretakerusername = $1;
+    DELETE FROM App_User A WHERE A.username = $1;
+    RETURN $1;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Create a new user: Pet Owner, Care Taker, or both
+CREATE OR REPLACE FUNCTION insert_new_user(
+    newUsername VARCHAR, newEmail VARCHAR, passwordDigest VARCHAR, newName VARCHAR, 
+    bio VARCHAR, phoneNumber VARCHAR, address VARCHAR, postalCode VARCHAR, 
+    newCCNumber VARCHAR, ccName VARCHAR, ccExpiryDate DATE, ccCvvCode VARCHAR,
+    newCategories VARCHAR[], accountType VARCHAR, caretakerType VARCHAR) 
+    -- Return enough data to verify insertion
+    RETURNS TABLE (username VARCHAR, email VARCHAR, name VARCHAR, ccNumber VARCHAR, categories VARCHAR[]) AS $$
+DECLARE 
+    categoryName VARCHAR;
+BEGIN 
+
+IF accountType NOT IN ('petOwner', 'caretaker', 'both') THEN
+    RAISE EXCEPTION 'A user must be either a pet owner or a caretaker or both';
+END IF;
+
+IF accountType != 'petOwner' AND (caretakerType IS NULL OR caretakerType NOT IN ('fullTime', 'partTime')) THEN
+    RAISE EXCEPTION 'A care taker must be either a full-time or a part-time employee';
+END IF;
+
+INSERT INTO App_User VALUES (newUsername, newEmail, passwordDigest, newName, NULL, bio, phoneNumber, address, postalCode);
+IF accountType = 'petOwner' OR accountType = 'both' THEN
+    INSERT INTO Pet_Owner VALUES (newCCNumber, ccName, ccExpiryDate, ccCvvCode, newUsername);
+END IF;
+IF accountType = 'caretaker' OR accountType = 'both' THEN
+    INSERT INTO Caretaker VALUES (newUsername, NULL);
+
+    IF caretakerType = 'fullTime' THEN
+        INSERT INTO Full_Time_Employee VALUES (newUsername);
+    ELSIF caretakerType = 'partTime' THEN
+        INSERT INTO Part_Time_Employee VALUES (newUsername);
+    END IF;
+
+    FOREACH categoryName IN ARRAY newCategories 
+    LOOP
+        INSERT INTO Cares_For VALUES(categoryName, newUsername);
+    END LOOP;
+END IF;
+
+RETURN QUERY 
+    SELECT U.username, U.email, U.name, P.ccNumber, ARRAY_AGG(CF.categoryName)
+    FROM App_User U LEFT JOIN Pet_Owner P ON P.petOwnerUsername = U.username 
+        LEFT JOIN Caretaker C ON C.caretakerUsername = U.username
+        LEFT JOIN Cares_For CF ON CF.caretakerUsername = C.caretakerUsername
+    WHERE U.username = newUsername
+    GROUP BY U.username, P.petOwnerUsername, C.caretakerUsername;
+END;
+$$ LANGUAGE plpgsql;
+
+
 -------------------------------------------- TRIGGERS ------------------------------------------
 
 -- Triggers for leave application
@@ -402,6 +463,8 @@ FOR EACH ROW
 WHEN  (OLD.status = 'Pending' AND NEW.status = 'Accepted')
 EXECUTE PROCEDURE reject_conflicting_bids();
 
+
+-------------------------------------------- VIEWS ------------------------------------------
 
 -------------------------------------------- VIEWS ------------------------------------------
 
