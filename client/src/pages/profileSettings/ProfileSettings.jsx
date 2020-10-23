@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Grid, Container, Typography, Card, CardContent } from '@material-ui/core';
 import { Field, Form, Formik } from 'formik';
 import { useHistory } from 'react-router-dom';
+import * as Yup from 'yup';
 import { useStore } from '../../utilities/store';
 import api from '../../api';
 import PetOwnerForm from './PetOwnerForm';
@@ -9,7 +10,6 @@ import CaretakerForm from './CaretakerForm';
 import Loading from '../../components/Loading';
 import FormTextField from '../../components/forms/FormTextField';
 import SubmitButton from '../../components/forms/SubmitButton';
-import * as Yup from 'yup';
 
 const ProfileSettings = () => {
   const UpdateSchema = Yup.object({
@@ -17,9 +17,9 @@ const ProfileSettings = () => {
     username: Yup.string().required(),
     phonenumber: Yup.string().required(),
     bio: Yup.string().required(),
-    address: Yup.string().required("You must register an address"),
-    postalcode: Yup.string().required("You must register an postal code"),
-    email: Yup.string().email().required("Please enter a valid email address"),
+    address: Yup.string().required('You must register an address'),
+    postalcode: Yup.string().required('You must register an postal code'),
+    email: Yup.string().email().required('Please enter a valid email address'),
     passworddigest: Yup.string(),
     confirmpassword: Yup.string().oneOf([Yup.ref('passworddigest'), null], 'Passwords must match'),
   });
@@ -61,7 +61,11 @@ const ProfileSettings = () => {
     <Container>
       <Card>
         <CardContent>
-          <Formik initialValues={user} validationSchema={UpdateSchema} onSubmit={(values) => handleSubmit({ values })}>
+          <Formik
+            initialValues={user}
+            validationSchema={UpdateSchema}
+            onSubmit={(values) => handleSubmit({ values })}
+          >
             <Form>
               <Typography variant="h6" style={{ marginTop: 30, marginBottom: 30 }}>
                 {'Update Profile'}

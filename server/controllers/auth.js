@@ -70,7 +70,7 @@ exports.delete_user = async (req, res) => {
   try {
     const { username } = req.params;
     const result = await db.query('UPDATE app_user SET deletedAt = NOW() WHERE username = $1', [
-      username
+      username,
     ]);
     res.json(result.rows);
   } catch (err) {

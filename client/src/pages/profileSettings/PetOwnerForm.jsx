@@ -26,7 +26,7 @@ const PetOwnerForm = (username) => {
 
   // hacky solution..
   if (!creditCard) {
-    return <Loading/>;
+    return <Loading />;
   }
 
   return (

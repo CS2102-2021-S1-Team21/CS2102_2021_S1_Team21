@@ -34,23 +34,29 @@ exports.view = async (req, res) => {
 };
 
 exports.edit = async (req, res) => {
+  const { username } = req.params;
+  const client = await db.connect();
   try {
-    const { username } = req.params;
+    await client.query('BEGIN');
     // Delete all existing associated categories
-    await db.query('DELETE FROM cares_for WHERE caretakerusername = $1', [username]);
+    await client.query('DELETE FROM cares_for WHERE caretakerusername = $1', [username]);
     // Insert each selected category
     const updatedCategories = await Promise.all(
       req.body.map(async (category) => {
-        const insertResult = await db.query(
+        const insertResult = await client.query(
           'INSERT INTO cares_for VALUES ($2, $1) RETURNING categoryname',
           [username, category],
         );
         return insertResult.rows[0];
       }),
     );
+    await client.query('COMMIT');
     res.json(updatedCategories.rows);
   } catch (err) {
+    await client.query('ROLLBACK');
     console.error(err);
     res.json({ error: 'An unexpected error occurred' });
+  } finally {
+    client.release();
   }
 };
