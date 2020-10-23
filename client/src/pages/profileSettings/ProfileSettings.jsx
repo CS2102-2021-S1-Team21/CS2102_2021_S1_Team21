@@ -6,10 +6,24 @@ import { useStore } from '../../utilities/store';
 import api from '../../api';
 import PetOwnerForm from './PetOwnerForm';
 import CaretakerForm from './CaretakerForm';
+import Loading from '../../components/Loading';
 import FormTextField from '../../components/forms/FormTextField';
 import SubmitButton from '../../components/forms/SubmitButton';
+import * as Yup from 'yup';
 
 const ProfileSettings = () => {
+  const UpdateSchema = Yup.object({
+    name: Yup.string().required(),
+    username: Yup.string().required(),
+    phonenumber: Yup.string().required(),
+    bio: Yup.string().required(),
+    address: Yup.string().required("You must register an address"),
+    postalcode: Yup.string().required("You must register an postal code"),
+    email: Yup.string().email().required("Please enter a valid email address"),
+    passworddigest: Yup.string(),
+    confirmpassword: Yup.string().oneOf([Yup.ref('passworddigest'), null], 'Passwords must match'),
+  });
+
   const history = useHistory();
   const { user: userAccount } = useStore();
   const [user, setUser] = useState();
@@ -26,9 +40,7 @@ const ProfileSettings = () => {
     try {
       if (!window.confirm(`Are you sure you want to delete your account?`)) return;
       // set deletedAt, then delete session and finally push to login page
-      await api.auth
-        .deleteUser({ username: userAccount.username, deletedAt: new Date() })
-        .then(api.auth.logout());
+      await api.auth.deleteUser(userAccount.username).then(api.auth.logout());
       history.push('/login');
     } catch (err) {
       console.log(err.message);
@@ -43,13 +55,13 @@ const ProfileSettings = () => {
 
   // hacky solution to get the forms to render after userAccount has been retrieved
   if (!user) {
-    return 'loading..';
+    return <Loading />;
   }
   return (
     <Container>
       <Card>
         <CardContent>
-          <Formik initialValues={user} onSubmit={(values) => handleSubmit({ values })}>
+          <Formik initialValues={user} validationSchema={UpdateSchema} onSubmit={(values) => handleSubmit({ values })}>
             <Form>
               <Typography variant="h6" style={{ marginTop: 30, marginBottom: 30 }}>
                 {'Update Profile'}
@@ -78,16 +90,28 @@ const ProfileSettings = () => {
                 <Grid item xs={12}>
                   <Field name="bio" label="About" multiline component={FormTextField} required />
                 </Grid>
-                <Grid item xs={12} md={8}>
+                <Grid item xs={12} md={5}>
                   <Field name="address" label="Address" component={FormTextField} required />
                 </Grid>
-                <Grid item xs={6} md={4}>
+                <Grid item xs={6} md={2}>
                   <Field name="postalcode" label="Postal Code" component={FormTextField} required />
                 </Grid>
-                <Grid item xs={6} md={12}>
+                <Grid item xs={6} md={5}>
+                  <Field name="email" label="Email" component={FormTextField} required />
+                </Grid>
+                <Grid item xs={6}>
                   <Field
                     name="passworddigest"
                     label="New Password"
+                    component={FormTextField}
+                    type="password"
+                    initialValue=""
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <Field
+                    name="confirmpassword"
+                    label="Confirm New Password"
                     component={FormTextField}
                     type="password"
                     initialValue=""

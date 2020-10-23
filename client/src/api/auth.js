@@ -21,8 +21,8 @@ const auth = {
   signup: async (userAttributes) => {
     return baseAPI.post('users');
   },
-  deleteUser: async (body) => {
-    return baseAPI.put(`/del/${body.username}`, body);
+  deleteUser: async (username) => {
+    return baseAPI.delete(`users/${username}`);
   },
 };
 

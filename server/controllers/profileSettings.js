@@ -16,22 +16,22 @@ exports.view = async (req, res) => {
 
 exports.edit = async (req, res) => {
   try {
-    const { username, passworddigest, bio, phonenumber, address, postalcode } = req.body;
+    const { username, passworddigest, bio, phonenumber, address, postalcode, email } = req.body;
     let result;
     if (passworddigest) {
       const hashPwd = await bcrypt.hash(passworddigest, 10);
       result = await db.query(
-        `UPDATE app_user SET passworddigest = $2, bio = $3, phonenumber = $4, address = $5, postalcode = $6 
+        `UPDATE app_user SET passworddigest = $2, bio = $3, phonenumber = $4, address = $5, postalcode = $6, email = $7
       WHERE username = $1
       RETURNING *`,
-        [username, hashPwd, bio, phonenumber, address, postalcode],
+        [username, hashPwd, bio, phonenumber, address, postalcode, email],
       );
     } else {
       result = await db.query(
-        `UPDATE app_user SET bio = $2, phonenumber = $3, address = $4, postalcode = $5
+        `UPDATE app_user SET bio = $2, phonenumber = $3, address = $4, postalcode = $5, email = $6
         WHERE username = $1
         RETURNING *`,
-        [username, bio, phonenumber, address, postalcode],
+        [username, bio, phonenumber, address, postalcode, email],
       );
     }
     if (result.rowCount === 0) {

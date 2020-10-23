@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Grid, Typography } from '@material-ui/core';
 import { Field, Form, Formik } from 'formik';
 import api from '../../api';
+import Loading from '../../components/Loading';
 import FormTextField from '../../components/forms/FormTextField';
 import FormDatePicker from '../../components/forms/FormDatePicker';
 import SubmitButton from '../../components/forms/SubmitButton';
@@ -25,7 +26,7 @@ const PetOwnerForm = (username) => {
 
   // hacky solution..
   if (!creditCard) {
-    return 'loading..';
+    return <Loading/>;
   }
 
   return (

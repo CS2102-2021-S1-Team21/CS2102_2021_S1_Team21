@@ -42,6 +42,7 @@ function union(a, b) {
   return [...a, ...not(b, a)];
 }
 
+// Adapted from Mui's Enhanced Transfer List demo
 export default function TransferList({ categories, handleSubmit }) {
   const classes = useStyles();
   const [checked, setChecked] = React.useState([]);
