@@ -5,7 +5,7 @@ import Availability from '../pages/availabilities/Availability';
 import CaretakerProfile from '../pages/CaretakerProfile';
 import EditProfile from '../pages/EditProfile';
 import Leaves from '../pages/leaves/Leaves';
-import PcsAdmin from '../pages/pcsAdmin/PcsAdmin';
+import LeaveRequest from '../pages/pcsAdmin/LeaveRequest';
 import PetOwnerProfile from '../pages/PetOwnerProfile';
 import Bookings from '../pages/Bookings';
 import Jobs from '../pages/Jobs';
@@ -57,7 +57,7 @@ const AuthRouter = () => {
           <Route path="/pet-owners/:petOwnerUsername/pets/:petName" component={PetProfile} />
           <Route path="/pet-owners/:username" component={PetOwnerProfile} />
           <Route path="/caretakers/:username" component={CaretakerProfile} />
-          <Route path="/pcs-admin" component={PcsAdmin} />
+          <Route path="/pcs-admin/leave-request" component={LeaveRequest} />
         </Switch>
       </NavBar>
     </StoreProvider>
