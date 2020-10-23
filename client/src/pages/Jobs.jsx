@@ -6,9 +6,9 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-import Upcoming from './Bookings/Upcoming';
-import Failed from './Bookings/Failed';
-import Past from './Bookings/Past';
+import Upcoming from './Jobs/Upcoming';
+import Failed from './Jobs/Failed';
+import Past from './Jobs/Past';
 import Pending from './Jobs/Pending';
 
 function TabPanel(props) {

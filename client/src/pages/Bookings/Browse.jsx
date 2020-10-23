@@ -60,7 +60,7 @@ const Browse = () => {
         petOwnerUsername: store.user.username,
         caretakerUsername: caretaker.caretakerusername,
         dailyPrice,
-        submittedAt: new Date(),
+        submittedAt: moment(new Date(), "YYYY-MM-DD HH:mm:ss"),
         startDate: dateFrom,
         endDate: dateTo,
         transferType,
@@ -125,6 +125,7 @@ const Browse = () => {
                   offset: 0
                 };
                 console.log(body)
+                console.log(moment(new Date()).format("YYYY-MM-DD HH:mm:ss"))
                 api.caretakers.getCaretakers(body).then((x) => {
                   setCaretakers(x.entries);
                   console.log("total count " + x.totalCount);

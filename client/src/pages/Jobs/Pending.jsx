@@ -11,8 +11,10 @@ import Paper from '@material-ui/core/Paper';
 import { addHours } from 'date-fns/';
 import api from '../../api';
 import { useStore } from '../../utilities/store';
+var moment = require("moment");
 
-const Upcoming = () => {
+
+const Pending = () => {
   const [bids, setBids] = useState([]);
   const [rating, setRating] = React.useState(2);
   const [dateFrom, setDateFrom] = useState(new Date());
@@ -23,17 +25,16 @@ const Upcoming = () => {
     api.bids.getCaretakerBids(store.user.username).then((x) => setBids(x));
   }, [store.user.username]);
 
-  const handleAccept = async (bid) => {
-    const newSubmittedAt = bid.submittedat.replace(/'/g, '"').replace(' ', 'T0');
+  const handleClick = async (status, bid) => {
     try {
       const body = {
         petName: bid.petname,
         petOwnerUsername: bid.petownerusername,
         caretakerUsername: bid.caretakerusername,
-        submittedAt: addHours(bid.submittedat, 8),
+        submittedAt: moment(bid.submittedat).format("YYYY-MM-DD HH:mm:ss"),
         startDate: bid.start,
         endDate: bid.end,
-        status: 'Accepted',
+        status: status,
         transactionDateTime: null,
         paymentMethod: null,
         totalAmount: null,
@@ -41,7 +42,8 @@ const Upcoming = () => {
         comment: null,
         reviewDateTime: null,
       };
-      console.log(`bids ${addHours(bid.submittedat, 8)}`);
+      console.log(`bids ${bid.submittedat}`)
+      console.log(moment(bid.submittedat).subtract(8, "hours").format("YYYY-MM-DD HH:mm:ss"));
       await api.bids.updateBids(body);
     } catch (err) {
       console.log(`err${err.message}`);
@@ -81,7 +83,7 @@ const Upcoming = () => {
                       variant="outlined"
                       color="primary"
                       onClick={() => {
-                        handleAccept(bid);
+                        handleClick('Accepted', bid);
                       }}
                     >
                       {'Accept'}
@@ -90,26 +92,7 @@ const Upcoming = () => {
                       size="small"
                       variant="outlined"
                       onClick={() => {
-                        try {
-                          const body = {
-                            petName: bids.petName,
-                            petOwnerUsername: bids.petOwnerUsername,
-                            caretakerUsername: bids.caretakerUsername,
-                            submittedAt: bids.submittedAt,
-                            startDate: bids.startDate,
-                            endDate: bids.endDate,
-                            status: 'Rejected',
-                            transactionDateTime: null,
-                            paymentMethod: null,
-                            totalAmount: null,
-                            rating: null,
-                            comment: null,
-                            reviewDateTime: null,
-                          };
-                          api.bids.updateBids(body);
-                        } catch (err) {
-                          console.log(err.message);
-                        }
+                        handleClick('Rejected', bid);
                       }}
                     >
                       {'Reject'}
@@ -124,4 +107,4 @@ const Upcoming = () => {
   );
 };
 
-export default Upcoming;
+export default Pending;

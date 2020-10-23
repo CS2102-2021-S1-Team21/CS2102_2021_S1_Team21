@@ -37,7 +37,8 @@ exports.apply = async (req, res) => {
 exports.petOwnerRetrieve = async (req, res) => {
   try {
     const { petOwnerUsername } = req.params;
-    const result = await db.query(`SELECT * FROM Bids WHERE petOwnerUsername = $1`, [
+    const result = await db.query(
+      `SELECT *, to_char(startDate, 'yyyy-MM-dd') AS start, to_char(endDate, 'yyyy-MM-dd') AS end FROM Bids WHERE petOwnerUsername = $1`, [
       petOwnerUsername,
     ]);
     res.json(result.rows);

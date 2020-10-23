@@ -8,47 +8,46 @@ import {
 } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import Paper from '@material-ui/core/Paper';
+import { addHours } from 'date-fns/';
 import api from '../../api';
 import { useStore } from '../../utilities/store';
+var moment = require("moment");
 
-const Failed = () => {
-  const [allBids, setAllBids] = useState([]);
+const Upcoming = () => {
+  const [bids, setBids] = useState([]);
   const [rating, setRating] = React.useState(2);
   const [dateFrom, setDateFrom] = useState(new Date());
   const [dateTo, setDateTo] = useState(new Date());
   const store = useStore();
 
   useEffect(() => {
-    api.bids.getPetOwnerBids(store.user.username).then((x) => setAllBids(x));
+    api.bids.getCaretakerBids(store.user.username).then((x) => setBids(x));
   }, [store.user.username]);
-
-  console.log(`all bids${allBids}`);
 
   return (
     <>
       <Paper style={{ margin: 30, padding: 30 }}>
-        <Typography>{'Status: Expired/Rejected'}</Typography>
+        <Typography>{'Status: Completed'}</Typography>
       </Paper>
       <List>
-        {allBids
-          .filter((bids) => bids.status === 'Expired' || bids.status === 'Rejected')
-          .map((bids) => {
+        {bids
+          .filter((bid) => bid.status === 'Completed')
+          .map((bid) => {
             return (
               <Paper style={{ margin: 30, padding: 30 }} key={bids.id}>
                 <ListItem alignItems="flex-start">
                   <ListItemText
-                    primary={`${bids.caretakerusername}`}
+                    primary={
+                      <Typography component="span" variant="h3" color="Primary">
+                        {`${bid.petname}`}
+                      </Typography>
+                    }
                     secondary={
                       <>
-                        <Typography
-                          component="span"
-                          variant="body2"
-                          // className={classes.inline}
-                          color="textPrimary"
-                        >
-                          {`Secondary text `}
+                        <Typography component="span" variant="body2" color="textPrimary">
+                          {`${bid.petownerusername}`}
                         </Typography>
-                        {`Secondary`}
+                        {` Secondary`}
                       </>
                     }
                   />
@@ -61,4 +60,4 @@ const Failed = () => {
   );
 };
 
-export default Failed;
+export default Upcoming;
