@@ -19,6 +19,7 @@ import SelectPet from './Browse/SelectPet';
 import api from '../../api';
 import { useStore } from '../../utilities/store';
 import SelectTransferType from './Browse/SelectTransferType';
+var moment = require("moment");
 
 const Browse = () => {
   const [rating, setRating] = React.useState(2);
@@ -116,14 +117,19 @@ const Browse = () => {
             color="primary"
             onClick={() => {
               try {
-                // const body = {
-                //   startDate: dateFrom,
-                //   endDate: dateTo,
-                //   petCategory: pet.categoryname,
-                //   rating: rating,
-                // };
-                // api.caretakers.browseCaretakers(body).then((x) => setCaretakers(x));
-                api.caretakers.getCaretakers().then((x) => setCaretakers(x.entries));
+                const body = {
+                  minRating: rating,
+                  petCategory: pet.categoryname,
+                  startDate: moment(dateFrom).format('YYYY-MM-DD'),
+                  endDate: moment(dateTo).format('YYYY-MM-DD'),
+                  offset: 0
+                };
+                console.log(body)
+                api.caretakers.getCaretakers(body).then((x) => {
+                  setCaretakers(x.entries);
+                  console.log("total count " + x.totalCount);
+                }
+                );
               } catch (err) {
                 console.log(err.message);
               }

@@ -1,8 +1,8 @@
 import baseAPI from './baseAPI';
 
 const caretakers = {
-  getCaretakers: async () => {
-    return baseAPI.get('caretakers');
+  getCaretakers: async (body) => {
+    return baseAPI.get('caretakers', body);
   },
   getCaretaker: async (username) => {
     return baseAPI.get(`caretakers/${username}`);
