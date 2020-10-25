@@ -339,14 +339,14 @@ DECLARE max_jobs INTEGER;
 BEGIN
     SELECT MAX(n) INTO max_jobs FROM (
         SELECT caretakerusername, as_of_date, COUNT(*) AS n
-        FROM (SELECT d::date AS as_of_date FROM generate_series(NEW.startdate::timestamp, NEW.enddate::timestamp, '1 day') d) as dates
+        FROM (SELECT d::date AS as_of_date FROM generate_series(NEW.startdate::date, NEW.enddate::date, '1 day') d) as dates
         INNER JOIN Bids ON dates.as_of_date BETWEEN Bids.startdate AND Bids.enddate
         WHERE Bids.status = 'Accepted'
         GROUP BY caretakerusername, as_of_date) T WHERE NEW.caretakerusername = T.caretakerusername;
     -- All caretakers can have a maximum of 5 pets at one time
     IF max_jobs >= 5 THEN
         RAISE EXCEPTION 'Caretaker is unable to receive more pets during this period';
-    -- Part time can hold up to 2 or 5 pets depending on rating
+    -- Part timer can hold up to 2 or 5 pets depending on rating
     ELSEIF (NEW.caretakerusername IN (SELECT P.caretakerusername FROM Part_Time_Employee P) 
         AND ((SELECT totalAverageRating FROM Caretaker WHERE Caretakerusername = NEW.caretakerusername) <= 4) AND max_jobs >= 2) THEN
             RAISE EXCEPTION 'Part time Caretaker is unable to receive more pets during this period';
