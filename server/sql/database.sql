@@ -163,59 +163,6 @@ CREATE TABLE Bids(
 -------------------------------------------- TRIGGERS ------------------------------------------
 
 -- Triggers for leave application
-<<<<<<< HEAD
-CREATE OR REPLACE FUNCTION leave_constraints() RETURNS TRIGGER AS $$
-DECLARE 
-overlapping_date INTEGER;
-pet_under_care INTEGER;
-total_set INTEGER;
-BEGIN
-    -- Check no overlapping date of leave
-    SELECT COUNT(*) INTO overlapping_date FROM (select (generate_series(NEW.startdate, NEW.enddate, '1 day'::interval))::date
-        INTERSECT
-        select generate_series(
-        startdate, enddate, '1 day') FROM applies_for_leave_period where caretakerusername = NEW.caretakerusername) as intersect_dates;
-  
-    IF overlapping_date > 0 THEN
-        RAISE EXCEPTION 'You cannot apply for overlapping leaves';
-    END IF;
-
-    -- Check no pet under care
-    SELECT COUNT(*) INTO pet_under_care FROM (select (generate_series(NEW.startdate, NEW.enddate, '1 day'::interval))::date
-        INTERSECT
-        select generate_series(
-        startdate, enddate, '1 day') FROM Bids where caretakerusername = NEW.caretakerusername AND status = 'Accepted') as pet_being_cared;
-
-    IF pet_under_care > 0 THEN
-        RAISE EXCEPTION 'You cannot apply leave you are / will be in charge of one or more pets during the leave';
-    END IF;
-
-    -- Check caretaker can still fulfill 2x150 working days criteria starting from when account is registered
-    WITH dates(date) AS (
-        -- This table contains all the distinct date 
-        -- instances in the data set
-        SELECT generate_series(
-        concat(extract(year from current_date)::text, substring(createdAt::text from 5))::date, 
-        concat((extract(year from current_date) + 1)::text, substring(createdAt::text from 5))::date, 
-        '1 day'::interval)::date
-        FROM App_User WHERE username = NEW.caretakerusername
-        EXCEPT
-        -- EXCEPT the insert of new row here
-        select (generate_series(NEW.startdate, NEW.enddate, '1 day'::interval))::date
-        EXCEPT
-        -- DATA that are already existing in the table beforehand
-        select generate_series(
-            startdate, enddate, '1 day') FROM applies_for_leave_period where caretakerusername = NEW.caretakerusername
-    ),
-    -- Generate "consecutive_leave_groups" of dates by subtracting the
-    -- date's row number (no gaps) from the date itself
-    -- (with potential gaps). Whenever there is a gap,
-    -- there will be a new group
-    consecutive_leave_groups AS (
-        SELECT
-        ROW_NUMBER() OVER (ORDER BY date) AS rn,
-        date - (ROW_NUMBER() OVER (ORDER BY date)) * INTERVAL '1 day' AS grp,
-=======
 CREATE OR REPLACE FUNCTION leave_consecutive() RETURNS TRIGGER AS $$
 DECLARE 
 total_set INTEGER;
@@ -240,7 +187,6 @@ BEGIN
         SELECT
         ROW_NUMBER() OVER (ORDER BY date) AS rn,
         date + (-ROW_NUMBER() OVER (ORDER BY date)) * INTERVAL '1 day' AS grp,
->>>>>>> master
         date
         FROM dates
     )
@@ -248,36 +194,6 @@ BEGIN
     SELECT sum(sets) INTO total_set FROM (
         SELECT
         COUNT(*) / 150 AS sets
-<<<<<<< HEAD
-        FROM consecutive_leave_groups
-        GROUP BY grp
-    ) AS consecutive;
-
-    IF (total_set <> 2) THEN
-        RAISE exception 'You cannot take this leave because you will not be able to fulfill minimum requirements of consecutive working days';
-    END IF;
-
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER check_leave_constraints
-BEFORE INSERT ON applies_for_leave_period
-FOR EACH ROW EXECUTE PROCEDURE leave_constraints();
-
--- -- Triggers for availability application
-CREATE OR REPLACE FUNCTION availability_overlapping_date() RETURNS TRIGGER AS $$
-DECLARE 
-overlapping_date INTEGER;
-BEGIN
-    SELECT COUNT(*) INTO overlapping_date FROM (select (generate_series(NEW.startdate, NEW.enddate, '1 day'::interval))::date
-        INTERSECT
-        select generate_series(
-        startdate, enddate, '1 day') FROM indicates_availability_period where caretakerusername = NEW.caretakerusername) as dates;
-  
-    IF overlapping_date > 0 THEN
-        RAISE EXCEPTION 'You cannot indicate overlapping availability periods';
-=======
         FROM groups
         GROUP BY grp
     ) AS consecutive;
@@ -325,118 +241,11 @@ BEGIN
   
     IF overlapping_date > 0 THEN
         RAISE EXCEPTION 'You cannot apply for overlapping leaves';
->>>>>>> master
     ELSE RETURN NEW;
     END IF;
 END;
 $$ LANGUAGE plpgsql;
 
-<<<<<<< HEAD
-CREATE TRIGGER check_availability_overlap
-BEFORE INSERT ON indicates_availability_period
-FOR EACH ROW EXECUTE PROCEDURE availability_overlapping_date();
-
--- Triggers for non-overlapping ISA relationship admin/ user
-CREATE OR REPLACE FUNCTION not_admin()
-RETURNS TRIGGER AS $$
-DECLARE app_user NUMERIC;
-BEGIN
-    SELECT COUNT(*) INTO app_user FROM PCS_Administrator A
-    WHERE NEW.username = A.username;
-    IF app_user > 0 THEN 
-        RAISE EXCEPTION 'Username is already used, please use a different username.';
-    ELSE 
-    RETURN NEW;
-    END IF; END;
-$$ LANGUAGE plpgsql; 
-
-CREATE TRIGGER check_not_admin
-BEFORE INSERT ON App_User
-FOR EACH ROW EXECUTE PROCEDURE not_admin();
-
-
-CREATE OR REPLACE FUNCTION not_user()
-RETURNS TRIGGER AS $$
-DECLARE isAdmin NUMERIC;
-BEGIN
-    SELECT COUNT(*) INTO isAdmin FROM App_User A
-    WHERE NEW.username = A.username;
-    IF isAdmin > 0 THEN 
-        RAISE EXCEPTION 'Username is already used, please use a different username.';
-    ELSE 
-    RETURN NEW;
-    END IF; END;
-$$ LANGUAGE plpgsql; 
-
-CREATE TRIGGER check_not_user
-BEFORE INSERT ON PCS_Administrator
-FOR EACH ROW EXECUTE PROCEDURE not_user();
-
-
--- Triggers for part time employee
-CREATE OR REPLACE FUNCTION not_full_time_employee()
-RETURNS TRIGGER AS $$
-DECLARE full_time NUMERIC;
-BEGIN
-    SELECT COUNT(*) INTO full_time FROM Full_Time_Employee F
-    WHERE NEW.caretakerusername = F.caretakerusername;
-    IF full_time > 0 THEN 
-        RAISE EXCEPTION 'You cannot apply for Part Time Employment if you are a Full timer';
-    ELSE 
-    RETURN NEW;
-    END IF; END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER check_not_full_time_employee
-BEFORE INSERT ON Part_Time_Employee
-FOR EACH ROW EXECUTE PROCEDURE not_full_time_employee();
-
--- Triggers for full time employee
-CREATE OR REPLACE FUNCTION not_part_time_employee()
-RETURNS TRIGGER AS $$
-DECLARE part_time NUMERIC;
-BEGIN
-    SELECT COUNT(*) INTO part_time FROM Part_Time_Employee P
-    WHERE NEW.caretakerusername = P.caretakerusername;
-    IF part_time > 0 THEN 
-        RAISE EXCEPTION 'You cannot apply for Full Time Employment if you are a Part timer';
-    ELSE 
-    RETURN NEW;
-    END IF; END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER check_not_part_time_employee
-BEFORE INSERT ON Full_Time_Employee
-FOR EACH ROW EXECUTE PROCEDURE not_part_time_employee();
-
--- Triggers for Bids
-CREATE OR REPLACE FUNCTION bids_constraint()
-RETURNS TRIGGER AS $$
-DECLARE max_jobs INTEGER;
-BEGIN
-    -- If caretaker is a full timer
-    SELECT MAX(n) INTO max_jobs FROM (SELECT caretakerusername, as_of_date, COUNT(*) as n
-        FROM (SELECT d::date AS as_of_date FROM generate_series(NEW.startdate::timestamp, NEW.enddate::timestamp, '1 day') d) as dates
-        INNER JOIN Bids ON dates.as_of_date BETWEEN Bids.startdate AND Bids.enddate
-        WHERE Bids.status = 'Accepted'
-        GROUP BY caretakerusername, as_of_date) T WHERE NEW.caretakerusername = T.caretakerusername;
-    IF max_jobs >= 5 THEN
-        RAISE EXCEPTION 'Caretaker is unable to receive more pets during this period';
-    ELSEIF (NEW.caretakerusername IN (SELECT P.caretakerusername FROM Part_Time_Employee P) 
-        AND ((SELECT totalAverageRating FROM Caretaker WHERE Caretakerusername = NEW.caretakerusername) <= 4) AND max_jobs >= 2) THEN
-            RAISE EXCEPTION 'Part time Caretaker is unable to receive more pets during this period';
-    ELSE
-        RETURN NEW;
-    END IF;
-    RETURN NULL;
-    END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER check_bids_constraint
-BEFORE INSERT ON Bids
-FOR EACH ROW 
-EXECUTE PROCEDURE bids_constraint();
-=======
 CREATE TRIGGER check_leave_consecutive
 BEFORE INSERT ON applies_for_leave_period
 FOR EACH ROW EXECUTE PROCEDURE leave_consecutive();
@@ -473,4 +282,3 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER check_availability_overlap
 BEFORE INSERT ON indicates_availability_period
 FOR EACH ROW EXECUTE PROCEDURE availability_overlapping_date();
->>>>>>> master
