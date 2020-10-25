@@ -262,11 +262,11 @@ FOR EACH ROW EXECUTE PROCEDURE availability_overlapping_date();
 -- Triggers for non-overlapping ISA relationship admin/ user
 CREATE OR REPLACE FUNCTION not_admin()
 RETURNS TRIGGER AS $$
-DECLARE app_user NUMERIC;
+DECLARE isAdmin NUMERIC;
 BEGIN
-    SELECT COUNT(*) INTO app_user FROM PCS_Administrator A
+    SELECT COUNT(*) INTO isAdmin FROM PCS_Administrator A
     WHERE NEW.username = A.username;
-    IF app_user > 0 THEN 
+    IF isAdmin > 0 THEN 
         RAISE EXCEPTION 'Username is already used, please use a different username.';
     ELSE 
     RETURN NEW;
@@ -280,11 +280,11 @@ FOR EACH ROW EXECUTE PROCEDURE not_admin();
 
 CREATE OR REPLACE FUNCTION not_user()
 RETURNS TRIGGER AS $$
-DECLARE isAdmin NUMERIC;
+DECLARE app_user NUMERIC;
 BEGIN
-    SELECT COUNT(*) INTO isAdmin FROM App_User A
+    SELECT COUNT(*) INTO app_user FROM App_User A
     WHERE NEW.username = A.username;
-    IF isAdmin > 0 THEN 
+    IF app_user > 0 THEN 
         RAISE EXCEPTION 'Username is already used, please use a different username.';
     ELSE 
     RETURN NEW;
