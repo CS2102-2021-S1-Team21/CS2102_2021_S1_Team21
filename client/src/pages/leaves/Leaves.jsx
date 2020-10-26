@@ -1,9 +1,8 @@
-import { Button, CardContent, Container, Card, Snackbar } from '@material-ui/core';
-import React, { useState, useEffect, useCallback } from 'react';
+import { Button, CardContent, Container, Card } from '@material-ui/core';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
-
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
@@ -12,7 +11,7 @@ import TableRow from '@material-ui/core/TableRow';
 import LeaveDialogContent from './LeaveDialogContent';
 import api from '../../api';
 import { useStore } from '../../utilities/store';
-import Alert from '../../components/Alert';
+
 
 const useStyles = makeStyles({
   table: {
@@ -31,28 +30,7 @@ const Leaves = () => {
   const classes = useStyles();
   const [leaves, setLeaves] = useState([]);
   const store = useStore();
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarContent, setSnackbarContent] = useState({ message: '', severity: '' });
-
-  // const handleResponseError = (promise) =>
-  // promise.then((response) => {
-  //   if (response.error) {
-  //     setSnackbarContent({ message: response.error, severity: 'error' });
-  //     setSnackbarOpen(true);
-  //     throw Error(response.error);
-  //   }
-  //   return response;
-  // });
-
-  // const getLeaves = useCallback(() => {
-  //   handleResponseError(api.pets.getLeaves(store.user.username))
-  //     .then((response) => {
-  //       setLeaves(response.rows);
-  //     })
-  //     .catch(console.error);
-  // }, [store.user.username]);
-
-
+  
   useEffect(() => {
     api.leaves.getLeaves(store.user.username).then((x) => setLeaves(x));
   }, [store.user.username]);
@@ -74,11 +52,6 @@ const Leaves = () => {
     }
     return <p>{'No'}</p>;
   }
-
-  const handleSnackbarClose = (event, reason) => {
-    if (reason === 'clickaway') return;
-    setSnackbarOpen(false);
-  };
 
   return (
     <Container>
@@ -123,16 +96,6 @@ const Leaves = () => {
           </TableBody>
         </Table>
       </TableContainer>
-      <Snackbar
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-        autoHideDuration={10_000}
-        open={snackbarOpen}
-        onClose={handleSnackbarClose}
-      >
-        <Alert severity={snackbarContent.severity} onClose={handleSnackbarClose}>
-          {snackbarContent.message}
-        </Alert>
-      </Snackbar>
     </Container>
   );
 };
