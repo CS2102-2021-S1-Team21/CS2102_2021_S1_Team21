@@ -196,32 +196,32 @@ BEGIN
     -- date's row number (no gaps) from the date itself
     -- (with potential gaps). Whenever there is a gap,
     -- there will be a new group
-    WITH dates(date) AS (
+    WITH consecutive_leave_groups AS (
+        SELECT
+        ROW_NUMBER() OVER (ORDER BY date) AS rn,
+        date + (-ROW_NUMBER() OVER (ORDER BY date)) * INTERVAL '1 day' AS grp,
+        date
+        FROM (       
         -- This table contains all the distinct date 
         -- instances in the data set
-        select (generate_series(concat(extract(year from current_date)::text, substring(createdAt::text from 5))::date,
-        concat((extract(year from current_date) + 1)::text, substring(createdAt::text from 5))::date,
-        '1 day'::interval))::date
+        SELECT generate_series(
+        concat(extract(year from current_date)::text, substring(createdAt::text from 5))::date, 
+        concat((extract(year from current_date) + 1)::text, substring(createdAt::text from 5))::date, 
+        '1 day'::interval)::date
         FROM App_User WHERE username = NEW.caretakerusername
         EXCEPT
         -- EXCEPT the insert of new row here
-        select (generate_series(NEW.startdate, NEW.enddate, '1 day'::interval))::date
+        SELECT (generate_series(NEW.startdate, NEW.enddate, '1 day'::interval))::date
         EXCEPT
         -- DATA that are already existing in the table beforehand
-        select generate_series(
-            startdate, enddate, '1 day') FROM applies_for_leave_period where caretakerusername = NEW.caretakerusername
+        SELECT generate_series(
+            startdate, enddate, '1 day') FROM applies_for_leave_period where caretakerusername = NEW.caretakerusername) AS all_dates
     )
 
     SELECT sum(sets) INTO total_set FROM (
         SELECT
         COUNT(*) / 150 AS sets
-        FROM (
-            SELECT
-            ROW_NUMBER() OVER (ORDER BY date) AS rn,
-            date + (-ROW_NUMBER() OVER (ORDER BY date)) * INTERVAL '1 day' AS grp,
-            date
-            FROM dates  
-        ) AS groups
+        FROM consecutive_leave_groups
         GROUP BY grp
     ) AS consecutive;
 
