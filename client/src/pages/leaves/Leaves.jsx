@@ -12,7 +12,6 @@ import LeaveDialogContent from './LeaveDialogContent';
 import api from '../../api';
 import { useStore } from '../../utilities/store';
 
-
 const useStyles = makeStyles({
   table: {
     minWidth: 650,
@@ -30,7 +29,7 @@ const Leaves = () => {
   const classes = useStyles();
   const [leaves, setLeaves] = useState([]);
   const store = useStore();
-  
+
   useEffect(() => {
     api.leaves.getLeaves(store.user.username).then((x) => setLeaves(x));
   }, [store.user.username]);
