@@ -2,19 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import { DataGrid } from '@material-ui/data-grid';
 import {
-  Avatar,
-  Box,
-  Button,
-  Card,
-  CardContent,
-  CardHeader,
   Container,
-  Grid,
-  IconButton,
   makeStyles,
   Paper,
-  Snackbar,
-  Typography,
 } from '@material-ui/core';
 import api from '../../api';
 
@@ -78,7 +68,7 @@ const AdminDashboard = () => {
     <Container>
       <Paper className={classes.paper}>
         <h1>
-          {'Leaderboard for'}
+          {'Leaderboard for '}
           {reportMonth}
         </h1>
         <div style={{ height: 400, width: '100%' }}>
