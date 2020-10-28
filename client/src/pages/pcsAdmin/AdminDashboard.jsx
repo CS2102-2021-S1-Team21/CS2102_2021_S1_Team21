@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { format } from 'date-fns';
-import api from '../../api';
 import { DataGrid } from '@material-ui/data-grid';
 import {
   Avatar,
@@ -17,11 +16,12 @@ import {
   Snackbar,
   Typography,
 } from '@material-ui/core';
+import api from '../../api';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
     padding: theme.spacing(2),
-  }
+  },
 }));
 
 const AdminDashboard = () => {
@@ -46,13 +46,15 @@ const AdminDashboard = () => {
     {
       field: 'efficiencyscore',
       headerName: 'Efficiency',
-      description: 'Relative number of jobs taken by a caretaker this month compared to the average of their role, multiplied by 25',
+      description:
+        'Relative number of jobs taken by a caretaker this month compared to the average of their role, multiplied by 25',
       width: 150,
     },
     {
       field: 'popularityscore',
       headerName: 'Popularity',
-      description: 'Relative number of bids received by a caretaker this month compared to the average of their role, multiplied by 25',
+      description:
+        'Relative number of bids received by a caretaker this month compared to the average of their role, multiplied by 25',
       width: 150,
     },
     {
@@ -68,21 +70,19 @@ const AdminDashboard = () => {
       console.log(res.result);
       setRows(res.result);
       setMonth(res.resultMonth);
-      console.log(res.resultMonth)
+      console.log(res.resultMonth);
     });
   }, []);
 
   return (
     <Container>
       <Paper className={classes.paper}>
-        <h1>Leaderboard for {reportMonth}</h1>
+        <h1>
+          {'Leaderboard for'}
+          {reportMonth}
+        </h1>
         <div style={{ height: 400, width: '100%' }}>
-          <DataGrid
-            disableSelectionOnClick="true"
-            rows={rows}
-            columns={columns}
-            pageSize={10}
-          />
+          <DataGrid disableSelectionOnClick="true" rows={rows} columns={columns} pageSize={10} />
         </div>
       </Paper>
     </Container>

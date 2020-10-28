@@ -135,7 +135,7 @@ const NavBar = ({ children }) => {
                   {'My Availability'}
                 </Button>
               )}
-                {user.isAdmin && (
+              {user.isAdmin && (
                 <Button
                   color="inherit"
                   className={classes.navItem}
