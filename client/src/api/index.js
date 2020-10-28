@@ -1,5 +1,6 @@
 import auth from './auth';
 import availability from './availability';
+import adminDashboard from './adminDashboard';
 import caretakers from './caretakers';
 import caresFor from './caresFor';
 import leaves from './leaves';
@@ -17,6 +18,7 @@ import userProfiles from './userProfiles';
 
 const api = {
   auth,
+  adminDashboard,
   petOwners,
   leaves,
   availability,

@@ -1,6 +1,7 @@
 const router = require('express').Router();
 
 const auth = require('./auth');
+const adminDashboard = require('./adminDashboard');
 const { ensureAuthenticated } = require('../auth/middleware');
 const pets = require('./pets');
 const petCategories = require('./petCategories');
@@ -18,6 +19,7 @@ router.use('/', auth);
 // Routes
 
 router.use('/leaves', ensureAuthenticated, leaves);
+router.use('/admin-dashboard', ensureAuthenticated, adminDashboard);
 router.use('/availability', ensureAuthenticated, availability);
 router.use('/pet-owners', ensureAuthenticated, petOwners);
 router.use('/caretakers', ensureAuthenticated, caretakers);
