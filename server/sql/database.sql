@@ -366,7 +366,8 @@ EXECUTE PROCEDURE bids_constraint();
 
 -- View for Admin Dashboard
 CREATE OR REPLACE VIEW leaderboard AS (
-    SELECT *, rank() OVER (PARTITION BY role ORDER BY totalScore desc) 
+  SELECT * FROM 
+    (SELECT *, rank() OVER (PARTITION BY role ORDER BY totalScore desc) AS rank
     FROM (
         SELECT *, satisfactionscore + efficiencyscore + popularityscore AS totalScore
         FROM (
@@ -396,5 +397,7 @@ CREATE OR REPLACE VIEW leaderboard AS (
             ) AS t4
         ) AS t5
     ) AS t6
-    ORDER BY role, rank, totalScore, efficiencyscore, popularityscore, averageRating
+  ) AS t7
+  WHERE rank BETWEEN 1 AND 5
+  ORDER BY role, rank, totalScore, efficiencyscore, popularityscore, averageRating
 );
