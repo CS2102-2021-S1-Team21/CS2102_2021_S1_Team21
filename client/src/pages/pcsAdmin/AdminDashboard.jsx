@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import { DataGrid } from '@material-ui/data-grid';
-import {
-  Container,
-  makeStyles,
-  Paper,
-} from '@material-ui/core';
+import { Container, makeStyles, Paper } from '@material-ui/core';
 import api from '../../api';
 
 const useStyles = makeStyles((theme) => ({
