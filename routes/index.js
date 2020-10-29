@@ -28,7 +28,7 @@ router.use('/reviews', ensureAuthenticated, reviews);
 router.use('/profile', ensureAuthenticated, profile);
 router.use('/profile-settings', ensureAuthenticated, profileSettings);
 router.use('/pets', ensureAuthenticated, pets);
-router.use('/pet-categories', ensureAuthenticated, petCategories);
+router.use('/pet-categories', petCategories);
 
 // Catch-all route (used for error handling)
 
