@@ -1,6 +1,8 @@
 const db = require('../db');
 
-exports.apply = async (req, res) => {
+const { errorDetails } = require('../constants');
+
+exports.apply = async (req, res, next) => {
   try {
     const { caretakerUsername, startDate, endDate, isEmergency } = req.body;
     const result = await db.query(
@@ -9,7 +11,13 @@ exports.apply = async (req, res) => {
     );
     res.json(result.rows);
   } catch (err) {
-    console.error(err);
+    if (err.where.startsWith(errorDetails.LEAVE_CONSTRAINTS)) {
+      res.status(400).json({
+        error: 'Leave application invalid. Please check that you meet the required conditions',
+      });
+      return;
+    }
+    next(err);
   }
 };
 

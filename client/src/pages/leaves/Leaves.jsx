@@ -12,6 +12,7 @@ import TableRow from '@material-ui/core/TableRow';
 import LeaveDialogContent from './LeaveDialogContent';
 import api from '../../api';
 import { useStore } from '../../utilities/store';
+import { useSnackbarContext } from '../../utilities/snackbar';
 
 const useStyles = makeStyles({
   table: {
@@ -24,15 +25,16 @@ const style = {
   marginBottom: '20px',
 };
 
-/** This is a dummy component for demo purposes. The actual one will look quite different. */
 const Leaves = () => {
-  const [open, setOpen] = useState(false);
   const classes = useStyles();
-  const [leaves, setLeaves] = useState([]);
   const store = useStore();
+  const showSnackbar = useSnackbarContext();
+
+  const [open, setOpen] = useState(false);
+  const [leaves, setLeaves] = useState([]);
 
   useEffect(() => {
-    api.leaves.getLeaves(store.user.username).then((x) => setLeaves(x));
+    showSnackbar(api.leaves.getLeaves(store.user.username)).then((x) => setLeaves(x));
   }, [store.user.username]);
 
   const handleClickOpen = () => {
