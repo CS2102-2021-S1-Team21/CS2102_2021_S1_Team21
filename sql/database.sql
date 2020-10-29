@@ -1,4 +1,4 @@
--- psql -U postgres cs2102 < server/node_modules/connect-pg-simple/table.sql
+-- psql -U postgres cs2102 < node_modules/connect-pg-simple/table.sql
 
 ------------------------------------------ DROPS ALL TABLES (EXCEPT ENUMS) ------------------------------------------
 DO $$ DECLARE
@@ -196,32 +196,32 @@ BEGIN
     -- date's row number (no gaps) from the date itself
     -- (with potential gaps). Whenever there is a gap,
     -- there will be a new group
-    WITH consecutive_leave_groups AS (
-        SELECT
-        ROW_NUMBER() OVER (ORDER BY date) AS rn,
-        date + (-ROW_NUMBER() OVER (ORDER BY date)) * INTERVAL '1 day' AS grp,
-        date
-        FROM (       
+    WITH dates(date) AS (
         -- This table contains all the distinct date 
         -- instances in the data set
-        SELECT generate_series(
-        concat(extract(year from current_date)::text, substring(createdAt::text from 5))::date, 
-        concat((extract(year from current_date) + 1)::text, substring(createdAt::text from 5))::date, 
-        '1 day'::interval)::date
+        select (generate_series(concat(extract(year from current_date)::text, substring(createdAt::text from 5))::date,
+        concat((extract(year from current_date) + 1)::text, substring(createdAt::text from 5))::date,
+        '1 day'::interval))::date
         FROM App_User WHERE username = NEW.caretakerusername
         EXCEPT
         -- EXCEPT the insert of new row here
-        SELECT (generate_series(NEW.startdate, NEW.enddate, '1 day'::interval))::date
+        select (generate_series(NEW.startdate, NEW.enddate, '1 day'::interval))::date
         EXCEPT
         -- DATA that are already existing in the table beforehand
-        SELECT generate_series(
-            startdate, enddate, '1 day') FROM applies_for_leave_period where caretakerusername = NEW.caretakerusername) AS all_dates
+        select generate_series(
+            startdate, enddate, '1 day') FROM applies_for_leave_period where caretakerusername = NEW.caretakerusername
     )
 
     SELECT sum(sets) INTO total_set FROM (
         SELECT
         COUNT(*) / 150 AS sets
-        FROM consecutive_leave_groups
+        FROM (
+            SELECT
+            ROW_NUMBER() OVER (ORDER BY date) AS rn,
+            date + (-ROW_NUMBER() OVER (ORDER BY date)) * INTERVAL '1 day' AS grp,
+            date
+            FROM dates  
+        ) AS groups
         GROUP BY grp
     ) AS consecutive;
 

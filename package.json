@@ -1,12 +1,28 @@
 {
-  "name": "petCaringServices",
-  "license": "MIT",
-  "devDependencies": {
-    "husky": "^4.3.0"
+  "name": "server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "engines": {
+    "node": "12.*",
+    "yarn": "1.22.*"
   },
-  "husky": {
-    "hooks": {
-      "pre-push": "cd server && yarn run check && cd ../client && yarn run check"
-    }
+  "license": "MIT",
+  "dependencies": {
+    "bcrypt": "^5.0.0",
+    "body-parser": "^1.19.0",
+    "connect-pg-simple": "^6.2.1",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-session": "^1.17.1",
+    "lodash": "^4.17.20",
+    "nodemon": "^2.0.4",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0",
+    "pg": "^8.3.3"
+  },
+  "scripts": {
+    "start": "nodemon index.js",
+    "heroku-postbuild": "cd client && yarn install && yarn run build"
   }
 }
