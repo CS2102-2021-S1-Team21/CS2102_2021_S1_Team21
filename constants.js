@@ -5,6 +5,7 @@ exports.errorCodes = {
 exports.errorDetails = {
   PET_DUPLICATE_KEY: 'Key (petownerusername, name)=',
   REQUIREMENT_DUPLICATE_KEY: 'Key (requirementtype, petname, petownerusername)=',
+  AVAILABILITY_OVERLAPPING_DATE: 'PL/pgSQL function availability_overlapping_date()',
 };
 
 exports.messages = {
