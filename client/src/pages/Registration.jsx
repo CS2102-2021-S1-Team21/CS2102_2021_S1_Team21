@@ -1,4 +1,4 @@
-import { Box, Grid, Typography } from '@material-ui/core';
+import { Grid, Typography } from '@material-ui/core';
 import { Field, Form, Formik } from 'formik';
 import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
@@ -42,26 +42,15 @@ const DEFAULT_VALUES = {
   ccexpirydate: '',
   cvvcode: '',
   caresForCategories: [],
-  // username: 'saralee',
-  // email: 'saralee@gmail.com',
-  // password: 'password',
-  // passwordConfirmation: 'password',
-  // name: 'Sara',
-  // bio: 'hello',
-  // phonenumber: '2738263',
-  // address: 'hello',
-  // postalcode: '293472',
-  // accountType: 'both',
-  // caretakerType: 'fullTime',
-  // ccnumber: '123112',
-  // ccname: 'Sara',
-  // ccexpirydate: '2021-01-23',
-  // cvvcode: '324',
-  // caresForCategories: ['Hamster', 'Large dog'],
 };
 
 const validationSchema = Yup.object().shape({
-  username: Yup.string().required(),
+  username: Yup.string()
+    .required()
+    .matches(
+      /^[\w-.]+$/,
+      'Username can only contain alphanumeric characters, dots (.), dashes (-), and underscores (-)',
+    ),
   email: Yup.string().email().required(),
   password: Yup.string().required(),
   passwordConfirmation: Yup.string()

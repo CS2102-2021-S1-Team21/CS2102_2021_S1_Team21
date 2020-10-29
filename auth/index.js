@@ -16,7 +16,7 @@ function findUser(username, callback) {
         LEFT OUTER JOIN Pet_Owner ON App_User.username = Pet_Owner.petOwnerUsername
         LEFT OUTER JOIN Full_Time_Employee ON App_User.username = Full_Time_Employee.caretakerUsername
         LEFT OUTER JOIN Part_Time_Employee ON App_User.username = Part_Time_Employee.caretakerUsername
-      WHERE App_User.deletedAt IS NULL AND App_User.username = $1
+      WHERE App_User.deletedAt IS NULL AND (App_User.username = $1 OR App_User.email = $1)
       UNION
       SELECT
         username, email, passwordDigest, name, 
@@ -25,7 +25,7 @@ function findUser(username, callback) {
         FALSE AS isFullTimeCaretaker,
         FALSE AS isPartTimeCaretaker
       FROM PCS_Administrator 
-      WHERE username = $1`,
+      WHERE username = $1 OR email = $1`,
     [username],
     (err, data) => {
       if (err) {
