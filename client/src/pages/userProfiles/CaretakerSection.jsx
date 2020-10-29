@@ -5,9 +5,11 @@ import { Box, Chip, Typography } from '@material-ui/core';
 import Rating from '@material-ui/lab/Rating';
 import PetsIcon from '@material-ui/icons/Pets';
 import api from '../../api';
+import { useSnackbarContext } from '../../utilities/snackbar';
 
 const CaretakerSection = (props) => {
   const { handle } = props;
+  const showSnackbar = useSnackbarContext();
   const [petCategories, setPetCategories] = useState([]);
   const [reviews, setReviews] = useState([]);
   const [avg, setAverage] = useState(0);
@@ -30,14 +32,14 @@ const CaretakerSection = (props) => {
     });
 
   useEffect(() => {
-    api.caresFor.getCaretakerCaresFor(handle).then((res) => {
+    showSnackbar(api.caresFor.getCaretakerCaresFor(handle)).then((res) => {
       const registeredCategories = res.selectedResult;
       setPetCategories(convertToPetChips(registeredCategories));
     });
   }, [handle]);
 
   useEffect(() => {
-    api.reviews.getReview(handle).then((res) => {
+    showSnackbar(api.reviews.getReview(handle)).then((res) => {
       if (res[1]) {
         setReviews(res[1]);
         setAverage(res[0]);

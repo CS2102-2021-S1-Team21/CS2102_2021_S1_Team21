@@ -3,10 +3,12 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Card, Box, CardContent, Container, Typography } from '@material-ui/core';
 import api from '../../api';
 import CaretakerSection from './CaretakerSection';
+import { useSnackbarContext } from '../../utilities/snackbar';
 
 const UserProfile = (props) => {
   const { match } = props;
   const handle = match.params.username;
+  const showSnackbar = useSnackbarContext();
   const [user, setUser] = useState({});
 
   makeStyles((theme) => ({
@@ -18,7 +20,7 @@ const UserProfile = (props) => {
   }));
 
   useEffect(() => {
-    api.userProfiles.getUserProfile(handle).then((res) => {
+    showSnackbar(api.userProfiles.getUserProfile(handle)).then((res) => {
       setUser(res);
     });
   }, [handle]);
