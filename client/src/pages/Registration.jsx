@@ -1,7 +1,8 @@
-import { Box, Grid, makeStyles, Typography } from '@material-ui/core';
+import { Box, Grid, Typography } from '@material-ui/core';
 import { Field, Form, Formik } from 'formik';
 import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import * as Yup from 'yup';
 import api from '../api';
 import FormCheckboxGroup from '../components/forms/FormCheckboxGroup';
@@ -10,6 +11,7 @@ import FormSelect from '../components/forms/FormSelect';
 import FormTextArea from '../components/forms/FormTextArea';
 import FormTextField from '../components/forms/FormTextField';
 import SubmitButton from '../components/forms/SubmitButton';
+import NoAuthAppShell from '../components/NoAuthAppShell';
 
 // Utility Functions
 
@@ -21,47 +23,41 @@ function isPetOwner(accountType) {
   return ['petOwner', 'both'].includes(accountType);
 }
 
-// Hooks & Constants
-
-const useStyles = makeStyles((theme) => ({
-  container: {
-    margin: theme.spacing(4),
-  },
-}));
+// Constants
 
 const DEFAULT_VALUES = {
-  // username: '',
-  // email: '',
-  // password: '',
-  // passwordConfirmation: '',
-  // name: '',
-  // bio: '',
-  // phonenumber: '',
-  // address: '',
-  // postalcode: '',
-  // accountType: '',
-  // caretakerType: '',
-  // ccnumber: '',
-  // ccname: '',
-  // ccexpirydate: '',
-  // cvvcode: '',
-  // caresForCategories: [],
-  username: 'saralee',
-  email: 'saralee@gmail.com',
-  password: 'password',
-  passwordConfirmation: 'password',
-  name: 'Sara',
-  bio: 'hello',
-  phonenumber: '2738263',
-  address: 'hello',
-  postalcode: '293472',
-  accountType: 'both',
-  caretakerType: 'fullTime',
-  ccnumber: '123112',
-  ccname: 'Sara',
-  ccexpirydate: '2021-01-23',
-  cvvcode: '324',
-  caresForCategories: ['Hamster', 'Large dog'],
+  username: '',
+  email: '',
+  password: '',
+  passwordConfirmation: '',
+  name: '',
+  bio: '',
+  phonenumber: '',
+  address: '',
+  postalcode: '',
+  accountType: '',
+  caretakerType: '',
+  ccnumber: '',
+  ccname: '',
+  ccexpirydate: '',
+  cvvcode: '',
+  caresForCategories: [],
+  // username: 'saralee',
+  // email: 'saralee@gmail.com',
+  // password: 'password',
+  // passwordConfirmation: 'password',
+  // name: 'Sara',
+  // bio: 'hello',
+  // phonenumber: '2738263',
+  // address: 'hello',
+  // postalcode: '293472',
+  // accountType: 'both',
+  // caretakerType: 'fullTime',
+  // ccnumber: '123112',
+  // ccname: 'Sara',
+  // ccexpirydate: '2021-01-23',
+  // cvvcode: '324',
+  // caresForCategories: ['Hamster', 'Large dog'],
 };
 
 const validationSchema = Yup.object().shape({
@@ -95,7 +91,7 @@ const validationSchema = Yup.object().shape({
 // Component
 
 const Registration = () => {
-  const classes = useStyles();
+  const history = useHistory();
 
   const [petCategories, setPetCategories] = useState([]);
 
@@ -109,13 +105,15 @@ const Registration = () => {
     console.log(values);
     await api.users
       .signup(_.omit(values, 'passwordConfirmation'))
-      .then((response) => console.log(response))
+      .then((response) => {
+        console.log(response);
+        history.push('/login');
+      })
       .catch(console.error);
   };
 
   return (
-    // TODO: mobile view
-    <Box className={classes.container} maxWidth={0.75}>
+    <NoAuthAppShell>
       <Formik
         onSubmit={handleSubmit}
         initialValues={initialValues}
@@ -131,7 +129,7 @@ const Registration = () => {
               </Grid>
 
               <Grid item xs={12} sm={6}>
-                <h1> Account Details </h1>
+                <h1>{'Account Details'}</h1>
                 <Field
                   name="username"
                   label="Enter a username"
@@ -212,7 +210,7 @@ const Registration = () => {
               </Grid>
 
               <Grid item xs={12}>
-                <h1> Profile Details </h1>
+                <h1>{'Profile Details'}</h1>
                 <Field
                   name="name"
                   label="Enter your full name"
@@ -234,7 +232,8 @@ const Registration = () => {
                 <Field
                   name="address"
                   label="Enter your address"
-                  component={FormTextField}
+                  component={FormTextArea}
+                  rows={2}
                   required
                 />
               </Grid>
@@ -249,18 +248,22 @@ const Registration = () => {
 
               {isPetOwner(formik.values.accountType) && (
                 <>
-                  <Grid item xs={12}>
-                    <h1>Add Credit Card</h1>
+                  <Grid item xs={12} sm={6}>
+                    <h1>{'Add Credit Card'}</h1>
                     <Field
                       name="ccnumber"
-                      label="Enter Credit Card Number"
+                      label="Enter credit card number"
                       component={FormTextField}
                     />
                   </Grid>
-                  <Grid item xs={12}>
-                    <Field name="ccname" label="Enter Credit Card Name" component={FormTextField} />
+                  <Grid item xs={12} sm={6}>
+                    <Field
+                      name="ccname"
+                      label="Enter name on credit card"
+                      component={FormTextField}
+                    />
                   </Grid>
-                  <Grid item xs={12}>
+                  <Grid item xs={12} sm={6}>
                     <Field
                       name="ccexpirydate"
                       label="Enter credit card expiry date"
@@ -270,8 +273,8 @@ const Registration = () => {
                       required
                     />
                   </Grid>
-                  <Grid item xs={12}>
-                    <Field name="cvvcode" label="CVV Code" component={FormTextField} />
+                  <Grid item xs={12} sm={6}>
+                    <Field name="cvvcode" label="CVV code" component={FormTextField} />
                   </Grid>
                 </>
               )}
@@ -279,7 +282,7 @@ const Registration = () => {
               {isCaretaker(formik.values.accountType) && (
                 <>
                   <Grid item xs={12}>
-                    <h1>Care Taker Details</h1>
+                    <h1>{'Care Taker Details'}</h1>
                     <Field
                       name="caresForCategories"
                       label="Select the Pet Categories that you can take care of"
@@ -302,7 +305,7 @@ const Registration = () => {
           </Form>
         )}
       </Formik>
-    </Box>
+    </NoAuthAppShell>
   );
 };
 
