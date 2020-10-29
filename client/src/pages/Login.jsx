@@ -1,4 +1,4 @@
-import { Box, Grid, makeStyles, Typography } from '@material-ui/core';
+import { Grid, Typography } from '@material-ui/core';
 import { Field, Form, Formik } from 'formik';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
@@ -6,12 +6,7 @@ import * as Yup from 'yup';
 import api from '../api';
 import FormTextField from '../components/forms/FormTextField';
 import SubmitButton from '../components/forms/SubmitButton';
-
-const useStyles = makeStyles((theme) => ({
-  container: {
-    margin: theme.spacing(4),
-  },
-}));
+import NoAuthAppShell from '../components/NoAuthAppShell';
 
 const DEFAULT_VALUES = {
   username: '',
@@ -24,7 +19,6 @@ const validationSchema = Yup.object().shape({
 });
 
 const Login = () => {
-  const classes = useStyles();
   const history = useHistory();
 
   const initialValues = { ...DEFAULT_VALUES, isDeleted: false };
@@ -35,7 +29,7 @@ const Login = () => {
   };
 
   return (
-    <Box className={classes.container}>
+    <NoAuthAppShell>
       <Formik
         onSubmit={handleSubmit}
         initialValues={initialValues}
@@ -76,7 +70,7 @@ const Login = () => {
           </Grid>
         </Form>
       </Formik>
-    </Box>
+    </NoAuthAppShell>
   );
 };
 
