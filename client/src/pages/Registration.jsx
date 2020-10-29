@@ -180,6 +180,17 @@ const Registration = () => {
                     { value: 'careTaker', label: 'Care Taker only' },
                     { value: 'both', label: 'Both Pet Owner and Care Taker' },
                   ]}
+                  onChangeCallback={(value) => {
+                    if (value === 'petOwner') {
+                      formik.setFieldValue('caretakerType', DEFAULT_VALUES.caretakerType);
+                      formik.setFieldValue('caresForCategories', DEFAULT_VALUES.caresForCategories);
+                    } else if (value === 'careTaker') {
+                      formik.setFieldValue('ccnumber', DEFAULT_VALUES.ccnumber);
+                      formik.setFieldValue('ccname', DEFAULT_VALUES.ccname);
+                      formik.setFieldValue('ccexpirydate', DEFAULT_VALUES.ccexpirydate);
+                      formik.setFieldValue('cvvcode', DEFAULT_VALUES.cvvcode);
+                    }
+                  }}
                   required
                 />
               </Grid>
