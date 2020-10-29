@@ -1,7 +1,7 @@
 import { AppBar, Button, Container, makeStyles, Toolbar } from '@material-ui/core';
-import PetsIcon from '@material-ui/icons/Pets';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
+import PCSHomeButton from './PCSHomeButton';
 
 const useStyles = makeStyles((theme) => ({
   buttonWithSpace: {
@@ -16,9 +16,6 @@ const useStyles = makeStyles((theme) => ({
   space: {
     flexGrow: 1,
   },
-  title: {
-    marginRight: theme.spacing(2),
-  },
 }));
 
 const NoAuthAppShell = ({ children }) => {
@@ -29,15 +26,7 @@ const NoAuthAppShell = ({ children }) => {
     <>
       <AppBar position="static">
         <Toolbar>
-          <Button
-            startIcon={<PetsIcon />}
-            color="inherit"
-            size="large"
-            className={classes.title}
-            onClick={() => history.push('/')}
-          >
-            {'PCS'}
-          </Button>
+          <PCSHomeButton onClick={() => history.push('/')} />
 
           <div className={classes.space} />
           <Button
