@@ -36,7 +36,7 @@ const CaretakerSection = (props) => {
       const registeredCategories = res.selectedResult;
       setPetCategories(convertToPetChips(registeredCategories));
     });
-  }, [handle]);
+  }, [handle, showSnackbar]);
 
   useEffect(() => {
     showSnackbar(api.reviews.getReview(handle)).then((res) => {
@@ -45,7 +45,7 @@ const CaretakerSection = (props) => {
         setAverage(res[0]);
       }
     });
-  }, [handle]);
+  }, [handle, showSnackbar]);
 
   const columns = [
     { field: 'id', headerName: 'ID', width: 70, hide: true },

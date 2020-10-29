@@ -23,7 +23,7 @@ const UserProfile = (props) => {
     showSnackbar(api.userProfiles.getUserProfile(handle)).then((res) => {
       setUser(res);
     });
-  }, [handle]);
+  }, [handle, showSnackbar]);
 
   return (
     <Container>

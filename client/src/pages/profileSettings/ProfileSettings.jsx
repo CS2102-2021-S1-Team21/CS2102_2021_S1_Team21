@@ -53,7 +53,7 @@ const ProfileSettings = () => {
     showSnackbar(api.profileSettings.getUserDetails(userAccount.username)).then((res) => {
       setUser(res);
     });
-  }, [userAccount]);
+  }, [userAccount, showSnackbar]);
 
   // hacky solution to get the forms to render after userAccount has been retrieved
   if (!user) {

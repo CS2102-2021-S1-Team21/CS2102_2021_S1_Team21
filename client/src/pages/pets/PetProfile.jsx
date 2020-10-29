@@ -45,7 +45,7 @@ const PetProfile = ({ match }) => {
         setPetOwner(response);
       })
       .catch(console.error);
-  }, [petOwnerUsername, petName]);
+  }, [petOwnerUsername, petName, showSnackbar]);
 
   useEffect(updateData, [updateData]);
 
