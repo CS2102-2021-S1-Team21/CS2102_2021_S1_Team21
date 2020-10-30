@@ -141,7 +141,7 @@ CREATE TABLE Bids(
     petOwnerUsername VARCHAR,
     caretakerUsername VARCHAR REFERENCES Caretaker(caretakerUsername) ON DELETE CASCADE,
     dailyPrice DECIMAL(10,2) NOT NULL,
-    status STATUS DEFAULT 'Pending',
+    status STATUS,
     submittedAt TIMESTAMP,
     startDate DATE,
     endDate DATE,
@@ -350,14 +350,21 @@ BEGIN
     ELSEIF (NEW.caretakerusername IN (SELECT P.caretakerusername FROM Part_Time_Employee P) 
         AND ((SELECT totalAverageRating FROM Caretaker WHERE Caretakerusername = NEW.caretakerusername) <= 4) AND max_jobs >= 2) THEN
             RAISE EXCEPTION 'Part time Caretaker is unable to receive more pets during this period';
-    ELSE
-        RETURN NEW;
     END IF;
-    RETURN NULL;
+
+    IF (NEW.caretakerusername IN (SELECT F.caretakerusername FROM Full_Time_Employee F)) THEN
+      NEW.status = 'Accepted';  
+    ELSEIF (NEW.caretakerusername IN (SELECT caretakerusername FROM Part_Time_Employee)) THEN
+      NEW.status = 'Pending';
+    END IF;
+    RETURN NEW;
     END;
 $$ LANGUAGE plpgsql;
 
+
+DROP TRIGGER check_bids_constraint ON Bids;
 CREATE TRIGGER check_bids_constraint
 BEFORE INSERT ON Bids
 FOR EACH ROW 
 EXECUTE PROCEDURE bids_constraint();
+
