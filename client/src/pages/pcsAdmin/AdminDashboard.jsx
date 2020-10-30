@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
-import { makeStyles } from '@material-ui/core';
+import React, { useState, useEffect } from 'react';
+import { DataGrid } from '@material-ui/data-grid';
+import { Container, makeStyles, Paper } from '@material-ui/core';
 import api from '../../api';
 
 const useStyles = makeStyles((theme) => ({
@@ -51,10 +52,8 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     api.adminDashboard.getCaretakerRanking().then((res) => {
-      console.log(res.result);
       setRows(res.result);
       setMonth(res.resultMonth);
-      console.log(res.resultMonth);
     });
   }, []);
 

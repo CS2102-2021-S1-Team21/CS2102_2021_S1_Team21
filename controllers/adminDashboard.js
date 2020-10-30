@@ -9,7 +9,7 @@ exports.index = async (req, res) => {
       TO_CHAR(NOW() - interval '1' month, 'YYYY') AS "year"`,
     );
     if (result.rowCount === 0) {
-      res.json({ error: 'No job records exist this month' });
+      res.json({ info: 'No job records exist this month' });
       return; // TODO: next()?
     }
     res.json({
