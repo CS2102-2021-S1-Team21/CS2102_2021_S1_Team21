@@ -45,6 +45,8 @@ export default function WriteReviewDialog({
           <SimpleRating rating={rating} setRating={setRating} />
           <TextField
             autoFocus
+            multiline
+            rows={4}
             margin="dense"
             id="name"
             label="Say something nice! Or not..."

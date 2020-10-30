@@ -44,12 +44,6 @@ const Browse = () => {
     api.transferType.getTransferTypes().then((x) => setTransferTypeOptions(x));
   }, [store.user.username]);
 
-  useEffect(() => {
-    if (pet) {
-      api.petCategories.getDailyPrice(pet.categoryname).then((x) => setDailyPrice(x[0].dailyprice));
-    }
-  }, [pet]);
-
   const handleApply = async (caretaker) => {
     try {
       const body = {
@@ -63,8 +57,6 @@ const Browse = () => {
         transferType,
         remarks,
       };
-      console.log(`reviewDateTime${body.submittedAt}`);
-
       await api.bids.applyBids(body);
     } catch (err) {
       console.log(err.message);
@@ -125,7 +117,11 @@ const Browse = () => {
                 api.caretakers.getCaretakers(body).then((x) => {
                   setCaretakers(x.entries);
                   console.log(`total count ${x.entries}`);
-                });
+                })
+
+                api.petCategories.getDailyPrice(pet.categoryname).then((x) => setDailyPrice(x[0].dailyprice));
+
+                ;
                 console.log(caretakers);
               } catch (err) {
                 console.log(err.message);
@@ -153,16 +149,21 @@ const Browse = () => {
                   secondary={
                     <>
                       <Typography component="span" variant="body2" color="textPrimary">
-                        {`Secondary text `}
+                        {`Total average rating: ${caretaker.totalaveragerating} `}
                       </Typography>
-                      {`Secondary`}
                     </>
                   }
                 />
+
                 <ListItemSecondaryAction>
+                  <>
+                <Typography component="span" variant="h3" color="Primary" alignRight>
+                    {`$${dailyPrice * (moment(dateTo).day() - moment(dateFrom).day() + 1)} `}
+                  </Typography>
                   <Button variant="outlined" onClick={() => handleApply(caretaker)} color="primary">
                     {'BOOK ME'}
                   </Button>
+                  </>
                 </ListItemSecondaryAction>
               </ListItem>
             </Paper>
