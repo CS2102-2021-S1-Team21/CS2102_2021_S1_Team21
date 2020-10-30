@@ -13,9 +13,7 @@ import { useStore } from '../../utilities/store';
 
 const Upcoming = () => {
   const [allBids, setAllBids] = useState([]);
-  const [rating, setRating] = React.useState(2);
-  const [dateFrom, setDateFrom] = useState(new Date());
-  const [dateTo, setDateTo] = useState(new Date());
+
   const store = useStore();
 
   useEffect(() => {
