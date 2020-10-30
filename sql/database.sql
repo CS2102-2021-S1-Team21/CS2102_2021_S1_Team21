@@ -156,7 +156,7 @@ CREATE TABLE Bids(
     comment VARCHAR,
     reviewDateTime TIMESTAMP,
     CONSTRAINT statusAccepted CHECK(status IN ('Accepted','Completed') OR (transactionDateTime IS NULL AND paymentMethod IS NULL AND totalAmount IS NULL)),
-    CONSTRAINT transactionCompleted CHECK((status = 'Completed') OR (rating IS NULL AND comment IS NULL AND reviewDateTime IS NULL)),
+    CONSTRAINT transactionCompleted CHECK((transactionDateTime IS NOT NULL AND status = 'Completed') OR (rating IS NULL AND comment IS NULL AND reviewDateTime IS NULL)),
     PRIMARY KEY(petName, petOwnerUsername, caretakerUsername, submittedAt, startDate, endDate),
     FOREIGN KEY(petName, petOwnerUsername) REFERENCES Pet(name, petOwnerUsername) ON DELETE CASCADE ON UPDATE CASCADE
 );
@@ -371,33 +371,42 @@ CREATE OR REPLACE VIEW leaderboard AS (
     FROM (
         SELECT *, satisfactionscore + efficiencyscore + popularityscore AS totalScore
         FROM (
-            SELECT *, ROUND(averageRating * 10) AS satisfactionscore,
-                  ROUND(t4.jobCount * 25 / avgJobCount) AS efficiencyscore,
-                  ROUND(t4.bidCount * 25 / avgBidCount) AS popularityscore
+            SELECT *, COALESCE(ROUND(averageRating * 10),0) AS satisfactionscore,
+                  COALESCE(ROUND(jobCount * 25 / avgJobCount),0) AS efficiencyscore,
+                  COALESCE(ROUND(bidCount * 25 / avgBidCount),0) AS popularityscore
             FROM (
-              SELECT *, AVG(t3.jobCount) over (partition by role) AS avgJobCount, AVG(t3.bidCount) over (partition by role) AS avgBidCount
-              FROM (
-                  (SELECT caretakerusername, 
-                      CASE WHEN caretakerusername IN (SELECT * FROM part_time_employee ) THEN 'PT'
-                          WHEN caretakerusername IN (SELECT * FROM full_time_employee ) THEN 'FT'
-                      ELSE 'null'
-                      END AS role,
-                  COUNT(*) AS jobCount, AVG(rating) AS averageRating
-                  FROM bids
-                  WHERE status = 'Completed' AND 
-                    enddate BETWEEN date_trunc('month', CURRENT_DATE - interval '1' month) AND date_trunc('month', CURRENT_DATE)
-                  GROUP BY caretakerusername) t1
-                  NATURAL JOIN 
-                  (SELECT caretakerusername, count(*) as bidCount
-                  FROM bids
-                  WHERE  
-                    submittedat BETWEEN date_trunc('month', CURRENT_DATE - interval '1' month) AND date_trunc('month', CURRENT_DATE)
-                  GROUP BY caretakerusername) t2
-              ) AS t3
-            ) AS t4
-        ) AS t5
-    ) AS t6
-  ) AS t7
+              SELECT *, AVG(jobCount) over (partition by role) AS avgJobCount, AVG(bidCount) over (partition by role) AS avgBidCount FROM 
+              (
+                SELECT COALESCE(caretakerusername, caretakerusername2) AS caretakerusername, COALESCE(role, role2) AS role, jobcount, averageRating, bidcount
+                FROM (
+                    (SELECT caretakerusername, 
+                        CASE WHEN caretakerusername IN (SELECT * FROM part_time_employee ) THEN 'PT'
+                            WHEN caretakerusername IN (SELECT * FROM full_time_employee ) THEN 'FT'
+                        ELSE 'null'
+                        END AS role,
+                    COUNT(*) AS jobCount, AVG(rating) AS averageRating
+                    FROM bids
+                    WHERE status = 'Completed' AND 
+                      enddate BETWEEN date_trunc('month', CURRENT_DATE - interval '1' month) AND date_trunc('month', CURRENT_DATE)
+                    GROUP BY caretakerusername) t1
+                    FULL OUTER JOIN
+                    (SELECT caretakerusername AS caretakerusername2, 
+                        CASE WHEN caretakerusername IN (SELECT * FROM part_time_employee ) THEN 'PT'
+                        WHEN caretakerusername IN (SELECT * FROM full_time_employee ) THEN 'FT'
+                        ELSE 'null'
+                        END AS role2,
+                        count(*) as bidCount
+                    FROM bids
+                    WHERE  
+                      submittedat BETWEEN date_trunc('month', CURRENT_DATE - interval '1' month) AND date_trunc('month', CURRENT_DATE)
+                    GROUP BY caretakerusername) t2
+                    ON t1.caretakerusername = t2.caretakerusername2
+                ) AS t3
+              ) AS t4
+            ) AS t5
+        ) AS t6
+    ) AS t7
+  ) AS t8
   WHERE rank BETWEEN 1 AND 5
-  ORDER BY role, rank, totalScore, efficiencyscore, popularityscore, averageRating
-);
+  ORDER BY role, rank, totalScore, efficiencyscore, popularityscore, satisfactionscore
+); 
