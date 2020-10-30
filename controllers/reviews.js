@@ -19,7 +19,7 @@ exports.view = async (req, res) => {
       [username],
     );
     if (result.rowCount === 0) {
-      res.json({ error: 'Reviews for this caretaker do not exist' });
+      res.json({ info: 'Reviews for this caretaker do not exist' });
       return; // TODO: next()?
     }
     const sumOfRatings = result.rows.reduce((a, b) => a + b.rating, 0);

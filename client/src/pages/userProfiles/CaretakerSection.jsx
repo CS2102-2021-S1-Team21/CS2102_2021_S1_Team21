@@ -45,7 +45,7 @@ const CaretakerSection = (props) => {
         setAverage(res[0]);
       }
     });
-  }, [handle, showSnackbar]);
+  }, [handle]);
 
   const columns = [
     { field: 'id', headerName: 'ID', width: 70, hide: true },
