@@ -7,7 +7,7 @@ import axios from 'axios';
 
 const baseAPI = axios.create({
   // TODO: use environment variables
-  baseURL: 'http://localhost:8000/api',
+  baseURL: '/api',
   withCredentials: true, // to allow cookies
   validateStatus: (status) => status >= 200 && status < 500, // allow status codes 400+ to be received by application
 });
