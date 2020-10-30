@@ -159,6 +159,22 @@ CREATE TABLE Bids(
     FOREIGN KEY(petName, petOwnerUsername) REFERENCES Pet(name, petOwnerUsername) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+-------------------------------------------- FUNCTIONS ------------------------------------------
+
+-- Get overall average rating of a Caretaker
+CREATE OR REPLACE FUNCTION average_rating (ctusername VARCHAR)
+RETURNS NUMERIC AS $avg$
+declare 
+  avg NUMERIC;
+BEGIN  
+    SELECT AVG(rating) into avg
+    FROM bids b
+    WHERE ctusername = b.caretakerusername
+    GROUP BY b.caretakerusername;
+    RETURN avg;
+END; 
+$avg$
+LANGUAGE plpgsql;
 
 -------------------------------------------- TRIGGERS ------------------------------------------
 
