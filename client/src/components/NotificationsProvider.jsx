@@ -32,8 +32,6 @@ const NotificationsProvider = ({ children }) => {
         updateSnackbar({ message: response.info, severity: 'info' });
       } else if (response.success) {
         updateSnackbar({ message: response.success, severity: 'success' });
-      } else {
-        setSnackbarOpen(false);
       }
       return response;
     });
