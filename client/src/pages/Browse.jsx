@@ -19,6 +19,8 @@ import SelectPet from './Browse/SelectPet';
 import api from '../api';
 import { useStore } from '../utilities/store';
 import SelectTransferType from './Browse/SelectTransferType';
+import { useHistory } from 'react-router-dom';
+
 
 const moment = require('moment');
 
@@ -38,6 +40,9 @@ const Browse = () => {
   const [caretakers, setCaretakers] = useState([]);
   const [dailyPrice, setDailyPrice] = useState();
   const store = useStore();
+
+  const history = useHistory();
+
 
   useEffect(() => {
     api.pets.getPetPet(store.user.username).then((x) => setPetOptions(x));
@@ -139,8 +144,10 @@ const Browse = () => {
         {caretakers.map((caretaker) => {
           return (
             <Paper style={{ margin: 30, padding: 30 }} key={caretaker.caretakerusername}>
-              <ListItem alignItems="flex-start">
-                <ListItemText
+              <ListItem alignItems="flex-start" 
+              button = {true} 
+              onClick={() => history.push(`/profile/${caretaker.username}`)}>
+                <ListItemText 
                   primary={
                     <Typography component="span" variant="h3" color="Primary">
                       {`${caretaker.username}`}
