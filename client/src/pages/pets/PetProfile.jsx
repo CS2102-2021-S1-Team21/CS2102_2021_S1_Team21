@@ -1,16 +1,16 @@
-import { Container, Grid, makeStyles, Paper, Snackbar, Typography } from '@material-ui/core';
+import { Container, Grid, makeStyles, Paper, Typography } from '@material-ui/core';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
-import InfoIcon from '@material-ui/icons/Info';
 import EmailIcon from '@material-ui/icons/Email';
 import HomeIcon from '@material-ui/icons/Home';
+import InfoIcon from '@material-ui/icons/Info';
 import PersonIcon from '@material-ui/icons/Person';
 import PetsIcon from '@material-ui/icons/Pets';
 import PhoneIcon from '@material-ui/icons/Phone';
 import React, { useCallback, useEffect, useState } from 'react';
 import api from '../../api';
-import Alert from '../../components/Alert';
 import Loading from '../../components/Loading';
 import ProfileDetail from '../../components/ProfileDetail';
+import { useSnackbarContext } from '../../utilities/snackbar';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -25,33 +25,21 @@ const useStyles = makeStyles((theme) => ({
 
 const PetProfile = ({ match }) => {
   const classes = useStyles();
+  const showSnackbar = useSnackbarContext();
 
   const [pet, setPet] = useState(null);
   const [petOwner, setPetOwner] = useState(null);
-  // TODO: move snackbar state management into App or AppRouter
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarContent, setSnackbarContent] = useState({ message: '', severity: '' });
 
   const { petOwnerUsername, petName } = match.params;
 
-  const handleResponseError = (promise) =>
-    promise.then((response) => {
-      if (response.error) {
-        setSnackbarContent({ message: response.error, severity: 'error' });
-        setSnackbarOpen(true);
-        throw Error(response.error);
-      }
-      return response;
-    });
-
   const updateData = useCallback(() => {
-    handleResponseError(api.pets.getPet(petOwnerUsername, petName))
+    showSnackbar(api.pets.getPet(petOwnerUsername, petName))
       .then((response) => {
         console.log(response);
         setPet(response);
       })
       .catch(console.error);
-    handleResponseError(api.petOwners.getPetOwner(petOwnerUsername))
+    showSnackbar(api.petOwners.getPetOwner(petOwnerUsername))
       .then((response) => {
         console.log(response);
         setPetOwner(response);
@@ -60,11 +48,6 @@ const PetProfile = ({ match }) => {
   }, [petOwnerUsername, petName]);
 
   useEffect(updateData, [updateData]);
-
-  const handleSnackbarClose = (event, reason) => {
-    if (reason === 'clickaway') return;
-    setSnackbarOpen(false);
-  };
 
   return (
     <Container>
@@ -153,17 +136,6 @@ const PetProfile = ({ match }) => {
           </Paper>
         </>
       )}
-
-      <Snackbar
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-        autoHideDuration={10_000}
-        open={snackbarOpen}
-        onClose={handleSnackbarClose}
-      >
-        <Alert severity={snackbarContent.severity} onClose={handleSnackbarClose}>
-          {snackbarContent.message}
-        </Alert>
-      </Snackbar>
     </Container>
   );
 };

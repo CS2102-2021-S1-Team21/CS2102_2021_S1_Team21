@@ -1,13 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import { Box, Card, CardContent, Container, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { Card, Box, CardContent, Container, Typography } from '@material-ui/core';
+import React, { useEffect, useState } from 'react';
 import api from '../../api';
+import Loading from '../../components/Loading';
+import { useSnackbarContext } from '../../utilities/snackbar';
+import NotFound from '../NotFound';
 import CaretakerSection from './CaretakerSection';
 
 const UserProfile = (props) => {
   const { match } = props;
   const handle = match.params.username;
-  const [user, setUser] = useState({});
+  const showSnackbar = useSnackbarContext();
+  const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   makeStyles((theme) => ({
     root: {
@@ -18,10 +23,16 @@ const UserProfile = (props) => {
   }));
 
   useEffect(() => {
-    api.userProfiles.getUserProfile(handle).then((res) => {
-      setUser(res);
-    });
+    showSnackbar(api.userProfiles.getUserProfile(handle))
+      .then((res) => {
+        setUser(res);
+      })
+      .catch(() => {})
+      .finally(() => setIsLoading(false));
   }, [handle]);
+
+  if (isLoading) return <Loading />;
+  if (!user) return <NotFound />;
 
   return (
     <Container>

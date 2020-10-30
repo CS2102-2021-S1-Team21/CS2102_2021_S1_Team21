@@ -12,6 +12,7 @@
     "sourceType": "module"
   },
   "plugins": ["prettier"],
+  "ignorePatterns": "client/",
   "rules": {
     // downgraded rules
     "no-plusplus": "off",
