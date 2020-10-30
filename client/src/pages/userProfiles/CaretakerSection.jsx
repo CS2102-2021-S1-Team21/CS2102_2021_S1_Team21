@@ -74,7 +74,7 @@ const CaretakerSection = (props) => {
   return (
     <Box>
       <Typography variant="h6">{'Pet Categories I take care of'}</Typography>
-      <Box my={1}>{petCategories}</Box>
+      <Box my={1}>{petCategories.length === 0 ? 'None' : petCategories}</Box>
       <Typography variant="h6">{'Reviews'}</Typography>
       <Box display="flex">
         <Typography variant="subtitle1">{'Average Rating: '}</Typography>
