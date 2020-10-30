@@ -14,13 +14,12 @@ import React, { useEffect, useState } from 'react';
 import { KeyboardDatePicker } from '@material-ui/pickers';
 import Paper from '@material-ui/core/Paper';
 import { isUndefined } from 'lodash';
+import { useHistory } from 'react-router-dom';
 import SimpleRating from './Bookings/Components/SimpleRating';
 import SelectPet from './Browse/SelectPet';
 import api from '../api';
 import { useStore } from '../utilities/store';
 import SelectTransferType from './Browse/SelectTransferType';
-import { useHistory } from 'react-router-dom';
-
 
 const moment = require('moment');
 
@@ -42,7 +41,6 @@ const Browse = () => {
   const store = useStore();
 
   const history = useHistory();
-
 
   useEffect(() => {
     api.pets.getPetPet(store.user.username).then((x) => setPetOptions(x));
@@ -122,11 +120,12 @@ const Browse = () => {
                 api.caretakers.getCaretakers(body).then((x) => {
                   setCaretakers(x.entries);
                   console.log(`total count ${x.entries}`);
-                })
+                });
 
-                api.petCategories.getDailyPrice(pet.categoryname).then((x) => setDailyPrice(x[0].dailyprice));
+                api.petCategories
+                  .getDailyPrice(pet.categoryname)
+                  .then((x) => setDailyPrice(x[0].dailyprice));
 
-                ;
                 console.log(caretakers);
               } catch (err) {
                 console.log(err.message);
@@ -144,10 +143,12 @@ const Browse = () => {
         {caretakers.map((caretaker) => {
           return (
             <Paper style={{ margin: 30, padding: 30 }} key={caretaker.caretakerusername}>
-              <ListItem alignItems="flex-start" 
-              button = {true} 
-              onClick={() => history.push(`/profile/${caretaker.username}`)}>
-                <ListItemText 
+              <ListItem
+                alignItems="flex-start"
+                button
+                onClick={() => history.push(`/profile/${caretaker.username}`)}
+              >
+                <ListItemText
                   primary={
                     <Typography component="span" variant="h3" color="Primary">
                       {`${caretaker.username}`}
@@ -164,12 +165,16 @@ const Browse = () => {
 
                 <ListItemSecondaryAction>
                   <>
-                <Typography component="span" variant="h3" color="Primary" alignRight>
-                    {`$${dailyPrice * (moment(dateTo).day() - moment(dateFrom).day() + 1)} `}
-                  </Typography>
-                  <Button variant="outlined" onClick={() => handleApply(caretaker)} color="primary">
-                    {'BOOK ME'}
-                  </Button>
+                    <Typography component="span" variant="h3" color="Primary" alignRight>
+                      {`$${dailyPrice * (moment(dateTo).day() - moment(dateFrom).day() + 1)} `}
+                    </Typography>
+                    <Button
+                      variant="outlined"
+                      onClick={() => handleApply(caretaker)}
+                      color="primary"
+                    >
+                      {'BOOK ME'}
+                    </Button>
                   </>
                 </ListItemSecondaryAction>
               </ListItem>
