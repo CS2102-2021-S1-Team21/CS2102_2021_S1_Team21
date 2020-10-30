@@ -12,7 +12,7 @@ const CaretakerForm = ({ username }) => {
     showSnackbar(api.caresFor.getCaretakerCaresFor(username)).then((res) => {
       setPetCategories(res);
     });
-  }, [username, showSnackbar]);
+  }, [username]);
 
   const handleSubmit = async (values) => {
     try {

@@ -34,7 +34,7 @@ const LeaveRequest = () => {
     showSnackbar(api.leaves.getAllPendingLeaves()).then((res) => {
       setPendingLeaves(res);
     });
-  }, [showSnackbar]);
+  }, []);
   console.log(pendingLeaves);
 
   const handleApproval = async (index) => {

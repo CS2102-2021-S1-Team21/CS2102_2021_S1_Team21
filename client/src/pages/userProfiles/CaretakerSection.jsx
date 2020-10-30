@@ -36,7 +36,7 @@ const CaretakerSection = (props) => {
       const registeredCategories = res.selectedResult;
       setPetCategories(convertToPetChips(registeredCategories));
     });
-  }, [handle, showSnackbar]);
+  }, [handle]);
 
   useEffect(() => {
     showSnackbar(api.reviews.getReview(handle)).then((res) => {

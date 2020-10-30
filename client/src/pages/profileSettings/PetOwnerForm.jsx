@@ -16,7 +16,7 @@ const PetOwnerForm = (username) => {
     showSnackbar(api.petOwners.getCreditCard(username)).then((res) => {
       setCreditCard(res);
     });
-  }, [username, showSnackbar]);
+  }, [username]);
 
   const handleSubmit = async (input) => {
     try {

@@ -56,7 +56,7 @@ const Availability = () => {
     showSnackbar(api.availability.getAvailability(store.user.username)).then((x) =>
       setAvailability(x),
     );
-  }, [store.user.username, showSnackbar]);
+  }, [store.user.username]);
 
   const handleClickOpen = () => {
     setOpen(true);

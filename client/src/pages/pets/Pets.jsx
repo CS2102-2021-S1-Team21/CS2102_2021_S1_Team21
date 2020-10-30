@@ -57,7 +57,7 @@ const Pets = () => {
         setPets(response.rows);
       })
       .catch(console.error);
-  }, [petOwnerUsername, showSnackbar]);
+  }, [petOwnerUsername]);
 
   useEffect(updatePets, [updatePets]);
   useEffect(() => {

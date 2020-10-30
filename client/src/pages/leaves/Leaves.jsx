@@ -35,7 +35,7 @@ const Leaves = () => {
 
   useEffect(() => {
     showSnackbar(api.leaves.getLeaves(store.user.username)).then((x) => setLeaves(x));
-  }, [store.user.username, showSnackbar]);
+  }, [store.user.username]);
 
   const handleClickOpen = () => {
     setOpen(true);
