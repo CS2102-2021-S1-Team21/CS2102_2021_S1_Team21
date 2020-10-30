@@ -13,7 +13,6 @@ import {
 import React, { useEffect, useState } from 'react';
 import { KeyboardDatePicker } from '@material-ui/pickers';
 import Paper from '@material-ui/core/Paper';
-import { isUndefined } from 'lodash';
 import { useHistory } from 'react-router-dom';
 import SimpleRating from './Bookings/Components/SimpleRating';
 import SelectPet from './Browse/SelectPet';
