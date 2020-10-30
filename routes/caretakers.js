@@ -1,5 +1,5 @@
 const express = require('express');
-const caretakers = require('../controllers/userProfiles');
+const caretakers = require('../controllers/caretakers');
 
 const router = express.Router();
 
