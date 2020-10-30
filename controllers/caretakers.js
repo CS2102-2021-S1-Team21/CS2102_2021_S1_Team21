@@ -92,6 +92,7 @@ exports.browse = async (req, res) => {
     res.json(result.rows);
   } catch (err) {
     console.error(err);
+    res.json({ error: 'An unexpected error occurred' });
   }
 };
 

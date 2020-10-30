@@ -1,4 +1,5 @@
 const passport = require('passport');
+const db = require('../db');
 
 // Login
 exports.create_session = async (req, res, next) => {
@@ -61,6 +62,19 @@ exports.session_info = (req, res) => {
 };
 
 // Signup
-exports.create_user = (req, res, next) => {
-  // TODO: registration
+// exports.create_user = (req, res, next) => {
+// TODO: registration
+// };
+
+exports.delete_user = async (req, res) => {
+  try {
+    const { username } = req.params;
+    const result = await db.query('UPDATE app_user SET deletedAt = NOW() WHERE username = $1', [
+      username,
+    ]);
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.json({ error: 'An unexpected error occurred' });
+  }
 };

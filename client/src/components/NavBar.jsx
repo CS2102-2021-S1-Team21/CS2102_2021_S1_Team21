@@ -146,7 +146,10 @@ const NavBar = ({ children }) => {
               )}
 
               <div className={classes.space} />
-              <Tooltip title="Edit Account Settings" onClick={() => history.push('/edit-profile')}>
+              <Tooltip
+                title="Edit Account Settings"
+                onClick={() => history.push('/profile-settings')}
+              >
                 <IconButton color="inherit">
                   <SettingsIcon />
                 </IconButton>
@@ -154,7 +157,7 @@ const NavBar = ({ children }) => {
               <Tooltip
                 title={`View Profile (${user.name})`}
                 // TODO: does this mean that pet owners need a profile too?
-                onClick={() => history.push('/my-profile')}
+                onClick={() => history.push(`/profile/${user.username}`)}
               >
                 <IconButton color="inherit">
                   <AccountCircleIcon />
