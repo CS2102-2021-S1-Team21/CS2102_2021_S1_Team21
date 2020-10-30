@@ -6,19 +6,21 @@ import Loading from '../../components/Loading';
 import FormTextField from '../../components/forms/FormTextField';
 import FormDatePicker from '../../components/forms/FormDatePicker';
 import SubmitButton from '../../components/forms/SubmitButton';
+import { useSnackbarContext } from '../../utilities/snackbar';
 
 const PetOwnerForm = (username) => {
+  const showSnackbar = useSnackbarContext();
   const [creditCard, setCreditCard] = useState();
 
   useEffect(() => {
-    api.petOwners.getCreditCard(username).then((res) => {
+    showSnackbar(api.petOwners.getCreditCard(username)).then((res) => {
       setCreditCard(res);
     });
   }, [username]);
 
   const handleSubmit = async (input) => {
     try {
-      await api.petOwners.editCreditCard(input.values);
+      await showSnackbar(api.petOwners.editCreditCard(input.values));
     } catch (err) {
       console.log(err.message);
     }

@@ -1,6 +1,8 @@
 const db = require('../db');
 
-exports.apply = async (req, res) => {
+const { errorDetails } = require('../constants');
+
+exports.apply = async (req, res, next) => {
   try {
     const { caretakerUsername, startDate, endDate } = req.body;
     const result = await db.query(
@@ -9,11 +11,17 @@ exports.apply = async (req, res) => {
     );
     res.json(result.rows);
   } catch (err) {
-    console.error(err);
+    if (err.where.startsWith(errorDetails.AVAILABILITY_OVERLAPPING_DATE)) {
+      res
+        .status(400)
+        .json({ error: 'You have an existing availability that overlaps with this one' });
+      return;
+    }
+    next(err);
   }
 };
 
-exports.retrieve = async (req, res) => {
+exports.retrieve = async (req, res, next) => {
   try {
     const { caretakerUsername } = req.params;
     const result = await db.query(
@@ -22,7 +30,7 @@ exports.retrieve = async (req, res) => {
     );
     res.json(result.rows);
   } catch (err) {
-    console.error('ERROR: ', err.message);
     res.json({ error: 'An unexpected error occurred' });
+    next(err);
   }
 };

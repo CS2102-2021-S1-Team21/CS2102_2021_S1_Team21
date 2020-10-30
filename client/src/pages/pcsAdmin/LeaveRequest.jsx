@@ -10,6 +10,7 @@ import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import { format } from 'date-fns';
 import api from '../../api';
+import { useSnackbarContext } from '../../utilities/snackbar';
 
 const useStyles = makeStyles({
   table: {
@@ -26,10 +27,11 @@ const useStyles = makeStyles({
 
 const LeaveRequest = () => {
   const classes = useStyles();
+  const showSnackbar = useSnackbarContext();
   const [pendingLeaves, setPendingLeaves] = useState([]);
 
   useEffect(() => {
-    api.leaves.getAllPendingLeaves().then((res) => {
+    showSnackbar(api.leaves.getAllPendingLeaves()).then((res) => {
       setPendingLeaves(res);
     });
   }, []);
