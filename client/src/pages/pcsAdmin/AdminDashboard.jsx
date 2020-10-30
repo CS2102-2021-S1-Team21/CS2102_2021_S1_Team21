@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { DataGrid } from '@material-ui/data-grid';
-import { Container, makeStyles, Paper } from '@material-ui/core';
+import { useState, useEffect } from 'react';
+import { makeStyles } from '@material-ui/core';
 import api from '../../api';
 
 const useStyles = makeStyles((theme) => ({
