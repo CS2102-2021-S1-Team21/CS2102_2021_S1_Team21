@@ -165,7 +165,7 @@ const Browse = () => {
                 <ListItemSecondaryAction>
                   <>
                     <Typography component="span" variant="h3" color="Primary" alignRight>
-                      {`$${dailyPrice * (moment(dateTo).day() - moment(dateFrom).day() + 1)} `}
+                      {`$${dailyPrice * (moment(dateTo).diff(moment(dateFrom), 'days') + 1)} `}
                     </Typography>
                     <Button
                       variant="outlined"
