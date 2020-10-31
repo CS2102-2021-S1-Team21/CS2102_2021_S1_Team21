@@ -56,7 +56,7 @@ exports.create_user = async (req, res, next) => {
   } catch (err) {
     if (
       err.code === errorCodes.DUPLICATE_KEY_VALUE ||
-      err.where.startsWith(errorDetails.NOT_ADMIN_CONSTRAINT)
+      (err.where && err.where.startsWith(errorDetails.NOT_ADMIN_CONSTRAINT))
     ) {
       res.status(400).json({ error: messages.DUPLICATE_USER });
       return;

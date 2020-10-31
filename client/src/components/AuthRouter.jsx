@@ -44,11 +44,10 @@ const AuthRouter = () => {
   }
 
   /* eslint-disable no-nested-ternary */
-    const defaultHomePage = 
-    user.isAdmin 
-    ? '/pcs-admin/dashboard' 
-    : user.isPetOwner 
-    ? '/caretakers' 
+  const defaultHomePage = user.isAdmin
+    ? '/pcs-admin/dashboard'
+    : user.isPetOwner
+    ? '/caretakers'
     : '/my-jobs'; // user is a caretaker
   /* eslint-enable no-nested-ternary */
 

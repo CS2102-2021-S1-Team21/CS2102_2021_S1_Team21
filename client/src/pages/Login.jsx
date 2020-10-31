@@ -26,7 +26,9 @@ const Login = () => {
   const initialValues = { ...DEFAULT_VALUES, isDeleted: false };
 
   const handleSubmit = async ({ username, password }) => {
-    showSnackbar(api.auth.login({ username, password })).then(() => history.push('/')).catch(console.error);
+    showSnackbar(api.auth.login({ username, password }))
+      .then(() => history.push('/'))
+      .catch(console.error);
   };
 
   return (
