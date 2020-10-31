@@ -10,6 +10,8 @@ BEGIN
   END LOOP;
 END $$;
 
+DROP VIEW leaderboard IF EXISTS;
+
 CREATE TABLE PCS_Administrator(
     username VARCHAR PRIMARY KEY,
     email VARCHAR NOT NULL UNIQUE,
@@ -156,7 +158,7 @@ CREATE TABLE Bids(
     comment VARCHAR,
     reviewDateTime TIMESTAMP,
     CONSTRAINT statusAccepted CHECK(status IN ('Accepted','Completed') OR (transactionDateTime IS NULL AND paymentMethod IS NULL AND totalAmount IS NULL)),
-    CONSTRAINT transactionCompleted CHECK((transactionDATEtIME IS NOT NULL AND status = 'Completed') OR (rating IS NULL AND comment IS NULL AND reviewDateTime IS NULL)),
+    CONSTRAINT transactionCompleted CHECK((transactionDateTime IS NOT NULL AND status = 'Completed') OR (rating IS NULL AND comment IS NULL AND reviewDateTime IS NULL)),
     PRIMARY KEY(petName, petOwnerUsername, caretakerUsername, submittedAt, startDate, endDate),
     FOREIGN KEY(petName, petOwnerUsername) REFERENCES Pet(name, petOwnerUsername) ON DELETE CASCADE ON UPDATE CASCADE
 );
@@ -370,3 +372,52 @@ BEFORE INSERT ON Bids
 FOR EACH ROW 
 EXECUTE PROCEDURE bids_constraint();
 
+<<<<<<< HEAD
+=======
+-- View for Admin Dashboard
+CREATE OR REPLACE VIEW leaderboard AS (
+  SELECT * FROM 
+    (SELECT *, rank() OVER (PARTITION BY role ORDER BY totalScore desc) AS rank
+    FROM (
+        SELECT *, satisfactionscore + efficiencyscore + popularityscore AS totalScore
+        FROM (
+            SELECT *, COALESCE(ROUND(averageRating * 10),0) AS satisfactionscore,
+                  COALESCE(ROUND(jobCount * 25 / avgJobCount),0) AS efficiencyscore,
+                  COALESCE(ROUND(bidCount * 25 / avgBidCount),0) AS popularityscore
+            FROM (
+              SELECT *, AVG(jobCount) over (partition by role) AS avgJobCount, AVG(bidCount) over (partition by role) AS avgBidCount FROM 
+              (
+                SELECT COALESCE(caretakerusername, caretakerusername2) AS caretakerusername, COALESCE(role, role2) AS role, jobcount, averageRating, bidcount
+                FROM (
+                    (SELECT caretakerusername, 
+                        CASE WHEN caretakerusername IN (SELECT * FROM part_time_employee ) THEN 'PT'
+                            WHEN caretakerusername IN (SELECT * FROM full_time_employee ) THEN 'FT'
+                        ELSE 'null'
+                        END AS role,
+                    COUNT(*) AS jobCount, AVG(rating) AS averageRating
+                    FROM bids
+                    WHERE status = 'Completed' AND 
+                      enddate BETWEEN date_trunc('month', CURRENT_DATE - interval '1' month) AND date_trunc('month', CURRENT_DATE)
+                    GROUP BY caretakerusername) t1
+                    FULL OUTER JOIN
+                    (SELECT caretakerusername AS caretakerusername2, 
+                        CASE WHEN caretakerusername IN (SELECT * FROM part_time_employee ) THEN 'PT'
+                        WHEN caretakerusername IN (SELECT * FROM full_time_employee ) THEN 'FT'
+                        ELSE 'null'
+                        END AS role2,
+                        count(*) as bidCount
+                    FROM bids
+                    WHERE  
+                      submittedat BETWEEN date_trunc('month', CURRENT_DATE - interval '1' month) AND date_trunc('month', CURRENT_DATE)
+                    GROUP BY caretakerusername) t2
+                    ON t1.caretakerusername = t2.caretakerusername2
+                ) AS t3
+              ) AS t4
+            ) AS t5
+        ) AS t6
+    ) AS t7
+  ) AS t8
+  WHERE rank BETWEEN 1 AND 5
+  ORDER BY role, rank, totalScore, efficiencyscore, popularityscore, satisfactionscore
+); 
+>>>>>>> master

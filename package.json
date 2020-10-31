@@ -21,7 +21,21 @@
     "passport-local": "^1.0.0",
     "pg": "^8.3.3"
   },
+  "devDependencies": {
+    "eslint": "^6.6.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-config-prettier": "^6.15.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-prettier": "^3.1.4",
+    "prettier": "^2.1.2"
+  },
   "scripts": {
+    "lint": "eslint --ext .js",
+    "lint:fix": "eslint --fix --ext .js",
+    "format": "prettier --check",
+    "format:fix": "prettier --write",
+    "check": "yarn run lint . && yarn run format .",
+    "fix": "yarn run lint:fix . && yarn run format:fix .",
     "start": "nodemon index.js",
     "heroku-postbuild": "cd client && yarn install && yarn run build"
   }

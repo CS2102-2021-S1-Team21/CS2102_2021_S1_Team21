@@ -213,15 +213,16 @@ VALUES('Gougou',
        300,
        2,
        'Terrible, my dog came back obese',
-       '1/1/20'),
-       delete from bids where caretakerusername = 'dora' or caretakerusername = 'wincent';
-       insert into bids values ('Gougou','ladygaga','wincent',25,'Accepted','1/1/20','4/3/20','15/6/20','On-site transfer',null,NULL,NULL,NULL,null,null,null);
-       insert into bids values ('Gougou','ladygaga','dora',25,'Accepted','1/1/20','4/3/20','18/6/20','On-site transfer',null,NULL,NULL,NULL,null,null,null);
-       insert into bids values ('Gougou','ladygaga','dora',25,'Accepted','1/1/20','4/3/20','21/6/20','On-site transfer',null,NULL,NULL,NULL,null,null,null);
-       insert into bids values ('Gougou','ladygaga','dora',25,'Accepted','1/1/20','4/3/20','23/6/20','On-site transfer',null,NULL,NULL,NULL,null,null,null);
-       insert into bids values ('Gougou','ladygaga','dora',25,'Accepted','1/1/20','4/3/20','26/6/20','On-site transfer',null,NULL,NULL,NULL,null,null,null);
-       insert into bids values ('Gougou','ladygaga','dora',25,'Accepted','1/1/20','5/3/20','4/7/20','On-site transfer',null,NULL,NULL,NULL,null,null,null);
-       insert into bids values ('Gougou','ladygaga','dora',25,'Accepted','1/1/20','4/3/20','22/6/20','On-site transfer',null,NULL,NULL,NULL,null,null,null);
+       '1/1/20');
+       
+delete from bids where caretakerusername = 'dora' or caretakerusername = 'wincent';
+insert into bids values ('Gougou','ladygaga','wincent',25,'Accepted','1/1/20','4/3/20','15/6/20','On-site transfer',null,NULL,NULL,NULL,null,null,null);
+insert into bids values ('Gougou','ladygaga','dora',25,'Accepted','1/1/20','4/3/20','18/6/20','On-site transfer',null,NULL,NULL,NULL,null,null,null);
+insert into bids values ('Gougou','ladygaga','dora',25,'Accepted','1/1/20','4/3/20','21/6/20','On-site transfer',null,NULL,NULL,NULL,null,null,null);
+insert into bids values ('Gougou','ladygaga','dora',25,'Accepted','1/1/20','4/3/20','23/6/20','On-site transfer',null,NULL,NULL,NULL,null,null,null);
+insert into bids values ('Gougou','ladygaga','dora',25,'Accepted','1/1/20','4/3/20','26/6/20','On-site transfer',null,NULL,NULL,NULL,null,null,null);
+insert into bids values ('Gougou','ladygaga','dora',25,'Accepted','1/1/20','5/3/20','4/7/20','On-site transfer',null,NULL,NULL,NULL,null,null,null);
+insert into bids values ('Gougou','ladygaga','dora',25,'Accepted','1/1/20','4/3/20','22/6/20','On-site transfer',null,NULL,NULL,NULL,null,null,null);
 
 INSERT INTO Caretaker VALUES ('oompaloompa', null);
 

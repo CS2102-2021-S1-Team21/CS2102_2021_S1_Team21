@@ -91,7 +91,11 @@ exports.new = async (req, res, next) => {
     );
     await client.query('COMMIT');
     // End of transaction
-    res.json({ ..._.omit(insertedPet, 'deletedat'), requirements: insertedRequirements });
+    res.json({
+      ..._.omit(insertedPet, 'deletedat'),
+      requirements: insertedRequirements,
+      success: `Pet ${insertedPet.name} successfully added!`,
+    });
   } catch (err) {
     await client.query('ROLLBACK');
     if (err.code === errorCodes.DUPLICATE_KEY_VALUE) {
@@ -158,7 +162,11 @@ exports.edit = async (req, res, next) => {
     );
     await client.query('COMMIT');
     // End of transaction
-    res.json({ ..._.omit(updatedPet, 'deletedat'), requirements: updatedRequirements });
+    res.json({
+      ..._.omit(updatedPet, 'deletedat'),
+      requirements: updatedRequirements,
+      success: `Pet ${updatedPet.name} successfully updated!`,
+    });
   } catch (err) {
     await client.query('ROLLBACK');
     if (err.code === errorCodes.DUPLICATE_KEY_VALUE) {
@@ -189,7 +197,8 @@ exports.delete = async (req, res, next) => {
       res.status(404).json({ error: messages.PET_NOT_FOUND });
       return;
     }
-    res.json(result.rows[0]);
+    const deletedPet = result.rows[0];
+    res.json({ ...deletedPet, success: `Pet ${deletedPet.name} successfully deleted!` });
   } catch (err) {
     next(err);
   }

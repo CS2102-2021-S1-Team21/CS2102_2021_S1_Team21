@@ -12,6 +12,7 @@
     "sourceType": "module"
   },
   "plugins": ["prettier"],
+  "ignorePatterns": "client/",
   "rules": {
     // downgraded rules
     "no-plusplus": "off",
@@ -19,6 +20,7 @@
     "curly": ["error", "multi-line"],
     "no-var": "error",
     // disabled for ease of development (should be changed eventually)
-    "no-unused-vars": "warn"
+    "no-unused-vars": "warn",
+    "no-useless-concat": "off"
   }
 }

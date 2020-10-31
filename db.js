@@ -1,5 +1,5 @@
 const { Pool, types } = require('pg');
-require("dotenv").config();
+require('dotenv').config();
 // to be included inside .gitignore once everyone has set up
 // TODO: use environment variables
 // const pool = new Pool({
@@ -19,10 +19,10 @@ const devConfig = {
 };
 
 const proConfig = {
-  connectionString: process.env.DATABASE_URL //heroku addons
-}
+  connectionString: process.env.DATABASE_URL, // heroku addons
+};
 
-const pool = new Pool(process.env.NODE_ENV === "production" ? proConfig : devConfig);
+const pool = new Pool(process.env.NODE_ENV === 'production' ? proConfig : devConfig);
 
 // For some reason, allowing node-postgres to parse this caused the value to be returned in UTC time
 types.setTypeParser(types.builtins.DATE, (val) => new Date(val));

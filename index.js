@@ -5,7 +5,7 @@ const session = require('express-session');
 const passport = require('passport');
 const PGStore = require('connect-pg-simple')(session);
 
-const path = require("path");
+const path = require('path');
 const auth = require('./auth');
 const pool = require('./db');
 const routes = require('./routes');
@@ -20,8 +20,8 @@ app.use(bodyParser.json());
 // support parsing of 'application/x-www-form-urlencoded' type data
 app.use(bodyParser.urlencoded({ extended: true }));
 
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "client/build")))
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, 'client/build')));
 }
 
 app.use(
@@ -47,9 +47,8 @@ const sessionConfig = {
     httpOnly: false, // allow browser JavaScript to access the cookie
     maxAge: 24 * 60 * 60 * 1000, // 24 hours
   },
-  proxy: true
+  proxy: true,
 };
-
 
 if (app.get('env') === 'production') {
   sessionConfig.cookie.secure = true; // only use cookie over HTTPS
@@ -70,8 +69,8 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'An unexpected error occurred' });
 });
 
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "client/build/index.html"));
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'client/build/index.html'));
 });
 
 // -------------------- Server --------------------
