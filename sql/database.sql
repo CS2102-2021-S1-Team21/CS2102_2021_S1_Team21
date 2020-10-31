@@ -380,6 +380,24 @@ BEGIN
     END;
 $$ LANGUAGE plpgsql;
 
+-- Trigger condition: On any updates on Bids table that changes status from Pending to Accepted
+-- Action: Reject all other bids with the same pet, petowner and overlapping time period.
+CREATE OR REPLACE FUNCTION reject_conflicting_bids()
+RETURNS TRIGGER AS $$
+BEGIN
+    UPDATE bids SET status = 'Rejected'
+    WHERE bids.status = 'Pending' AND bids.caretakerusername != NEW.caretakerusername AND bids.petownerusername = NEW.petownerusername AND bids.petname = NEW.petname AND 
+        (bids.startdate BETWEEN NEW.startdate AND NEW.enddate OR bids.enddate BETWEEN NEW.startdate AND NEW.enddate);
+        RETURN NULL;
+    END;
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER check_bids_constraint ON Bids;
+CREATE TRIGGER check_bids_constraint
+AFTER UPDATE ON Bids
+FOR EACH ROW
+WHEN  (OLD.status = 'Pending' AND NEW.status = 'Accepted')
+EXECUTE PROCEDURE reject_conflicting_bids();
 
 DROP TRIGGER check_bids_constraint ON Bids;
 CREATE TRIGGER check_bids_constraint
