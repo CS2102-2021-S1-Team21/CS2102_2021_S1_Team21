@@ -2,19 +2,21 @@ import React, { useEffect, useState } from 'react';
 import { Box, Typography } from '@material-ui/core';
 import api from '../../api';
 import TransferList from './TransferList';
+import { useSnackbarContext } from '../../utilities/snackbar';
 
 const CaretakerForm = ({ username }) => {
+  const showSnackbar = useSnackbarContext();
   const [petCategories, setPetCategories] = useState([]);
 
   useEffect(() => {
-    api.caresFor.getCaretakerCaresFor(username).then((res) => {
+    showSnackbar(api.caresFor.getCaretakerCaresFor(username)).then((res) => {
       setPetCategories(res);
     });
   }, [username]);
 
   const handleSubmit = async (values) => {
     try {
-      await api.caresFor.editCaretakerCaresFor(username, values);
+      await showSnackbar(api.caresFor.editCaretakerCaresFor(username, values));
     } catch (err) {
       console.log(err.message);
     }

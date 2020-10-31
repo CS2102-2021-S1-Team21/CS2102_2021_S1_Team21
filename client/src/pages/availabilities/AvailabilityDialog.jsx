@@ -6,13 +6,16 @@ import { KeyboardDatePicker } from '@material-ui/pickers';
 import DialogActions from '@material-ui/core/DialogActions';
 import { Button, Dialog } from '@material-ui/core';
 import addYears from 'date-fns/addYears';
+import { format } from 'date-fns';
 import api from '../../api';
 import { useStore } from '../../utilities/store';
+import { useSnackbarContext } from '../../utilities/snackbar';
 
 const AvailabilityDialog = ({ open, setOpen }) => {
   const [selectedDateFrom, handleDateChangeFrom] = useState(new Date());
   const [selectedDateTo, handleDateChangeTo] = useState(new Date());
   const store = useStore();
+  const showSnackbar = useSnackbarContext();
 
   const handleCancel = () => {
     setOpen(false);
@@ -20,14 +23,14 @@ const AvailabilityDialog = ({ open, setOpen }) => {
 
   const handleApply = async (e) => {
     e.preventDefault();
-    setOpen(false);
     try {
       const body = {
-        startDate: selectedDateFrom,
-        endDate: selectedDateTo,
+        startDate: format(selectedDateFrom, 'yyyy-MM-dd'),
+        endDate: format(selectedDateTo, 'yyyy-MM-dd'),
         caretakerUsername: store.user.username,
       };
-      await api.availability.addAvailability(body);
+      await showSnackbar(api.availability.addAvailability(body));
+      setOpen(false);
     } catch (err) {
       console.log(err.message);
     }

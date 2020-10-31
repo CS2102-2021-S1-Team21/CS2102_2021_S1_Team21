@@ -17,6 +17,7 @@ import React, { useState, useEffect } from 'react';
 import AvailabilityDialog from './AvailabilityDialog';
 import { useStore } from '../../utilities/store';
 import api from '../../api';
+import { useSnackbarContext } from '../../utilities/snackbar';
 
 const useStyles = makeStyles({
   root: {
@@ -45,12 +46,16 @@ const style = {
 
 const Availability = () => {
   const classes = useStyles();
+  const store = useStore();
+  const showSnackbar = useSnackbarContext();
+
   const [open, setOpen] = useState(false);
   const [availability, setAvailability] = useState([]);
-  const store = useStore();
 
   useEffect(() => {
-    api.availability.getAvailability(store.user.username).then((x) => setAvailability(x));
+    showSnackbar(api.availability.getAvailability(store.user.username)).then((x) =>
+      setAvailability(x),
+    );
   }, [store.user.username]);
 
   const handleClickOpen = () => {
