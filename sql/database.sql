@@ -10,8 +10,6 @@ BEGIN
   END LOOP;
 END $$;
 
-DROP VIEW leaderboard IF EXISTS;
-
 CREATE TABLE PCS_Administrator(
     username VARCHAR PRIMARY KEY,
     email VARCHAR NOT NULL UNIQUE,
@@ -441,6 +439,12 @@ BEGIN
     END;
 $$ LANGUAGE plpgsql;
 
+
+CREATE TRIGGER check_bids_constraint
+BEFORE INSERT ON Bids
+FOR EACH ROW 
+EXECUTE PROCEDURE bids_constraint();
+
 -- Trigger condition: On any updates on Bids table that changes status from Pending to Accepted
 -- Action: Reject all other bids with the same pet, petowner and overlapping time period.
 CREATE OR REPLACE FUNCTION reject_conflicting_bids()
@@ -453,18 +457,12 @@ BEGIN
     END;
 $$ LANGUAGE plpgsql;
 
-DROP TRIGGER check_bids_constraint ON Bids;
-CREATE TRIGGER check_bids_constraint
+CREATE TRIGGER check_conflict_bids_constraint
 AFTER UPDATE ON Bids
 FOR EACH ROW
 WHEN  (OLD.status = 'Pending' AND NEW.status = 'Accepted')
 EXECUTE PROCEDURE reject_conflicting_bids();
 
-DROP TRIGGER check_bids_constraint ON Bids;
-CREATE TRIGGER check_bids_constraint
-BEFORE INSERT ON Bids
-FOR EACH ROW 
-EXECUTE PROCEDURE bids_constraint();
 
 -------------------------------------------- VIEWS ------------------------------------------
 
