@@ -9,6 +9,7 @@ import Bookings from '../pages/Bookings';
 import Jobs from '../pages/Jobs';
 import Browse from '../pages/Browse';
 // import PcsAdmin from '../pages/pcsAdmin/PcsAdmin';
+import AdminDashboard from '../pages/pcsAdmin/AdminDashboard';
 import PetProfile from '../pages/pets/PetProfile';
 import Pets from '../pages/pets/Pets';
 import UserProfile from '../pages/userProfiles/UserProfile';
@@ -63,6 +64,7 @@ const AuthRouter = () => {
           <Route path="/profile-settings" component={ProfileSettings} />
           <Route path="/profile/:username" component={UserProfile} />
           <Route path="/pcs-admin/leave-request" component={LeaveRequest} />
+          <Route path="/pcs-admin/dashboard" component={AdminDashboard} />
         </Switch>
       </NavBar>
     </StoreProvider>
