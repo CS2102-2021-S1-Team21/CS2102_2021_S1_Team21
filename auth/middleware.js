@@ -11,6 +11,6 @@ exports.ensureUnauthenticated = (req, res, next) => {
     next();
   } else {
     // TODO: not sure what the correct response should be
-    res.status(200).json({ message: 'Already logged in' });
+    res.status(200).json({ info: 'Already logged in' });
   }
 };
