@@ -105,7 +105,7 @@ CREATE TABLE Indicates_Availability_Period(
     endDate DATE,
     CHECK (startDate <= endDate),
     -- Latest leave application is end of next year
-    CHECK (substring(endDate::text, 1, 4) <= (concat(extract(year from current_date) + 1)::text)),
+    CHECK (extract(year from endDate) <= extract(year from current_date) + 1),
     PRIMARY KEY(caretakerUsername, startDate, endDate)
 );
 
