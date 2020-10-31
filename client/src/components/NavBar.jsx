@@ -39,7 +39,7 @@ const NavBar = ({ children }) => {
     <>
       <AppBar position="static">
         <Toolbar>
-          <PCSHomeButton onClick={() => (user ? history.push('/dashboard') : history.push('/'))} />
+          <PCSHomeButton onClick={() => history.push('/')} />
 
           {/* TODO: handle mobile layout */}
           {user.isPetOwner && (
