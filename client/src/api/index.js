@@ -1,8 +1,8 @@
+import adminDashboard from './adminDashboard';
 import auth from './auth';
 import availability from './availability';
-import adminDashboard from './adminDashboard';
-import caretakers from './caretakers';
 import caresFor from './caresFor';
+import caretakers from './caretakers';
 import leaves from './leaves';
 import petCategories from './petCategories';
 import petOwners from './petOwners';
@@ -13,6 +13,7 @@ import bids from './bids';
 import transferType from './transferType';
 import paymentMethod from './paymentMethod';
 import userProfiles from './userProfiles';
+import users from './users';
 
 /* ====================================
  * Index of all API request routes
@@ -34,6 +35,7 @@ const api = {
   paymentMethod,
   profileSettings,
   caresFor,
+  users,
   userProfiles,
 };
 

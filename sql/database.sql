@@ -43,8 +43,7 @@ CREATE TABLE Pet_Owner(
 );
 
 CREATE TABLE Caretaker(
-    caretakerUsername VARCHAR PRIMARY KEY REFERENCES App_User(username),
-    totalAverageRating DECIMAL(2,1)
+    caretakerUsername VARCHAR PRIMARY KEY REFERENCES App_User(username)
 );
 
 CREATE TABLE Full_Time_Employee(
@@ -106,6 +105,8 @@ CREATE TABLE Indicates_Availability_Period(
     startDate DATE,
     endDate DATE,
     CHECK (startDate <= endDate),
+    -- Latest leave application is end of next year
+    CHECK (extract(year from endDate) <= extract(year from current_date) + 1),
     PRIMARY KEY(caretakerUsername, startDate, endDate)
 );
 
@@ -143,7 +144,7 @@ CREATE TABLE Bids(
     petOwnerUsername VARCHAR,
     caretakerUsername VARCHAR REFERENCES Caretaker(caretakerUsername) ON DELETE CASCADE,
     dailyPrice DECIMAL(10,2) NOT NULL,
-    status STATUS DEFAULT 'Pending', -- add not null
+    status STATUS,
     submittedAt TIMESTAMP,
     startDate DATE,
     endDate DATE,
@@ -161,6 +162,22 @@ CREATE TABLE Bids(
     FOREIGN KEY(petName, petOwnerUsername) REFERENCES Pet(name, petOwnerUsername) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+-------------------------------------------- FUNCTIONS ------------------------------------------
+
+-- Get overall average rating of a Caretaker
+CREATE OR REPLACE FUNCTION average_rating (ctusername VARCHAR)
+RETURNS NUMERIC AS $avg$
+declare 
+  avg NUMERIC;
+BEGIN 
+    SELECT COALESCE(AVG(rating),0) into avg
+    FROM bids b
+    WHERE ctusername = b.caretakerusername
+    GROUP BY b.caretakerusername;
+    RETURN avg;
+END; 
+$avg$
+LANGUAGE plpgsql;
 
 -------------------------------------------- TRIGGERS ------------------------------------------
 
@@ -352,13 +369,37 @@ BEGIN
     ELSEIF (NEW.caretakerusername IN (SELECT P.caretakerusername FROM Part_Time_Employee P) 
         AND ((SELECT totalAverageRating FROM Caretaker WHERE Caretakerusername = NEW.caretakerusername) <= 4) AND max_jobs >= 2) THEN
             RAISE EXCEPTION 'Part time Caretaker is unable to receive more pets during this period';
-    ELSE
-        RETURN NEW;
     END IF;
-    RETURN NULL;
+
+    IF (NEW.caretakerusername IN (SELECT F.caretakerusername FROM Full_Time_Employee F)) THEN
+      NEW.status = 'Accepted';  
+    ELSEIF (NEW.caretakerusername IN (SELECT caretakerusername FROM Part_Time_Employee)) THEN
+      NEW.status = 'Pending';
+    END IF;
+    RETURN NEW;
     END;
 $$ LANGUAGE plpgsql;
 
+-- Trigger condition: On any updates on Bids table that changes status from Pending to Accepted
+-- Action: Reject all other bids with the same pet, petowner and overlapping time period.
+CREATE OR REPLACE FUNCTION reject_conflicting_bids()
+RETURNS TRIGGER AS $$
+BEGIN
+    UPDATE bids SET status = 'Rejected'
+    WHERE bids.status = 'Pending' AND bids.caretakerusername != NEW.caretakerusername AND bids.petownerusername = NEW.petownerusername AND bids.petname = NEW.petname AND 
+        (bids.startdate BETWEEN NEW.startdate AND NEW.enddate OR bids.enddate BETWEEN NEW.startdate AND NEW.enddate);
+        RETURN NULL;
+    END;
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER check_bids_constraint ON Bids;
+CREATE TRIGGER check_bids_constraint
+AFTER UPDATE ON Bids
+FOR EACH ROW
+WHEN  (OLD.status = 'Pending' AND NEW.status = 'Accepted')
+EXECUTE PROCEDURE reject_conflicting_bids();
+
+DROP TRIGGER check_bids_constraint ON Bids;
 CREATE TRIGGER check_bids_constraint
 BEFORE INSERT ON Bids
 FOR EACH ROW 

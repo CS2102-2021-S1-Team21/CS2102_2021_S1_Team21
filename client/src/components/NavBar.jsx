@@ -136,22 +136,29 @@ const NavBar = ({ children }) => {
                 </Button>
               )}
               {user.isAdmin && (
-                <Button
-                  color="inherit"
-                  className={classes.navItem}
-                  onClick={() => history.push('/pcs-admin/dashboard')}
-                >
-                  {'Dashboard'}
-                </Button>
-              )}
-              {user.isAdmin && (
-                <Button
-                  color="inherit"
-                  className={classes.navItem}
-                  onClick={() => history.push('/pcs-admin/leave-request')}
-                >
-                  {'Leave Application'}
-                </Button>
+                <>
+                  <Button
+                    color="inherit"
+                    className={classes.navItem}
+                    onClick={() => history.push('/pcs-admin/dashboard')}
+                  >
+                    {'Dashboard'}
+                  </Button>
+                  <Button
+                    color="inherit"
+                    className={classes.navItem}
+                    onClick={() => history.push('/pcs-admin/leave-request')}
+                  >
+                    {'Leave Application'}
+                  </Button>
+                  <Button
+                    color="inherit"
+                    className={classes.navItem}
+                    onClick={() => history.push('/admins/new')}
+                  >
+                    {'Manage Accounts'}
+                  </Button>
+                </>
               )}
 
               <div className={classes.space} />

@@ -42,7 +42,7 @@ const ProfileSettings = () => {
     try {
       if (!window.confirm(`Are you sure you want to delete your account?`)) return;
       // set deletedAt, then delete session and finally push to login page
-      await showSnackbar(api.auth.deleteUser(userAccount.username)).then(api.auth.logout());
+      await showSnackbar(api.users.deleteUser(userAccount.username)).then(api.auth.logout());
       history.push('/login');
     } catch (err) {
       console.log(err.message);

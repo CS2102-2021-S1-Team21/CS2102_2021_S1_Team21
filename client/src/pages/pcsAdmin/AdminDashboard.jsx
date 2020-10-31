@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { DataGrid } from '@material-ui/data-grid';
 import { Container, makeStyles, Paper } from '@material-ui/core';
 import api from '../../api';
+import { useSnackbarContext } from '../../utilities/snackbar';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -11,6 +12,7 @@ const useStyles = makeStyles((theme) => ({
 
 const AdminDashboard = () => {
   const classes = useStyles();
+  const showSnackbar = useSnackbarContext();
   const [rows, setRows] = useState([]);
   const [reportMonth, setMonth] = useState([]);
 
@@ -51,7 +53,7 @@ const AdminDashboard = () => {
   ];
 
   useEffect(() => {
-    api.adminDashboard.getCaretakerRanking().then((res) => {
+    showSnackbar(api.adminDashboard.getCaretakerRanking()).then((res) => {
       setRows(res.result);
       setMonth(res.resultMonth);
     });

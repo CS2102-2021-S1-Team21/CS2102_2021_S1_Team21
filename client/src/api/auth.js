@@ -18,12 +18,6 @@ const auth = {
   getSessionInfo: async () => {
     return baseAPI.get('sessions');
   },
-  signup: async (userAttributes) => {
-    return baseAPI.post('users');
-  },
-  deleteUser: async (username) => {
-    return baseAPI.delete(`users/${username}`);
-  },
 };
 
 export default auth;

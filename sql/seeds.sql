@@ -5,7 +5,7 @@ VALUES
     'admin@petcaringservices.org.sg',
     '$2a$10$n2q9efUAsWFKbPzTu6O/4udJG6/kuwV.X.c8uwHTX36cpCk/Er3aK', -- bcrypt for 'pcsadmin'
     'PCS Admin',
-    null);
+    null, '2020-01-01');
 
 INSERT INTO PCS_Administrator
 VALUES
