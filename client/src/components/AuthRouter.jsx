@@ -3,7 +3,6 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import api from '../api';
 import Availability from '../pages/availabilities/Availability';
 import Leaves from '../pages/leaves/Leaves';
-import LeaveRequest from '../pages/pcsAdmin/LeaveRequest';
 import Bookings from '../pages/Bookings';
 import Jobs from '../pages/Jobs';
 import Browse from '../pages/Browse';
