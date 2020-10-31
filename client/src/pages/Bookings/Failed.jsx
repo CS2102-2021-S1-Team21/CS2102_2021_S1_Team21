@@ -35,15 +35,10 @@ const Failed = () => {
                     primary={`${bids.caretakerusername}`}
                     secondary={
                       <>
-                        <Typography
-                          component="span"
-                          variant="body2"
-                          // className={classes.inline}
-                          color="textPrimary"
-                        >
-                          {`Secondary text `}
+                        <Typography component="span" variant="body2" color="textPrimary">
+                          {`Caretaker: `}
                         </Typography>
-                        {`Secondary`}
+                        {`${bids.caretakerusername}`}
                       </>
                     }
                   />

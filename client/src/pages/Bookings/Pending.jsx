@@ -43,9 +43,9 @@ const Upcoming = () => {
                     secondary={
                       <>
                         <Typography component="span" variant="body2" color="textPrimary">
-                          {`${bids.caretakerusername}`}
+                          {`Caretaker: `}
                         </Typography>
-                        {`Secondary`}
+                        {`${bids.caretakerusername}`}
                       </>
                     }
                   />

@@ -70,11 +70,12 @@ const Upcoming = () => {
                       </Typography>
                     }
                     secondary={
-                      <div>
-                        <Typography component="span" variant="body1">
-                          {`Caretaker: ${bids.caretakerusername}`}
+                      <>
+                        <Typography component="span" variant="body2" color="textPrimary">
+                          {`Caretaker: `}
                         </Typography>
-                      </div>
+                        {`${bids.caretakerusername}`}
+                      </>
                     }
                   />
                   <ListItemText />

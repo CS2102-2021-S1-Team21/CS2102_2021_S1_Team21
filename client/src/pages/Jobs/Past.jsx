@@ -38,11 +38,11 @@ const Upcoming = () => {
                     }
                     secondary={
                       <>
-                        <Typography component="span" variant="body2" color="textPrimary">
-                          {`${bid.petownerusername}`}
-                        </Typography>
-                        {` Secondary`}
-                      </>
+                      <Typography component="span" variant="body2" color="textPrimary">
+                        {`Pet Owner: `}
+                      </Typography>
+                      {`${bid.petownerusername}`}
+                    </>
                     }
                   />
                 </ListItem>
