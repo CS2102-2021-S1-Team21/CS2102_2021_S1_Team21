@@ -25,8 +25,9 @@ const NotificationsProvider = ({ children }) => {
     promise.then((response) => {
       if (response.error) {
         updateSnackbar({ message: response.error, severity: 'error' });
-        throw Error(response.error); // Component should see this as an error
-      } else if (response.warning) {
+        return Promise.reject(response.error); // Component should see this as an error
+      }
+      if (response.warning) {
         updateSnackbar({ message: response.warning, severity: 'warning' });
       } else if (response.info) {
         updateSnackbar({ message: response.info, severity: 'info' });

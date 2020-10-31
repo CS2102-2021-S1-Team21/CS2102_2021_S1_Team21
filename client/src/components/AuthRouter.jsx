@@ -3,16 +3,17 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import api from '../api';
 import Availability from '../pages/availabilities/Availability';
 import Leaves from '../pages/leaves/Leaves';
-import LeaveRequest from '../pages/pcsAdmin/LeaveRequest';
 import AdminDashboard from '../pages/pcsAdmin/AdminDashboard';
+import LeaveRequest from '../pages/pcsAdmin/LeaveRequest';
+import NewAdmin from '../pages/pcsAdmin/NewAdmin';
 import PetProfile from '../pages/pets/PetProfile';
 import Pets from '../pages/pets/Pets';
+import ProfileSettings from '../pages/profileSettings/ProfileSettings';
 import UserProfile from '../pages/userProfiles/UserProfile';
 import { getSessionCookie } from '../utilities/sessionCookie';
 import { StoreProvider } from '../utilities/store';
 import Loading from './Loading';
 import NavBar from './NavBar';
-import ProfileSettings from '../pages/profileSettings/ProfileSettings';
 
 const AuthRouter = () => {
   const sessionCookie = getSessionCookie();
@@ -54,8 +55,9 @@ const AuthRouter = () => {
           {/* <Route path="/pcs-admin" component={PcsAdmin} /> */}
           <Route path="/profile-settings" component={ProfileSettings} />
           <Route path="/profile/:username" component={UserProfile} />
-          <Route path="/pcs-admin/leave-request" component={LeaveRequest} />
-          <Route path="/pcs-admin/dashboard" component={AdminDashboard} />
+          {user.isAdmin && <Route path="/pcs-admin/dashboard" component={AdminDashboard} />}
+          {user.isAdmin && <Route path="/pcs-admin/leave-request" component={LeaveRequest} />}
+          {user.isAdmin && <Route path="/admins/new" component={NewAdmin} />}
         </Switch>
       </NavBar>
     </StoreProvider>
