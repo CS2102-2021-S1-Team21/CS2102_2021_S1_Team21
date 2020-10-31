@@ -147,14 +147,16 @@ const Browse = () => {
                 <ListItemText
                   primary={
                     <Typography component="span" variant="h3" color="Primary">
-                      {`${caretaker.username}`}
+                      {`${caretaker.name}`}
                     </Typography>
                   }
                   secondary={
                     <>
                       <Typography component="span" variant="body2" color="textPrimary">
-                        {`Total average rating: ${caretaker.totalaveragerating} `}
+                      {`Username: ${caretaker.username} `}
                       </Typography>
+                      {`Total average rating: ${caretaker.totalaveragerating} `}
+                      {`Bio: ${caretaker.bio} `}
                     </>
                   }
                 />
