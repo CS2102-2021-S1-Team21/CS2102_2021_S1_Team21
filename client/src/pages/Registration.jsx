@@ -12,37 +12,46 @@ import FormTextArea from '../components/forms/FormTextArea';
 import FormTextField from '../components/forms/FormTextField';
 import SubmitButton from '../components/forms/SubmitButton';
 import NoAuthAppShell from '../components/NoAuthAppShell';
+import { useSnackbarContext } from '../utilities/snackbar';
+
+// Constants
+
+const AccountType = Object.freeze({
+  PET_OWNER: 'petOwner',
+  CARETAKER: 'caretaker',
+  BOTH: 'both'
+});
+
+const DEFAULT_VALUES = {
+  username: 'admin',
+  email: 'admin@gmail.com',
+  password: 'pass',
+  passwordConfirmation: 'pass',
+  name: 'Admin',
+  bio: 'hello',
+  phonenumber: '234',
+  address: '234',
+  postalcode: '234',
+  accountType: AccountType.CARETAKER,
+  caretakerType: 'fullTime',
+  ccnumber: '',
+  ccname: '',
+  ccexpirydate: '2020-01-01',
+  cvvcode: '',
+  caresForCategories: ['Cat', 'Large dog'],
+};
 
 // Utility Functions
 
 function isCaretaker(accountType) {
-  return ['careTaker', 'both'].includes(accountType);
+  return [AccountType.CARETAKER, AccountType.BOTH].includes(accountType);
 }
 
 function isPetOwner(accountType) {
-  return ['petOwner', 'both'].includes(accountType);
+  return [AccountType.PET_OWNER, AccountType.BOTH].includes(accountType);
 }
 
-// Constants
-
-const DEFAULT_VALUES = {
-  username: '',
-  email: '',
-  password: '',
-  passwordConfirmation: '',
-  name: '',
-  bio: '',
-  phonenumber: '',
-  address: '',
-  postalcode: '',
-  accountType: '',
-  caretakerType: '',
-  ccnumber: '',
-  ccname: '',
-  ccexpirydate: '',
-  cvvcode: '',
-  caresForCategories: [],
-};
+// Validation Schema
 
 const validationSchema = Yup.object().shape({
   username: Yup.string()
@@ -60,7 +69,7 @@ const validationSchema = Yup.object().shape({
   bio: Yup.string().required().max(255),
   phonenumber: Yup.string().required(),
   address: Yup.string().required(),
-  postalcode: Yup.number().required(),
+  postalcode: Yup.string().required().matches(/^[0-9]+$/, 'Must be a number'),
   accountType: Yup.string().required(),
   caretakerType: Yup.string().when('accountType', {
     is: isCaretaker,
@@ -81,6 +90,7 @@ const validationSchema = Yup.object().shape({
 
 const Registration = () => {
   const history = useHistory();
+  const showSnackbar = useSnackbarContext();
 
   const [petCategories, setPetCategories] = useState([]);
 
@@ -88,14 +98,9 @@ const Registration = () => {
     api.petCategories.getPetCategories().then((response) => setPetCategories(response.rows));
   }, []);
 
-  const initialValues = { ...DEFAULT_VALUES, isDeleted: false };
-
   const handleSubmit = async (values) => {
-    console.log(values);
-    await api.users
-      .signup(_.omit(values, 'passwordConfirmation'))
-      .then((response) => {
-        console.log(response);
+    await showSnackbar(api.users.signup(_.omit(values, 'passwordConfirmation')))
+      .then(() => {
         history.push('/login');
       })
       .catch(console.error);
@@ -105,7 +110,7 @@ const Registration = () => {
     <NoAuthAppShell>
       <Formik
         onSubmit={handleSubmit}
-        initialValues={initialValues}
+        initialValues={DEFAULT_VALUES}
         validationSchema={validationSchema}
       >
         {(formik) => (
@@ -163,15 +168,15 @@ const Registration = () => {
                   label="Account Type"
                   component={FormSelect}
                   options={[
-                    { value: 'petOwner', label: 'Pet Owner only' },
-                    { value: 'careTaker', label: 'Care Taker only' },
-                    { value: 'both', label: 'Both Pet Owner and Care Taker' },
+                    { value: AccountType.PET_OWNER, label: 'Pet Owner only' },
+                    { value: AccountType.CARETAKER, label: 'Care Taker only' },
+                    { value: AccountType.BOTH, label: 'Both Pet Owner and Care Taker' },
                   ]}
                   onChangeCallback={(value) => {
-                    if (value === 'petOwner') {
+                    if (value === AccountType.PET_OWNER) {
                       formik.setFieldValue('caretakerType', DEFAULT_VALUES.caretakerType);
                       formik.setFieldValue('caresForCategories', DEFAULT_VALUES.caresForCategories);
-                    } else if (value === 'careTaker') {
+                    } else if (value === AccountType.CARETAKER) {
                       formik.setFieldValue('ccnumber', DEFAULT_VALUES.ccnumber);
                       formik.setFieldValue('ccname', DEFAULT_VALUES.ccname);
                       formik.setFieldValue('ccexpirydate', DEFAULT_VALUES.ccexpirydate);
