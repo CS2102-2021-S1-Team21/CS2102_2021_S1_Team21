@@ -7,6 +7,7 @@ import api from '../api';
 import FormTextField from '../components/forms/FormTextField';
 import SubmitButton from '../components/forms/SubmitButton';
 import NoAuthAppShell from '../components/NoAuthAppShell';
+import { useSnackbarContext } from '../utilities/snackbar';
 
 const DEFAULT_VALUES = {
   username: '',
@@ -20,12 +21,12 @@ const validationSchema = Yup.object().shape({
 
 const Login = () => {
   const history = useHistory();
+  const showSnackbar = useSnackbarContext();
 
   const initialValues = { ...DEFAULT_VALUES, isDeleted: false };
 
   const handleSubmit = async ({ username, password }) => {
-    api.auth.login({ username, password }).then(() => history.push('/'));
-    // TODO: error handling
+    showSnackbar(api.auth.login({ username, password })).then(() => history.push('/')).catch(console.error);
   };
 
   return (

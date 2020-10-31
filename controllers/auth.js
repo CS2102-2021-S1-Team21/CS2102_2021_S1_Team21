@@ -19,7 +19,7 @@ exports.create_session = async (req, res, next) => {
       }
       const { username, email, name } = user; // don't send passwordDigest
       return res.status(200).json({
-        message: `Welcome, ${req.user.name}!`,
+        success: `Welcome, ${req.user.name}!`,
         data: { username, email, name },
       });
     });
@@ -29,7 +29,7 @@ exports.create_session = async (req, res, next) => {
 // Logout
 exports.delete_session = async (req, res) => {
   await Promise.all([req.session.destroy(), req.logout()]);
-  res.status(200).json({ message: 'Good bye!' });
+  res.status(200).json({ success: 'Good bye!' });
 };
 
 // Session info
