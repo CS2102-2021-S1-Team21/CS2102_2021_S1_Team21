@@ -41,8 +41,7 @@ CREATE TABLE Pet_Owner(
 );
 
 CREATE TABLE Caretaker(
-    caretakerUsername VARCHAR PRIMARY KEY REFERENCES App_User(username),
-    totalAverageRating DECIMAL(2,1)
+    caretakerUsername VARCHAR PRIMARY KEY REFERENCES App_User(username)
 );
 
 CREATE TABLE Full_Time_Employee(
