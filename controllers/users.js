@@ -21,6 +21,19 @@ exports.delete_user = async (req, res) => {
   }
 };
 
+exports.delete_admin = async (req, res) => {
+  try {
+    const { username } = req.params;
+    const result = await db.query('DELETE FROM pcs_administrator WHERE username = $1', [
+      username
+    ]);
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.json({ error: 'An unexpected error occurred' });
+  }
+};
+
 // Admin Signup
 
 exports.create_admin_user = async (req, res, next) => {

@@ -39,7 +39,7 @@ const AdminProfileSettings = ({username}) => {
       // set deletedAt, then delete session and finally push to login page
 
       /// CHECK
-      await showSnackbar(api.auth.deleteUser(username)).then(api.auth.logout());
+      await showSnackbar(api.users.deleteAdmin(username)).then(api.auth.logout());
       history.push('/login');
     } catch (err) {
       console.log(err.message);
