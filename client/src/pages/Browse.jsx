@@ -155,8 +155,8 @@ const Browse = () => {
                       <Typography component="span" variant="body2" color="textPrimary">
                       {`Username: ${caretaker.username} `}
                       </Typography>
-                      {`Total average rating: ${caretaker.totalaveragerating} `}
-                      {`Bio: ${caretaker.bio} `}
+                      {/* {`Total average rating: ${caretaker.totalaveragerating} `}
+                      {`Bio: ${caretaker.bio} `} */}
                     </>
                   }
                 />
