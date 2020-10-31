@@ -372,8 +372,6 @@ BEFORE INSERT ON Bids
 FOR EACH ROW 
 EXECUTE PROCEDURE bids_constraint();
 
-<<<<<<< HEAD
-=======
 -- View for Admin Dashboard
 CREATE OR REPLACE VIEW leaderboard AS (
   SELECT * FROM 
@@ -420,4 +418,3 @@ CREATE OR REPLACE VIEW leaderboard AS (
   WHERE rank BETWEEN 1 AND 5
   ORDER BY role, rank, totalScore, efficiencyscore, popularityscore, satisfactionscore
 ); 
->>>>>>> master
