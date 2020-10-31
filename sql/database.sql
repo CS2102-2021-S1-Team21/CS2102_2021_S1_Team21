@@ -210,7 +210,7 @@ IF accountType != 'petOwner' AND (caretakerType IS NULL OR caretakerType NOT IN 
     RAISE EXCEPTION 'A care taker must be either a full-time or a part-time employee';
 END IF;
 
-INSERT INTO App_User VALUES (newUsername, newEmail, passwordDigest, newName, NULL, bio, phoneNumber, address, postalCode);
+INSERT INTO App_User VALUES (newUsername, newEmail, passwordDigest, newName, NULL, bio, phoneNumber, address, postalCode, NOW());
 IF accountType = 'petOwner' OR accountType = 'both' THEN
     INSERT INTO Pet_Owner VALUES (newCCNumber, ccName, ccExpiryDate, ccCvvCode, newUsername);
 END IF;
