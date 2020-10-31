@@ -215,7 +215,7 @@ IF accountType = 'petOwner' OR accountType = 'both' THEN
     INSERT INTO Pet_Owner VALUES (newCCNumber, ccName, ccExpiryDate, ccCvvCode, newUsername);
 END IF;
 IF accountType = 'caretaker' OR accountType = 'both' THEN
-    INSERT INTO Caretaker VALUES (newUsername, NULL);
+    INSERT INTO Caretaker VALUES (newUsername);
 
     IF caretakerType = 'fullTime' THEN
         INSERT INTO Full_Time_Employee VALUES (newUsername);
