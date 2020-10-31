@@ -43,8 +43,7 @@ CREATE TABLE Pet_Owner(
 );
 
 CREATE TABLE Caretaker(
-    caretakerUsername VARCHAR PRIMARY KEY REFERENCES App_User(username),
-    totalAverageRating DECIMAL(2,1)
+    caretakerUsername VARCHAR PRIMARY KEY REFERENCES App_User(username)
 );
 
 CREATE TABLE Full_Time_Employee(
@@ -163,6 +162,22 @@ CREATE TABLE Bids(
     FOREIGN KEY(petName, petOwnerUsername) REFERENCES Pet(name, petOwnerUsername) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+-------------------------------------------- FUNCTIONS ------------------------------------------
+
+-- Get overall average rating of a Caretaker
+CREATE OR REPLACE FUNCTION average_rating (ctusername VARCHAR)
+RETURNS NUMERIC AS $avg$
+declare 
+  avg NUMERIC;
+BEGIN 
+    SELECT COALESCE(AVG(rating),0) into avg
+    FROM bids b
+    WHERE ctusername = b.caretakerusername
+    GROUP BY b.caretakerusername;
+    RETURN avg;
+END; 
+$avg$
+LANGUAGE plpgsql;
 
 -------------------------------------------- TRIGGERS ------------------------------------------
 
