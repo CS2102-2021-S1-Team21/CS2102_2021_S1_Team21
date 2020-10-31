@@ -11,6 +11,7 @@ export default function SimpleRating({ rating, setRating }) {
           value={rating}
           onChange={(event, newValue) => {
             setRating(newValue);
+            console.log(newValue)
           }}
         />
       </Box>
