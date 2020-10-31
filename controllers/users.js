@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt');
 const db = require('../db');
 
-const { errorCodes, messages } = require('../constants');
+const { errorCodes, errorDetails, messages } = require('../constants');
 
 // Signup
 exports.create_user = async (req, res, next) => {
@@ -54,8 +54,10 @@ exports.create_user = async (req, res, next) => {
       categories: newUser.categories.filter((categoryName) => categoryName !== null), // Empty array if no categories inserted
     });
   } catch (err) {
-    console.error(err);
-    if (err.code === errorCodes.DUPLICATE_KEY_VALUE) {
+    if (
+      err.code === errorCodes.DUPLICATE_KEY_VALUE ||
+      err.where.startsWith(errorDetails.NOT_ADMIN_CONSTRAINT)
+    ) {
       res.status(400).json({ error: messages.DUPLICATE_USER });
       return;
     }
@@ -109,7 +111,10 @@ exports.create_admin_user = async (req, res, next) => {
       ...newUser,
     });
   } catch (err) {
-    if (err.code === errorCodes.DUPLICATE_KEY_VALUE) {
+    if (
+      err.code === errorCodes.DUPLICATE_KEY_VALUE ||
+      err.where.startsWith(errorDetails.NOT_USER_CONSTRAINT)
+    ) {
       res.status(400).json({ error: messages.DUPLICATE_USER });
       return;
     }
