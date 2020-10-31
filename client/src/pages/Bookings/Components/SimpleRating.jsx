@@ -10,8 +10,10 @@ export default function SimpleRating({ rating, setRating }) {
           name="simple-controlled"
           value={rating}
           onChange={(event, newValue) => {
+            if (newValue === null) {
+              newValue = 0;
+            }
             setRating(newValue);
-            console.log(newValue)
           }}
         />
       </Box>

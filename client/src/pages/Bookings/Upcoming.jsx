@@ -10,6 +10,7 @@ import Paper from '@material-ui/core/Paper';
 import api from '../../api';
 import { useStore } from '../../utilities/store';
 import SelectPaymentMethod from './Components/selectPaymentMethod';
+import { useHistory } from 'react-router-dom';
 
 const moment = require('moment');
 
@@ -18,6 +19,7 @@ const Upcoming = () => {
   const [paymentMethod, setPaymentMethod] = useState();
   const [paymentMethodOptions, setPaymentMethodOptions] = useState([]);
   const store = useStore();
+  const history = useHistory();
 
   useEffect(() => {
     api.bids.getPetOwnerBids(store.user.username).then((x) => setAllBids(x));
@@ -62,7 +64,11 @@ const Upcoming = () => {
           .map((bids) => {
             return (
               <Paper style={{ margin: 30, padding: 30 }} key={bids.id}>
-                <ListItem alignItems="flex-start">
+                <ListItem 
+                alignItems="flex-start"
+                button
+                onClick={() => history.push(`/profile/${bids.caretakerusername}`)}
+                >
                   <ListItemText
                     primary={
                       <Typography component="span" variant="h3" color="Primary">

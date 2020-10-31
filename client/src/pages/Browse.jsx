@@ -125,13 +125,10 @@ const Browse = () => {
                   .getDailyPrice(pet.categoryname)
                   .then((x) => setDailyPrice(x[0].dailyprice));
 
-                console.log(caretakers);
               } catch (err) {
                 console.log(err.message);
               }
-              console.log(
-                `rating:${rating}Pet:${pet.name}${pet.categoryname}${dailyPrice}start date: ${dateFrom}remarks${remarks}`,
-              );
+             
             }}
           >
             {'SEARCH'}
