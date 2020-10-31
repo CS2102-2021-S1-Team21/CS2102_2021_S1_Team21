@@ -13,4 +13,5 @@ exports.messages = {
   PET_NOT_FOUND: 'Sorry, we could not find a pet with this name',
   DUPLICATE_PET: 'A pet with the same name already exists',
   DUPLICATE_PET_REQUIREMENT: 'A pet cannot have two requirements with the same requirement type',
+  DUPLICATE_USER: 'A user with this username or email already exists',
 };
