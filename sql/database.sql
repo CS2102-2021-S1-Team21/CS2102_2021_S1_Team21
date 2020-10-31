@@ -170,11 +170,11 @@ RETURNS NUMERIC AS $avg$
 declare 
   avg NUMERIC;
 BEGIN 
-    SELECT COALESCE(AVG(rating),0) into avg
+    SELECT AVG(rating) into avg
     FROM bids b
     WHERE ctusername = b.caretakerusername
     GROUP BY b.caretakerusername;
-    RETURN avg;
+    RETURN COALESCE(avg, 0); -- Average rating = 0 if there are no bids yet
 END; 
 $avg$
 LANGUAGE plpgsql;
