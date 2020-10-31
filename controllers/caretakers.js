@@ -3,12 +3,11 @@ const db = require('../db');
 exports.index = async (req, res) => {
   try {
     const { minRating, petCategory, startDate, endDate, offset } = req.query;
-    console.log(`req${req.query.petCategory}`);
     const result = await db.query(
       `
-      SELECT username, totalAverageRating, name, bio
+      SELECT username, average_rating(username) AS totalAverageRating, name, bio
       FROM Caretaker CT INNER JOIN App_User ON App_User.username = CT.caretakerUsername
-      WHERE CT.totalAverageRating >= $1
+      WHERE average_rating(CT.caretakerUsername) >= $1
         AND EXISTS (
           SELECT 1 FROM Cares_For CF WHERE CF.caretakerUsername = CT.caretakerUsername AND CF.categoryName = $2
       ) AND NOT EXISTS (
@@ -28,7 +27,7 @@ exports.index = async (req, res) => {
         -- Max number of pets allowed at any point
         CASE 
         WHEN EXISTS (SELECT 1 FROM Full_Time_Employee FT WHERE FT.caretakerUsername = CT.caretakerUsername) 
-          OR CT.totalAverageRating >= 4
+          OR average_rating(CT.caretakerUsername) >= 4
           THEN 5 
         ELSE 2
         END
@@ -47,7 +46,6 @@ exports.index = async (req, res) => {
       [minRating, petCategory, startDate, endDate, offset],
     );
     res.json({ totalCount: result.rowCount, entries: result.rows });
-    // console.log(result.rows);
   } catch (err) {
     console.error(err);
   }
