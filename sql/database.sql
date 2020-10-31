@@ -165,8 +165,8 @@ CREATE OR REPLACE FUNCTION average_rating (ctusername VARCHAR)
 RETURNS NUMERIC AS $avg$
 declare 
   avg NUMERIC;
-BEGIN  
-    SELECT AVG(rating) into avg
+BEGIN 
+    SELECT COALESCE(AVG(rating),0) into avg
     FROM bids b
     WHERE ctusername = b.caretakerusername
     GROUP BY b.caretakerusername;
