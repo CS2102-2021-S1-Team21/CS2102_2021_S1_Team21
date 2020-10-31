@@ -19,26 +19,26 @@ import { useSnackbarContext } from '../utilities/snackbar';
 const AccountType = Object.freeze({
   PET_OWNER: 'petOwner',
   CARETAKER: 'caretaker',
-  BOTH: 'both'
+  BOTH: 'both',
 });
 
 const DEFAULT_VALUES = {
-  username: 'admin',
-  email: 'admin@gmail.com',
-  password: 'pass',
-  passwordConfirmation: 'pass',
-  name: 'Admin',
-  bio: 'hello',
-  phonenumber: '234',
-  address: '234',
-  postalcode: '234',
-  accountType: AccountType.CARETAKER,
-  caretakerType: 'fullTime',
+  username: '',
+  email: '',
+  password: '',
+  passwordConfirmation: '',
+  name: '',
+  bio: '',
+  phonenumber: '',
+  address: '',
+  postalcode: '',
+  accountType: '',
+  caretakerType: '',
   ccnumber: '',
   ccname: '',
-  ccexpirydate: '2020-01-01',
+  ccexpirydate: '',
   cvvcode: '',
-  caresForCategories: ['Cat', 'Large dog'],
+  caresForCategories: [],
 };
 
 // Utility Functions
@@ -66,10 +66,12 @@ const validationSchema = Yup.object().shape({
     .required()
     .oneOf([Yup.ref('password')], 'Password confirmation must match password'),
   name: Yup.string().required(),
-  bio: Yup.string().required().max(255),
+  bio: Yup.string().max(255),
   phonenumber: Yup.string().required(),
   address: Yup.string().required(),
-  postalcode: Yup.string().required().matches(/^[0-9]+$/, 'Must be a number'),
+  postalcode: Yup.string()
+    .required()
+    .matches(/^[0-9]+$/, 'Must be a number'),
   accountType: Yup.string().required(),
   caretakerType: Yup.string().when('accountType', {
     is: isCaretaker,
@@ -99,7 +101,11 @@ const Registration = () => {
   }, []);
 
   const handleSubmit = async (values) => {
-    await showSnackbar(api.users.signup(_.omit(values, 'passwordConfirmation')))
+    const valuesToPost = {
+      ..._.omit(values, 'passwordConfirmation'),
+      ccexpirydate: values.ccexpirydate || null, // send null instead of empty string
+    };
+    await showSnackbar(api.users.signup(valuesToPost))
       .then(() => {
         history.push('/login');
       })
@@ -218,7 +224,6 @@ const Registration = () => {
                   name="bio"
                   label="Write a few sentences to introduce yourself"
                   component={FormTextArea}
-                  required
                 />
               </Grid>
 
@@ -243,7 +248,7 @@ const Registration = () => {
               {isPetOwner(formik.values.accountType) && (
                 <>
                   <Grid item xs={12} sm={6}>
-                    <h1>{'Add Credit Card'}</h1>
+                    <h1>{'Payment Info'}</h1>
                     <Field
                       name="ccnumber"
                       label="Enter credit card number"
@@ -264,7 +269,6 @@ const Registration = () => {
                       views={['month']}
                       component={FormDatePicker}
                       format="MM/yy"
-                      required
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
