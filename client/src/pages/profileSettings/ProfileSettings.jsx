@@ -20,7 +20,6 @@ const ProfileSettings = () => {
     bio: Yup.string().required(),
     address: Yup.string().required('You must register an address'),
     postalcode: Yup.string().required('You must register an postal code'),
-    email: Yup.string().email().required('Please enter a valid email address'),
     passworddigest: Yup.string(),
     confirmpassword: Yup.string().oneOf([Yup.ref('passworddigest'), null], 'Passwords must match'),
   });
@@ -103,7 +102,7 @@ const ProfileSettings = () => {
                   <Field name="postalcode" label="Postal Code" component={FormTextField} required />
                 </Grid>
                 <Grid item xs={6} md={5}>
-                  <Field name="email" label="Email" component={FormTextField} required />
+                  <Field name="email" label="Email" disabled component={FormTextField} required />
                 </Grid>
                 <Grid item xs={6}>
                   <Field
