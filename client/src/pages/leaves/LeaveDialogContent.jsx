@@ -5,14 +5,16 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import { KeyboardDatePicker } from '@material-ui/pickers';
 import DialogActions from '@material-ui/core/DialogActions';
 import { Button, Dialog } from '@material-ui/core';
-import { addDays } from 'date-fns';
+import { format } from 'date-fns';
 import api from '../../api';
 import { useStore } from '../../utilities/store';
+import { useSnackbarContext } from '../../utilities/snackbar';
 
 const LeaveDialogContent = ({ open, setOpen }) => {
   const [selectedDateFrom, handleDateChangeFrom] = useState(new Date());
   const [selectedDateTo, handleDateChangeTo] = useState(new Date());
   const store = useStore();
+  const showSnackbar = useSnackbarContext();
 
   const handleCancel = () => {
     setOpen(false);
@@ -20,15 +22,15 @@ const LeaveDialogContent = ({ open, setOpen }) => {
 
   const handleApply = async (e) => {
     e.preventDefault();
-    setOpen(false);
     try {
       const body = {
-        startDate: addDays(selectedDateFrom, 1),
-        endDate: addDays(selectedDateTo, 1),
+        startDate: format(selectedDateFrom, 'yyyy-MM-dd'),
+        endDate: format(selectedDateTo, 'yyyy-MM-dd'),
         caretakerUsername: store.user.username,
         isEmergency: 'FALSE',
       };
-      await api.leaves.applyLeave(body);
+      await showSnackbar(api.leaves.applyLeave(body));
+      setOpen(false);
     } catch (err) {
       console.log(err.message);
     }

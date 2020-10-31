@@ -3,6 +3,7 @@ import { Button, Grid, Container, Typography, Card, CardContent } from '@materia
 import { Field, Form, Formik } from 'formik';
 import { useHistory } from 'react-router-dom';
 import * as Yup from 'yup';
+import { useSnackbarContext } from '../../utilities/snackbar';
 import { useStore } from '../../utilities/store';
 import api from '../../api';
 import PetOwnerForm from './PetOwnerForm';
@@ -25,12 +26,13 @@ const ProfileSettings = () => {
   });
 
   const history = useHistory();
+  const showSnackbar = useSnackbarContext();
   const { user: userAccount } = useStore();
   const [user, setUser] = useState();
 
   const handleSubmit = async (input) => {
     try {
-      await api.profileSettings.updateUserDetails(input.values);
+      await showSnackbar(api.profileSettings.updateUserDetails(input.values));
     } catch (err) {
       console.log(err.message);
     }
@@ -40,7 +42,7 @@ const ProfileSettings = () => {
     try {
       if (!window.confirm(`Are you sure you want to delete your account?`)) return;
       // set deletedAt, then delete session and finally push to login page
-      await api.auth.deleteUser(userAccount.username).then(api.auth.logout());
+      await showSnackbar(api.auth.deleteUser(userAccount.username)).then(api.auth.logout());
       history.push('/login');
     } catch (err) {
       console.log(err.message);
@@ -48,7 +50,7 @@ const ProfileSettings = () => {
   };
 
   useEffect(() => {
-    api.profileSettings.getUserDetails(userAccount.username).then((res) => {
+    showSnackbar(api.profileSettings.getUserDetails(userAccount.username)).then((res) => {
       setUser(res);
     });
   }, [userAccount]);

@@ -139,6 +139,15 @@ const NavBar = ({ children }) => {
                 <Button
                   color="inherit"
                   className={classes.navItem}
+                  onClick={() => history.push('/pcs-admin/dashboard')}
+                >
+                  {'Dashboard'}
+                </Button>
+              )}
+              {user.isAdmin && (
+                <Button
+                  color="inherit"
+                  className={classes.navItem}
                   onClick={() => history.push('/pcs-admin/leave-request')}
                 >
                   {'Leave Application'}
