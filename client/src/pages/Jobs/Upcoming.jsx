@@ -38,7 +38,7 @@ const Upcoming = () => {
         comment: null,
         reviewDateTime: null,
       };
-      console.log(`bids ${bid.submittedat}`);
+      console.log(`bids ${body.transactionDateTime}`);
       console.log(moment(bid.submittedat).subtract(8, 'hours').format('YYYY-MM-DD HH:mm:ss'));
       await api.bids.updateBids(body);
     } catch (err) {

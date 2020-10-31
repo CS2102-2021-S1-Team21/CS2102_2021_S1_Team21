@@ -79,7 +79,7 @@ exports.updateBids = async (req, res) => {
       comment,
       reviewDateTime,
     } = req.body;
-    console.log(`body ${req.body.reviewDateTime}`);
+    console.log(`body1 ${req.body.petName}`);
     const result = await db.query(
       `UPDATE Bids SET 
         status = $7,
