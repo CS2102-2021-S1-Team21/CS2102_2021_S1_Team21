@@ -3,7 +3,6 @@ import { Button, Grid, Container, Typography, Card, CardContent } from '@materia
 import { Field, Form, Formik } from 'formik';
 import { useHistory } from 'react-router-dom';
 import * as Yup from 'yup';
-import { useStore } from '../../utilities/store';
 import api from '../../api';
 import PetOwnerForm from './PetOwnerForm';
 import CaretakerForm from './CaretakerForm';
@@ -12,7 +11,7 @@ import FormTextField from '../../components/forms/FormTextField';
 import SubmitButton from '../../components/forms/SubmitButton';
 import { useSnackbarContext } from '../../utilities/snackbar';
 
-const UserProfileSettings = ({username, role}) => {
+const UserProfileSettings = ({ username, role }) => {
   const UpdateSchema = Yup.object({
     name: Yup.string().required(),
     username: Yup.string().required(),
@@ -28,7 +27,6 @@ const UserProfileSettings = ({username, role}) => {
   const history = useHistory();
   const [user, setUser] = useState();
   const showSnackbar = useSnackbarContext();
-
 
   const handleSubmit = async (input) => {
     try {
@@ -140,9 +138,9 @@ const UserProfileSettings = ({username, role}) => {
             </Form>
           </Formik>
           {/* If PetOwner, render PetOwnerForm */}
-          {role == 'petowner' && <PetOwnerForm username={username}/>}
+          {role === 'petowner' && <PetOwnerForm username={username} />}
           {/* If Caretaker, render CaretakerForm */}
-          {role == 'caretaker' && <CaretakerForm username={username} />}
+          {role === 'caretaker' && <CaretakerForm username={username} />}
         </CardContent>
       </Card>
     </Container>

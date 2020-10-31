@@ -13,6 +13,6 @@ const users = {
   deleteAdmin: async (username) => {
     return baseAPI.delete(`admins/${username}`);
   },
-}
+};
 
 export default users;
