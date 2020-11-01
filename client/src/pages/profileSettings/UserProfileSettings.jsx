@@ -16,7 +16,6 @@ const UserProfileSettings = ({ username, role }) => {
     name: Yup.string().required(),
     username: Yup.string().required(),
     phonenumber: Yup.string().required(),
-    bio: Yup.string().required(),
     address: Yup.string().required('You must register an address'),
     postalcode: Yup.string().required('You must register an postal code'),
     email: Yup.string().email().required('Please enter a valid email address'),
@@ -92,7 +91,7 @@ const UserProfileSettings = ({ username, role }) => {
                   />
                 </Grid>
                 <Grid item xs={12}>
-                  <Field name="bio" label="About" multiline component={FormTextField} required />
+                  <Field name="bio" label="About" multiline component={FormTextField} />
                 </Grid>
                 <Grid item xs={12} md={5}>
                   <Field name="address" label="Address" component={FormTextField} required />
