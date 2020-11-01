@@ -29,7 +29,7 @@ const UserProfileSettings = ({ username, role }) => {
 
   const handleSubmit = async (input) => {
     try {
-      await api.profileSettings.updateUserDetails(input.values);
+      await showSnackbar(api.profileSettings.updateUserDetails(input.values)).catch(console.error);
     } catch (err) {
       console.log(err.message);
     }
@@ -39,7 +39,7 @@ const UserProfileSettings = ({ username, role }) => {
     try {
       if (!window.confirm(`Are you sure you want to delete your account?`)) return;
       // set deletedAt, then delete session and finally push to login page
-      await api.users.deleteUser(username).then(api.auth.logout());
+      await showSnackbar(api.users.deleteUser(username).then(api.auth.logout())).catch(console.error);
       history.push('/login');
     } catch (err) {
       console.log(err.message);

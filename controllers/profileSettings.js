@@ -42,7 +42,7 @@ exports.edit = async (req, res) => {
       res.status(404).json({ error: 'User not found' });
       return;
     }
-    res.json(result.rows);
+    res.json({result: result.rows, success: `Profile successfully updated!`});
   } catch (err) {
     console.error(err);
     res.json({ error: 'An unexpected error occurred' });
@@ -90,7 +90,7 @@ exports.adminEdit = async (req, res) => {
       res.status(404).json({ error: 'Admin not found' });
       return;
     }
-    res.json(result.rows);
+    res.json({result: result.rows, success: `Profile successfully updated!`});
   } catch (err) {
     console.error(err);
     res.json({ error: 'An unexpected error occurred' });

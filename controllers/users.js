@@ -14,7 +14,8 @@ exports.delete_user = async (req, res) => {
     const result = await db.query('UPDATE app_user SET deletedAt = NOW() WHERE username = $1', [
       username,
     ]);
-    res.json(result.rows);
+    res.json({result: result.rows, success: `Account successfully deleted!`});
+
   } catch (err) {
     console.error(err);
     res.json({ error: 'An unexpected error occurred' });
@@ -27,7 +28,7 @@ exports.delete_admin = async (req, res) => {
     const result = await db.query('DELETE FROM pcs_administrator WHERE username = $1', [
       username
     ]);
-    res.json(result.rows);
+    res.json({result: result.rows, success: `Account successfully deleted!`});
   } catch (err) {
     console.error(err);
     res.json({ error: 'An unexpected error occurred' });
