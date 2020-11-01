@@ -13,8 +13,8 @@ const DEFAULT_ADMIN = {
   email: '',
   name: '',
   password: '',
-  passwordConfirmation: ''
-}
+  passwordConfirmation: '',
+};
 
 const validationSchema = Yup.object().shape({
   username: Yup.string()
@@ -46,24 +46,20 @@ const NewAdmin = () => {
         </Typography>
       </Box>
 
-      <Formik onSubmit={handleSubmit} initialValues={DEFAULT_ADMIN} validationSchema={validationSchema}>
+      <Formik
+        onSubmit={handleSubmit}
+        initialValues={DEFAULT_ADMIN}
+        validationSchema={validationSchema}
+      >
         <Form>
           <Grid container spacing={2}>
             <Grid item xs={12} md={6}>
-              <Field
-                name="name"
-                label="Enter name of new admin"
-                component={FormTextField}
-              />
+              <Field name="name" label="Enter name of new admin" component={FormTextField} />
             </Grid>
             {/* Next item for spacing only */}
             <Grid item xs={0} md={6} />
             <Grid item xs={12} md={6}>
-              <Field
-                name="username"
-                label="Enter a username"
-                component={FormTextField}
-              />
+              <Field name="username" label="Enter a username" component={FormTextField} />
             </Grid>
             <Grid item xs={12} md={6}>
               <Field
@@ -91,15 +87,13 @@ const NewAdmin = () => {
             </Grid>
 
             <Grid item xs={12} md={6}>
-              <SubmitButton>
-                {'Create Account'}
-              </SubmitButton>
+              <SubmitButton>{'Create Account'}</SubmitButton>
             </Grid>
           </Grid>
         </Form>
       </Formik>
     </Container>
-  )
-}
+  );
+};
 
 export default NewAdmin;

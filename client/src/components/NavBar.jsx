@@ -170,15 +170,16 @@ const NavBar = ({ children }) => {
                   <SettingsIcon />
                 </IconButton>
               </Tooltip>
-              <Tooltip
-                title={`View Profile (${user.name})`}
-                // TODO: does this mean that pet owners need a profile too?
-                onClick={() => history.push(`/profile/${user.username}`)}
-              >
-                <IconButton color="inherit">
-                  <AccountCircleIcon />
-                </IconButton>
-              </Tooltip>
+              {!user.isAdmin && (
+                <Tooltip
+                  title={`View Profile (${user.name})`}
+                  onClick={() => history.push(`/profile/${user.username}`)}
+                >
+                  <IconButton color="inherit">
+                    <AccountCircleIcon />
+                  </IconButton>
+                </Tooltip>
+              )}
               <Tooltip title="Log Out">
                 <IconButton color="inherit" onClick={handleLogout}>
                   <ExitToAppIcon />
