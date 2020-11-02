@@ -9,7 +9,7 @@ router.get('/sessions', auth.session_info);
 router.post('/sessions', auth.create_session);
 router.delete('/sessions', ensureAuthenticated, auth.delete_session);
 
-// router.post('/users', auth.create_user);
+router.post('/users', users.create_user);
 router.delete('/users/:username', users.delete_user);
 router.delete('/admins/:username', users.delete_admin);
 

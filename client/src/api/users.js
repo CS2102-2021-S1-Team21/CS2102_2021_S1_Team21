@@ -1,8 +1,8 @@
 import baseAPI from './baseAPI';
 
 const users = {
-  signup: async (userAttributes) => {
-    return baseAPI.post('users');
+  signup: async (newUser) => {
+    return baseAPI.post('users', newUser);
   },
   deleteUser: async (username) => {
     return baseAPI.delete(`users/${username}`);
