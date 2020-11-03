@@ -1,6 +1,6 @@
 const db = require('../db');
 
-const { errorDetails } = require('../constants');
+// const { errorDetails } = require('../constants');
 
 exports.apply = async (req, res) => {
   try {
