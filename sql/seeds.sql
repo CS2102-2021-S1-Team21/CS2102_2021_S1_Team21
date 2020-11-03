@@ -4,8 +4,8 @@ VALUES
     'pcsadmin',
     'admin@petcaringservices.org.sg',
     '$2a$10$n2q9efUAsWFKbPzTu6O/4udJG6/kuwV.X.c8uwHTX36cpCk/Er3aK', -- bcrypt for 'pcsadmin'
-    'PCS Admin',
-    null, '2020-01-01');
+    'PCS Admin', '2020-01-01',
+    null);
 
 INSERT INTO PCS_Administrator
 VALUES
@@ -169,14 +169,14 @@ VALUES ('harambe',
 
 INSERT INTO applies_for_leave_period
 VALUES ('wincent',
-        '4/4/2020',
-        '5/4/2020',
+        '30/01/2022',
+        '28/02/2022',
         FALSE);
 
 INSERT INTO indicates_availability_period
 VALUES ('dora',
-        '4/4/2020',
-        '10/4/2020');
+        '4/4/2021',
+        '10/4/2021');
 
 
 INSERT INTO Bids
@@ -212,18 +212,34 @@ VALUES('Gougou',
        300,
        2,
        'Terrible, my dog came back obese',
-       '1/1/20');
-       
-delete from bids where caretakerusername = 'dora' or caretakerusername = 'wincent';
-insert into bids values ('Gougou','ladygaga','wincent',25,'Accepted','1/1/20','4/3/20','15/6/20','On-site transfer',null,NULL,NULL,NULL,null,null,null);
-insert into bids values ('Gougou','ladygaga','dora',25,'Accepted','1/1/20','4/3/20','18/6/20','On-site transfer',null,NULL,NULL,NULL,null,null,null);
-insert into bids values ('Gougou','ladygaga','dora',25,'Accepted','1/1/20','4/3/20','21/6/20','On-site transfer',null,NULL,NULL,NULL,null,null,null);
-insert into bids values ('Gougou','ladygaga','dora',25,'Accepted','1/1/20','4/3/20','23/6/20','On-site transfer',null,NULL,NULL,NULL,null,null,null);
-insert into bids values ('Gougou','ladygaga','dora',25,'Accepted','1/1/20','4/3/20','26/6/20','On-site transfer',null,NULL,NULL,NULL,null,null,null);
-insert into bids values ('Gougou','ladygaga','dora',25,'Accepted','1/1/20','5/3/20','4/7/20','On-site transfer',null,NULL,NULL,NULL,null,null,null);
-insert into bids values ('Gougou','ladygaga','dora',25,'Accepted','1/1/20','4/3/20','22/6/20','On-site transfer',null,NULL,NULL,NULL,null,null,null);
-
-INSERT INTO Caretaker VALUES ('oompaloompa');
+       '1/1/20'),
+       delete from bids where caretakerusername = 'dora' or caretakerusername = 'wincent';
+       insert into bids values ('Gougou','ladygaga','dora',25,'Pending','1/1/20','4/3/20','15/6/20','On-site transfer',null,NULL,NULL,NULL,null,null,null);
+       insert into bids values ('Gougou','ladygaga','dora',25,'Pending','1/1/20','4/3/20','18/6/20','On-site transfer',null,NULL,NULL,NULL,null,null,null);
+       insert into bids values ('Gougou','ladygaga','dora',25,'Pending','1/1/20','4/3/20','21/6/20','On-site transfer',null,NULL,NULL,NULL,null,null,null);
+       insert into bids values ('Gougou','ladygaga','dora',25,'Pending','1/1/20','4/3/20','23/6/20','On-site transfer',null,NULL,NULL,NULL,null,null,null);
+       insert into bids values ('Gougou','ladygaga','dora',25,'Pending','1/1/20','4/3/20','26/6/20','On-site transfer',null,NULL,NULL,NULL,null,null,null);
+       insert into bids values ('Gougou','ladygaga','dora',25,'Pending','1/1/20','5/3/20','4/7/20','On-site transfer',null,NULL,NULL,NULL,null,null,null);
+       insert into bids values ('Gougou','ladygaga','dora',25,'Pending','1/1/20','4/3/20','22/6/20','On-site transfer',null,NULL,NULL,NULL,null,null,null);
+ insert into bids (petName, petOwnerUsername, caretakerUsername, dailyPrice, submittedAt, startDate, endDate ,transferType) 
+ values ('Gougou','ladygaga','dora',25,'1/1/20','4/3/20','15/6/20','On-site transfer');
+   petName VARCHAR,
+    petOwnerUsername VARCHAR,
+    caretakerUsername VARCHAR REFERENCES Caretaker(caretakerUsername) ON DELETE CASCADE,
+    dailyPrice DECIMAL(10,2) NOT NULL,
+    status STATUS DEFAULT 'Pending',
+    submittedAt TIMESTAMP,
+    startDate DATE,
+    endDate DATE,
+    transferType TRANSFER_TYPE NOT NULL,
+    remarks VARCHAR,
+    transactionDateTime TIMESTAMP,
+    paymentMethod PAYMENT_METHOD,
+    totalAmount DECIMAL(10,2),
+    rating INTEGER CHECK (rating BETWEEN 1 AND 5),
+    comment VARCHAR,
+    reviewDateTime TIMESTAMP,
+INSERT INTO Caretaker VALUES ('oompaloompa', null);
 
 INSERT INTO Full_Time_Employee VALUES ('oompaloompa');
 

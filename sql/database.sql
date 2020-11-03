@@ -419,7 +419,7 @@ BEGIN
         SELECT caretakerusername, as_of_date, COUNT(*) AS n
         FROM (SELECT d::date AS as_of_date FROM generate_series(NEW.startdate::date, NEW.enddate::date, '1 day') d) as dates
         INNER JOIN Bids ON dates.as_of_date BETWEEN Bids.startdate AND Bids.enddate
-        WHERE Bids.status = 'Accepted'
+        WHERE Bids.status = 'Accepted' OR Bids.status = 'Pending'
         GROUP BY caretakerusername, as_of_date) T WHERE NEW.caretakerusername = T.caretakerusername;
     -- All caretakers can have a maximum of 5 pets at one time
     IF max_jobs >= 5 THEN

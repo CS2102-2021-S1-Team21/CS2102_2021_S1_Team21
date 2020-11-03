@@ -32,7 +32,6 @@ const api = {
   caresFor,
   users,
   userProfiles,
-  caretakerMonthlyInfo,
 };
 
 export default api;
