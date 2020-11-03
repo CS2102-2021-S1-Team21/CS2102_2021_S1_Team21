@@ -47,7 +47,7 @@ const NavBar = ({ children }) => {
               <Button
                 color="inherit"
                 className={classes.navItem}
-                onClick={() => history.push('/caretakers')}
+                onClick={() => history.push('/browse')}
               >
                 {'Find Caretakers'}
               </Button>
@@ -92,6 +92,15 @@ const NavBar = ({ children }) => {
               onClick={() => history.push('/my-availability')}
             >
               {'My Availability'}
+            </Button>
+          )}
+          {(user.isFullTimeCaretaker || user.isPartTimeCaretaker) && (
+            <Button
+              color="inherit"
+              className={classes.navItem}
+              onClick={() => history.push('/my-performance')}
+            >
+              {'My Performance'}
             </Button>
           )}
           {user.isAdmin && (

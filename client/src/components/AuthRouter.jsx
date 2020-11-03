@@ -6,6 +6,7 @@ import Leaves from '../pages/leaves/Leaves';
 import AdminDashboard from '../pages/pcsAdmin/AdminDashboard';
 import LeaveRequest from '../pages/pcsAdmin/LeaveRequest';
 import NewAdmin from '../pages/pcsAdmin/NewAdmin';
+import Performance from '../pages/performance/Performance';
 import PetProfile from '../pages/pets/PetProfile';
 import Pets from '../pages/pets/Pets';
 import ProfileSettings from '../pages/profileSettings/ProfileSettings';
@@ -58,12 +59,11 @@ const AuthRouter = () => {
           {/* Redirect to the respective home page for this category of users */}
           <Route exact path="/" render={() => <Redirect to={defaultHomePage} />} />
 
-          {/* <Route path="/pet-owner" component={PetOwnerListing} /> */}
           <Route exact path="/my-leaves" component={Leaves} />
           <Route exact path="/my-availability" component={Availability} />
           <Route exact path="/my-pets" component={Pets} />
+          <Route exact path="/my-performance" component={Performance} />
           <Route path="/pet-owners/:petOwnerUsername/pets/:petName" component={PetProfile} />
-          {/* <Route path="/pcs-admin" component={PcsAdmin} /> */}
           <Route path="/profile-settings" component={ProfileSettings} />
           <Route path="/profile/:username" component={UserProfile} />
           {user.isAdmin && <Route path="/pcs-admin/dashboard" component={AdminDashboard} />}
