@@ -1,9 +1,12 @@
 import baseAPI from './baseAPI';
 
-const caretakers = {
+const adminDashboard = {
   getCaretakerRanking: async () => {
-    return baseAPI.get('admin-dashboard');
+    return baseAPI.get('admin-dashboard/leaderboard');
   },
+  getPerformance: async() => {
+    return baseAPI.get('admin-dashboard/performance');
+  }
 };
 
-export default caretakers;
+export default adminDashboard;
