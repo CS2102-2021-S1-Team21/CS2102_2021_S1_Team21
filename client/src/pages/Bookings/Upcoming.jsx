@@ -11,6 +11,7 @@ import api from '../../api';
 import { useStore } from '../../utilities/store';
 import SelectPaymentMethod from './Components/selectPaymentMethod';
 import { useHistory } from 'react-router-dom';
+import { useSnackbarContext } from '../../utilities/snackbar';
 
 const moment = require('moment');
 
@@ -20,6 +21,7 @@ const Upcoming = () => {
   const [paymentMethodOptions, setPaymentMethodOptions] = useState([]);
   const store = useStore();
   const history = useHistory();
+  const showSnackbar = useSnackbarContext();
 
   useEffect(() => {
     api.bids.getPetOwnerBids(store.user.username).then((x) => setAllBids(x));
@@ -47,7 +49,7 @@ const Upcoming = () => {
         comment: null,
         reviewDateTime: null,
       };
-      await api.bids.updateBids(body);
+      await showSnackbar(api.bids.updateBids(body));
     } catch (err) {
       console.log(`err${err.message}`);
     }
