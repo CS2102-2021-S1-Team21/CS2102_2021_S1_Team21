@@ -13,6 +13,7 @@ import api from '../../api';
 import { useStore } from '../../utilities/store';
 import WriteReviewDialog from './Components/writeReviewDialog';
 import { useHistory } from 'react-router-dom';
+import { useSnackbarContext } from '../../utilities/snackbar';
 
 const moment = require('moment');
 
@@ -24,6 +25,7 @@ const Past = () => {
   const [rating, setRating] = React.useState();
   const store = useStore();
   const history = useHistory();
+  const showSnackbar = useSnackbarContext();
 
   useEffect(() => {
     api.bids.getPetOwnerBids(store.user.username).then((x) => setAllBids(x));
@@ -50,7 +52,7 @@ const Past = () => {
       console.log(bid.transactiondatetime);
       console.log(body.transactionDateTime);
       console.log(`reviewDateTime${body.reviewDateTime}`);
-      await api.bids.updateBids(body);
+      await showSnackbar(api.bids.updateBids(body));
     } catch (err) {
       console.log(`err${err.message}`);
     }

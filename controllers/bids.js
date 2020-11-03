@@ -1,6 +1,6 @@
 const db = require('../db');
 
-// const { errorDetails } = require('../constants');
+const { messages, errorCodes } = require('../constants');
 
 exports.apply = async (req, res) => {
   try {
@@ -114,14 +114,16 @@ exports.updateBids = async (req, res, next) => {
       ],
     );
     console.log(result.rows);
-    res.json(result.rows);
+    res.json({success: `Bid successfully updated!`, result: result.rows});
+
   } catch (err) {
-    if (err) {
+    console.log('ERROR1: '+ err)
+    if (err.code === errorCodes.TRANSACTION_DATE_TIME_NOT_VALID_DATETIME) {
           console.error('ERROR: ', err.message);
 
       res
         .status(400)
-        .json({ error: 'An unexpected error occurred' });
+        .json({ error: messages.PAYMENT_NOT_DONE });
       return;
     }
     next(err);

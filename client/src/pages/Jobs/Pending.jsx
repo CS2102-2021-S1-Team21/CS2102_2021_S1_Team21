@@ -13,6 +13,7 @@ import Paper from '@material-ui/core/Paper';
 import api from '../../api';
 import { useStore } from '../../utilities/store';
 import { useHistory } from 'react-router-dom';
+import { useSnackbarContext } from '../../utilities/snackbar';
 
 const moment = require('moment');
 
@@ -20,6 +21,7 @@ const Pending = () => {
   const [bids, setBids] = useState([]);
   const store = useStore();
   const history = useHistory();
+  const showSnackbar = useSnackbarContext();
 
   useEffect(() => {
     api.bids.getCaretakerBids(store.user.username).then((x) => setBids(x));
@@ -42,7 +44,7 @@ const Pending = () => {
         comment: null,
         reviewDateTime: null,
       };
-      await api.bids.updateBids(body);
+      await showSnackbar(api.bids.updateBids(body));
     } catch (err) {
       console.log(`err${err.message}`);
     }

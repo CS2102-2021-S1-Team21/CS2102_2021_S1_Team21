@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Bookings = () => {
+const Jobs = () => {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
@@ -67,7 +67,7 @@ const Bookings = () => {
           onChange={handleChange}
           variant="scrollable"
           scrollButtons="auto"
-          aria-label="PetOwner Tabs"
+          aria-label="Caretaker Tabs"
         >
           <Tab label="Pending" {...a11yProps(0)} />
           <Tab label="Upcoming" {...a11yProps(1)} />
@@ -91,4 +91,4 @@ const Bookings = () => {
   );
 };
 
-export default Bookings;
+export default Jobs;
