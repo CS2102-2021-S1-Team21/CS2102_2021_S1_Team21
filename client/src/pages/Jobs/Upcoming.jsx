@@ -91,7 +91,6 @@ const Upcoming = () => {
                       size="small"
                       variant="outlined"
                       color="primary"
-                      disabled = {!bid.transactiondatetime}
                       onClick={() => {
                         handleAccept(bid);
                       }}
