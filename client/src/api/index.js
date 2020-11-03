@@ -11,7 +11,6 @@ import profileSettings from './profileSettings';
 import reviews from './reviews';
 import userProfiles from './userProfiles';
 import users from './users';
-import caretakerMonthlyInfo from './caretakerMonthlyInfo';
 
 /* ====================================
  * Index of all API request routes
