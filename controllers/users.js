@@ -24,7 +24,7 @@ exports.create_user = async (req, res, next) => {
   } = req.body;
 
   try {
-    const passwordDigest = bcrypt.hash(password, 10);
+    const passwordDigest = await bcrypt.hash(password, 10);
 
     const result = await db.query(
       'SELECT * FROM insert_new_user($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)',
