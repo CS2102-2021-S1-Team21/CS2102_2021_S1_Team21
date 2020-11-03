@@ -55,6 +55,84 @@ const Performance = () => {
     },
   ];
 
+  
+  const columnsPerformance = [
+    { field: 'caretakerusername', headerName: 'Username', width: 150, sortable: false },
+    {
+      field: 'role',
+      headerName: 'Role',
+      width: 100,
+    },
+    {
+      field: 'jobcount',
+      headerName: 'Job Count',
+      description: '',
+      width: 200,
+    },
+    {
+      field: 'bidcount',
+      headerName: 'Bid Count',
+      description:
+        '',
+      width: 150,
+    },
+    {
+      field: 'averagerating',
+      headerName: 'Average Rating',
+      description:
+        '',
+      width: 150,
+    },
+    {
+      field: 'petdaycount',
+      headerName: 'Pet Day',
+      description: 'Total Number of Pet Day the caretaker serviced last month',
+      width: 200,
+    },
+    {
+      field: 'invoiceamount',
+      headerName: 'Invoice Amount',
+      description: 'Total Monthly Revenue earned by each Caretaker. This is the amount the Petowner paid for the service and is calculated using the formula: Number of service days x Daily Price.',
+      width: 200,
+    },
+    {
+      field: 'variablepercentage',
+      headerName: 'Variable %',
+      description: 'For Part Timers, the variable percentage is 80% if the total Monthly Invoice Amount > $500. Else, the variable percentage is at 60%. For Full Timers, if Invoice Amount > $2,500, they will be entitled 50% of the share for the excess portions.',
+      width: 200,
+    },
+    {
+      field: 'basesalary',
+      headerName: 'Base Salary',
+      description: 'Only Full Time Employees have $2,500 base monthly salary',
+      width: 200,
+    },
+    {
+      field: 'variablesalary',
+      headerName: 'Variable Salary',
+      description: '',
+      width: 200,
+    },
+    {
+      field: 'totalsalary',
+      headerName: 'Total Salary',
+      description: 'Sum of the Base Salary and Variable Salary',
+      width: 200,
+    },
+    {
+      field: 'profitmargin',
+      headerName: 'Profit Margin',
+      description: 'The monthly revenue (Total Invoice) - total monthly salary paid to each employee (Total Salary)',
+      width: 200,
+    },
+    {
+      field: 'performance',
+      headerName: 'Performance',
+      description: 'Excellent performance if the monthly Profit Margin > $500. Good performance for Profit Margin between $0 and $499. Underperforming for those who fall below $0 (only applicable for full-timers)',
+      width: 200,
+    },
+  ];
+
   useEffect(() => {
     showSnackbar(api.adminDashboard.getCaretakerRanking()).then((res) => {
       if (res.info) return; // hacky way to check for no results
@@ -66,6 +144,9 @@ const Performance = () => {
     })
   }, []);
 
+  console.log(personalPerformanceRows)
+  console.log(rows)
+
   return (
     <Container>
       <Paper className={classes.paper}>
@@ -76,7 +157,9 @@ const Performance = () => {
         <h1>
           {'My Performance'}
         </h1>
-
+        <div style={{ height: 185, width: '100%' }}>
+        <DataGrid disableSelectionOnClick="true" rows={personalPerformanceRows} columns={columnsPerformance}/>
+        </div>
         <h1>
           {'Leaderboard'}
         </h1>
