@@ -365,7 +365,7 @@ BEGIN
         RAISE EXCEPTION 'Caretaker is unable to receive more pets during this period';
     -- Part timer can hold up to 2 or 5 pets depending on rating
     ELSEIF (NEW.caretakerusername IN (SELECT P.caretakerusername FROM Part_Time_Employee P) 
-        AND ((SELECT * FROM average_rating(NEW.caretakerusername)) <= 4) AND max_jobs >= 2) THEN
+        AND (average_rating(NEW.caretakerusername) <= 4) AND max_jobs >= 2) THEN
             RAISE EXCEPTION 'Part time Caretaker is unable to receive more pets during this period';
     END IF;
 
