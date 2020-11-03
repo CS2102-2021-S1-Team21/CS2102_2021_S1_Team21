@@ -449,11 +449,12 @@ EXECUTE PROCEDURE bids_constraint();
 -- Action: Reject all other bids with the same pet, petowner and overlapping time period.
 CREATE OR REPLACE FUNCTION reject_conflicting_bids()
 RETURNS TRIGGER AS $$
+DECLARE totalJobs INTEGER;
 BEGIN
     UPDATE bids SET status = 'Rejected'
     WHERE bids.status = 'Pending' AND bids.caretakerusername != NEW.caretakerusername AND bids.petownerusername = NEW.petownerusername AND bids.petname = NEW.petname AND 
         (bids.startdate BETWEEN NEW.startdate AND NEW.enddate OR bids.enddate BETWEEN NEW.startdate AND NEW.enddate);
-        RETURN NULL;
+    RETURN NULL;
     END;
 $$ LANGUAGE plpgsql;
 
@@ -462,6 +463,8 @@ AFTER UPDATE ON Bids
 FOR EACH ROW
 WHEN  (OLD.status = 'Pending' AND NEW.status = 'Accepted')
 EXECUTE PROCEDURE reject_conflicting_bids();
+
+
 
 
 -------------------------------------------- VIEWS ------------------------------------------
