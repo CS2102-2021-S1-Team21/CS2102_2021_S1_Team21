@@ -63,12 +63,7 @@ const Leaves = () => {
           <p>{'Note:'}</p>
           <p>{'- You must work for a minimum of 2 sets of 150 consecutive days a year. '}</p>
           <p>{'- Leave cannot have overlapping dates'}</p>
-          <p>
-            {
-              '- Start and end date starts and ends at 8am respectively. Eg: If you want to take leave on Monday 11th January 2020,'
-            }
-          </p>
-          <p>{'  you have put it as FROM: 11/01/2020 TO: 12/01/2020 (Not TO: 11/01/2020)'}</p>
+          <p>{'- You cannot apply for leave when you are in charge of any pet during the leave period'}</p>
         </CardContent>
       </Card>
       <br />
