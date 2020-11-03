@@ -1,6 +1,6 @@
 import React from 'react';
-import { useStore } from '../../utilities/store';
 import { Container } from '@material-ui/core';
+import { useStore } from '../../utilities/store';
 import UserProfileSettings from './UserProfileSettings';
 import AdminProfileSettings from './AdminProfileSettings';
 

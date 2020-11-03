@@ -13,6 +13,7 @@ const caresFor = require('./caresFor');
 const reviews = require('./reviews');
 const profileSettings = require('./profileSettings');
 const profile = require('./userProfiles');
+const caretakerMonthlyInfo = require('./caretakerMonthlyInfo');
 
 router.use('/', auth);
 
@@ -28,7 +29,8 @@ router.use('/reviews', ensureAuthenticated, reviews);
 router.use('/profile', ensureAuthenticated, profile);
 router.use('/profile-settings', ensureAuthenticated, profileSettings);
 router.use('/pets', ensureAuthenticated, pets);
-router.use('/pet-categories', ensureAuthenticated, petCategories);
+router.use('/pet-categories', petCategories);
+router.use('/petday', ensureAuthenticated, caretakerMonthlyInfo)
 
 // Catch-all route (used for error handling)
 
