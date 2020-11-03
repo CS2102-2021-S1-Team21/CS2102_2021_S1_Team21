@@ -61,6 +61,7 @@ const Upcoming = () => {
         {bids
           .filter((bid) => bid.status === 'Accepted')
           .map((bid) => {
+            console.log(bid.petname + bid.transactiondatetime)
             return (
               <Paper style={{ margin: 30, padding: 30 }} key={bids.id}>
                 <ListItem 
@@ -90,6 +91,7 @@ const Upcoming = () => {
                       size="small"
                       variant="outlined"
                       color="primary"
+                      disabled = {!bid.transactiondatetime}
                       onClick={() => {
                         handleAccept(bid);
                       }}

@@ -30,9 +30,15 @@ exports.apply = async (req, res) => {
       ],
     );
     console.log(result.rows);
-    res.json(result.rows);
+    res.json({success: `Bid applied successfully!`, result: result.rows});
   } catch (err) {
-    console.error(`biddingerr${err}`);
+     if (err) {
+
+      res
+        .status(400)
+        .json({ error: err.message });
+      return;
+     }
   }
 };
 
@@ -81,7 +87,6 @@ exports.updateBids = async (req, res, next) => {
       comment,
       reviewDateTime,
     } = req.body;
-    console.log(`body1 ${req.body.petName}`);
     const result = await db.query(
       `UPDATE Bids SET 
         status = $7,
@@ -113,7 +118,7 @@ exports.updateBids = async (req, res, next) => {
         reviewDateTime,
       ],
     );
-    console.log(result.rows);
+    console.log(result.rows.transactiondatetime);
     res.json({success: `Bid successfully updated!`, result: result.rows});
 
   } catch (err) {

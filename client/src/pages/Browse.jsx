@@ -21,6 +21,7 @@ import SelectPet from './Browse/SelectPet';
 import api from '../api';
 import { useStore } from '../utilities/store';
 import SelectTransferType from './Browse/SelectTransferType';
+import { useSnackbarContext } from '../utilities/snackbar';
 
 const moment = require('moment');
 
@@ -42,6 +43,8 @@ const Browse = () => {
   const store = useStore();
 
   const history = useHistory();
+  const showSnackbar = useSnackbarContext();
+
 
   useEffect(() => {
     api.pets.getPetPet(store.user.username).then((x) => setPetOptions(x));
@@ -61,7 +64,7 @@ const Browse = () => {
         transferType,
         remarks,
       };
-      await api.bids.applyBids(body);
+      await showSnackbar(api.bids.applyBids(body));
     } catch (err) {
       console.log(err.message);
     }
