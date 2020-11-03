@@ -4,7 +4,9 @@ import {
   ListItem,
   ListItemText,
   ListItemSecondaryAction,
+  ListItemIcon
 } from '@material-ui/core';
+import PetsIcon from '@material-ui/icons/Pets';
 import React, { useEffect, useState } from 'react';
 import Paper from '@material-ui/core/Paper';
 import api from '../../api';
@@ -17,7 +19,7 @@ const moment = require('moment');
 // TODO need to ensure that ONLY MARK AS COMPLETED AFTER PAYMENT
 // if not when updating bids cannot fetch transationdatetime and will cause invalid date error
 
-const Upcoming = () => {
+const Past = () => {
   const [allBids, setAllBids] = useState([]);
   const [rating, setRating] = React.useState();
   const store = useStore();
@@ -70,9 +72,12 @@ const Upcoming = () => {
                 button
                 onClick={() => history.push(`/profile/${bids.caretakerusername}`)}
                 >
+                  <ListItemIcon>
+                    <PetsIcon color="primary" fontSize="large"/>
+                  </ListItemIcon>
                   <ListItemText
                     primary={
-                      <Typography component="span" variant="body2" color="Primary">
+                      <Typography component="span" variant="h3" color="Primary">
                         {`${bids.petname}`}
                       </Typography>
                     }
@@ -104,4 +109,4 @@ const Upcoming = () => {
   );
 };
 
-export default Upcoming;
+export default Past;

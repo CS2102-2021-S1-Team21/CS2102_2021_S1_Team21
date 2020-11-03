@@ -9,6 +9,7 @@ exports.errorDetails = {
   LEAVE_CONSTRAINTS: 'PL/pgSQL function leave_constraints()',
   NOT_ADMIN_CONSTRAINT: 'PL/pgSQL function not_admin()',
   NOT_USER_CONSTRAINT: 'PL/pgSQL function not_user()',
+  TRANSACTION_DATE_TIME_NOT_VALID_DATETIME: ' invalid input syntax for type timestamp: "Invalid date',
 };
 
 exports.messages = {

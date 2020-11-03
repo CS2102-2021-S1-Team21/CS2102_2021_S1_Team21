@@ -5,12 +5,15 @@ import {
   ListItem,
   ListItemText,
   ListItemSecondaryAction,
+  ListItemIcon
 } from '@material-ui/core';
+import PetsIcon from '@material-ui/icons/Pets';
 import React, { useEffect, useState } from 'react';
 import Paper from '@material-ui/core/Paper';
 import api from '../../api';
 import { useStore } from '../../utilities/store';
 import { useHistory } from 'react-router-dom';
+import { useSnackbarContext } from '../../utilities/snackbar';
 
 const moment = require('moment');
 
@@ -18,6 +21,7 @@ const Upcoming = () => {
   const [bids, setBids] = useState([]);
   const store = useStore();
   const history = useHistory();
+  const showSnackbar = useSnackbarContext();
 
   useEffect(() => {
     api.bids.getCaretakerBids(store.user.username).then((x) => setBids(x));
@@ -42,7 +46,7 @@ const Upcoming = () => {
       };
       console.log(`bids ${body.transactionDateTime}`);
       console.log(moment(bid.submittedat).subtract(8, 'hours').format('YYYY-MM-DD HH:mm:ss'));
-      await api.bids.updateBids(body);
+      await showSnackbar(api.bids.updateBids(body));
     } catch (err) {
       console.log(`err${err.message}`);
     }
@@ -63,6 +67,9 @@ const Upcoming = () => {
                 alignItems="flex-start"
                 button
                 onClick={() => history.push(`/pet-owners/${bid.petownerusername}/pets/${bid.petname}`)}>
+                  <ListItemIcon>
+                    <PetsIcon color="primary" fontSize="large"/>
+                  </ListItemIcon>
                   <ListItemText
                     primary={
                       <Typography component="span" variant="h3" color="Primary">

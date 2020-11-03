@@ -3,7 +3,9 @@ import {
   List,
   ListItem,
   ListItemText,
+  ListItemIcon
 } from '@material-ui/core';
+import PetsIcon from '@material-ui/icons/Pets';
 import React, { useEffect, useState } from 'react';
 import Paper from '@material-ui/core/Paper';
 import api from '../../api';
@@ -37,8 +39,15 @@ const Failed = () => {
                 button
                 onClick={() => history.push(`/profile/${bids.caretakerusername}`)}
                 >
+                  <ListItemIcon>
+                    <PetsIcon color="primary" fontSize="large"/>
+                  </ListItemIcon>
                   <ListItemText
-                    primary={`${bids.caretakerusername}`}
+                    primary={
+                      <Typography component="span" variant="h3" color="Primary">
+                        {`${bids.petname}`}
+                      </Typography>
+                    }
                     secondary={
                       <>
                         <Typography component="span" variant="body2" color="textPrimary">

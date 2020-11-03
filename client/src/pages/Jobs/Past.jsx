@@ -3,7 +3,9 @@ import {
   List,
   ListItem,
   ListItemText,
+  ListItemIcon
 } from '@material-ui/core';
+import PetsIcon from '@material-ui/icons/Pets';
 import React, { useEffect, useState } from 'react';
 import Paper from '@material-ui/core/Paper';
 import api from '../../api';
@@ -35,6 +37,9 @@ const Upcoming = () => {
                 alignItems="flex-start"
                 button
                 onClick={() => history.push(`/pet-owners/${bid.petownerusername}/pets/${bid.petname}`)}>
+                  <ListItemIcon>
+                    <PetsIcon color="primary" fontSize="large"/>
+                  </ListItemIcon>
                   <ListItemText
                     primary={
                       <Typography component="span" variant="h3" color="Primary">

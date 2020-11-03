@@ -1,5 +1,7 @@
 const db = require('../db');
 
+const { errorDetails } = require('../constants');
+
 exports.apply = async (req, res) => {
   try {
     const {
@@ -62,7 +64,7 @@ exports.caretakerRetrieve = async (req, res) => {
   }
 };
 
-exports.updateBids = async (req, res) => {
+exports.updateBids = async (req, res, next) => {
   try {
     const {
       petName,
@@ -114,8 +116,17 @@ exports.updateBids = async (req, res) => {
     console.log(result.rows);
     res.json(result.rows);
   } catch (err) {
-    console.error('ERROR: ', err.message);
-    res.json({ error: 'An unexpected error occurred' });
+    if (err) {
+          console.error('ERROR: ', err.message);
+
+      res
+        .status(400)
+        .json({ error: 'An unexpected error occurred' });
+      return;
+    }
+    next(err);
+   
+    // res.json({ error: 'An unexpected error occurred' });
   }
 };
 
