@@ -54,6 +54,7 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     showSnackbar(api.adminDashboard.getCaretakerRanking()).then((res) => {
+      if (res.info) return; // hacky way to check for no results
       setRows(res.result);
       setMonth(res.resultMonth);
     });

@@ -46,10 +46,21 @@ const AuthRouter = () => {
     return <Loading />;
   }
 
+  /* eslint-disable no-nested-ternary */
+  const defaultHomePage = user.isAdmin
+    ? '/pcs-admin/dashboard'
+    : user.isPetOwner
+    ? '/caretakers'
+    : '/my-jobs'; // user is a caretaker
+  /* eslint-enable no-nested-ternary */
+
   return (
     <StoreProvider value={{ user }}>
       <NavBar>
         <Switch>
+          {/* Redirect to the respective home page for this category of users */}
+          <Route exact path="/" render={() => <Redirect to={defaultHomePage} />} />
+
           {/* <Route path="/pet-owner" component={PetOwnerListing} /> */}
           <Route exact path="/my-leaves" component={Leaves} />
           <Route exact path="/my-availability" component={Availability} />

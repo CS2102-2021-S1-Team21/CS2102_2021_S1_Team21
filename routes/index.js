@@ -32,9 +32,9 @@ router.use('/bids', ensureAuthenticated, bids);
 router.use('/profile', ensureAuthenticated, profile);
 router.use('/profile-settings', ensureAuthenticated, profileSettings);
 router.use('/pets', ensureAuthenticated, pets);
-router.use('/pet-categories', ensureAuthenticated, petCategories);
 router.use('/transferType', ensureAuthenticated, transferType);
 router.use('/paymentMethod', ensureAuthenticated, paymentMethod);
+router.use('/pet-categories', petCategories);
 
 // Catch-all route (used for error handling)
 

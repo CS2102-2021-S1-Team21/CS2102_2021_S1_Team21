@@ -78,15 +78,14 @@ VALUES ('wincent',
  '2010-06-01');
  insert into applies_for_leave_period values ('wincent', '2020-10-02', '2020-10-05', false);
 INSERT INTO Caretaker
-VALUES ('harambe', 4.3);
+VALUES ('harambe');
 
 
 INSERT INTO Caretaker
-VALUES ('wincent',
-        5);
+VALUES ('wincent');
 
 INSERT INTO Caretaker
-VALUES ('dora', 4.5);
+VALUES ('dora');
 
 INSERT INTO Part_Time_Employee
 VALUES ('dora');
@@ -224,7 +223,7 @@ insert into bids values ('Gougou','ladygaga','dora',25,'Accepted','1/1/20','4/3/
 insert into bids values ('Gougou','ladygaga','dora',25,'Accepted','1/1/20','5/3/20','4/7/20','On-site transfer',null,NULL,NULL,NULL,null,null,null);
 insert into bids values ('Gougou','ladygaga','dora',25,'Accepted','1/1/20','4/3/20','22/6/20','On-site transfer',null,NULL,NULL,NULL,null,null,null);
 
-INSERT INTO Caretaker VALUES ('oompaloompa', null);
+INSERT INTO Caretaker VALUES ('oompaloompa');
 
 INSERT INTO Full_Time_Employee VALUES ('oompaloompa');
 
