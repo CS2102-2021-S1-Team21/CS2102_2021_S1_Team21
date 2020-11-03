@@ -20,12 +20,25 @@ import React from 'react';
  * />
  * ```
  */
-const FormSelect = ({ field, form, label, options, SelectProps, ...otherProps }) => {
+const FormSelect = ({
+  field,
+  form,
+  label,
+  options,
+  SelectProps,
+  onChangeCallback = () => {},
+  ...otherProps
+}) => {
   const errorMessage = getIn(form.errors, field.name);
   const shouldShowError = getIn(form.touched, field.name) && !!errorMessage;
   const helperText = shouldShowError ? errorMessage : otherProps.helperText;
 
   // TODO: add flow/proptypes and make `options` required
+
+  const handleChange = (e) => {
+    field.onChange(e);
+    onChangeCallback(e.target.value);
+  };
 
   return (
     <FormControl variant="outlined" {...otherProps} error={shouldShowError} fullWidth>
@@ -34,6 +47,7 @@ const FormSelect = ({ field, form, label, options, SelectProps, ...otherProps })
       </InputLabel>
       <Select
         {...field}
+        onChange={handleChange}
         disabled={form.isSubmitting}
         {...SelectProps} // allow the above props to be overridden
         labelId={`${field.name}-label`}

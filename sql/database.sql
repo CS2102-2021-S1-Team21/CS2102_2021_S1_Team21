@@ -10,8 +10,6 @@ BEGIN
   END LOOP;
 END $$;
 
-DROP VIEW leaderboard IF EXISTS;
-
 CREATE TABLE PCS_Administrator(
     username VARCHAR PRIMARY KEY,
     email VARCHAR NOT NULL UNIQUE,
@@ -39,11 +37,11 @@ CREATE TABLE Pet_Owner(
     ccName VARCHAR,
     ccExpiryDate DATE,
     ccCvvCode VARCHAR,
-    petOwnerUsername VARCHAR PRIMARY KEY REFERENCES App_User(username)
+    petOwnerUsername VARCHAR PRIMARY KEY REFERENCES App_User(username) ON DELETE CASCADE
 );
 
 CREATE TABLE Caretaker(
-    caretakerUsername VARCHAR PRIMARY KEY REFERENCES App_User(username)
+    caretakerUsername VARCHAR PRIMARY KEY REFERENCES App_User(username) ON DELETE CASCADE
 );
 
 CREATE TABLE Full_Time_Employee(
@@ -178,6 +176,67 @@ BEGIN
 END; 
 $avg$
 LANGUAGE plpgsql;
+
+-- For convenience during development
+CREATE OR REPLACE FUNCTION delete_user(VARCHAR) RETURNS VARCHAR AS $$
+BEGIN
+    DELETE FROM pet_owner P WHERE P.petownerusername = $1;
+    DELETE FROM cares_for CF WHERE CF.caretakerusername = $1;
+    DELETE FROM caretaker C WHERE C.caretakerusername = $1;
+    DELETE FROM App_User A WHERE A.username = $1;
+    RETURN $1;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Create a new user: Pet Owner, Care Taker, or both
+CREATE OR REPLACE FUNCTION insert_new_user(
+    newUsername VARCHAR, newEmail VARCHAR, passwordDigest VARCHAR, newName VARCHAR, 
+    bio VARCHAR, phoneNumber VARCHAR, address VARCHAR, postalCode VARCHAR, 
+    newCCNumber VARCHAR, ccName VARCHAR, ccExpiryDate DATE, ccCvvCode VARCHAR,
+    newCategories VARCHAR[], accountType VARCHAR, caretakerType VARCHAR) 
+    -- Return enough data to verify insertion
+    RETURNS TABLE (username VARCHAR, email VARCHAR, name VARCHAR, ccNumber VARCHAR, categories VARCHAR[]) AS $$
+DECLARE 
+    categoryName VARCHAR;
+BEGIN 
+
+IF accountType NOT IN ('petOwner', 'caretaker', 'both') THEN
+    RAISE EXCEPTION 'A user must be either a pet owner or a caretaker or both';
+END IF;
+
+IF accountType != 'petOwner' AND (caretakerType IS NULL OR caretakerType NOT IN ('fullTime', 'partTime')) THEN
+    RAISE EXCEPTION 'A care taker must be either a full-time or a part-time employee';
+END IF;
+
+INSERT INTO App_User VALUES (newUsername, newEmail, passwordDigest, newName, NULL, bio, phoneNumber, address, postalCode, NOW());
+IF accountType = 'petOwner' OR accountType = 'both' THEN
+    INSERT INTO Pet_Owner VALUES (newCCNumber, ccName, ccExpiryDate, ccCvvCode, newUsername);
+END IF;
+IF accountType = 'caretaker' OR accountType = 'both' THEN
+    INSERT INTO Caretaker VALUES (newUsername);
+
+    IF caretakerType = 'fullTime' THEN
+        INSERT INTO Full_Time_Employee VALUES (newUsername);
+    ELSIF caretakerType = 'partTime' THEN
+        INSERT INTO Part_Time_Employee VALUES (newUsername);
+    END IF;
+
+    FOREACH categoryName IN ARRAY newCategories 
+    LOOP
+        INSERT INTO Cares_For VALUES(categoryName, newUsername);
+    END LOOP;
+END IF;
+
+RETURN QUERY 
+    SELECT U.username, U.email, U.name, P.ccNumber, ARRAY_AGG(CF.categoryName)
+    FROM App_User U LEFT JOIN Pet_Owner P ON P.petOwnerUsername = U.username 
+        LEFT JOIN Caretaker C ON C.caretakerUsername = U.username
+        LEFT JOIN Cares_For CF ON CF.caretakerUsername = C.caretakerUsername
+    WHERE U.username = newUsername
+    GROUP BY U.username, P.petOwnerUsername, C.caretakerUsername;
+END;
+$$ LANGUAGE plpgsql;
+
 
 -------------------------------------------- TRIGGERS ------------------------------------------
 
@@ -367,7 +426,7 @@ BEGIN
         RAISE EXCEPTION 'Caretaker is unable to receive more pets during this period';
     -- Part timer can hold up to 2 or 5 pets depending on rating
     ELSEIF (NEW.caretakerusername IN (SELECT P.caretakerusername FROM Part_Time_Employee P) 
-        AND ((SELECT totalAverageRating FROM Caretaker WHERE Caretakerusername = NEW.caretakerusername) <= 4) AND max_jobs >= 2) THEN
+        AND (average_rating(NEW.caretakerusername) <= 4) AND max_jobs >= 2) THEN
             RAISE EXCEPTION 'Part time Caretaker is unable to receive more pets during this period';
     END IF;
 
@@ -379,6 +438,12 @@ BEGIN
     RETURN NEW;
     END;
 $$ LANGUAGE plpgsql;
+
+
+CREATE TRIGGER check_bids_constraint
+BEFORE INSERT ON Bids
+FOR EACH ROW 
+EXECUTE PROCEDURE bids_constraint();
 
 -- Trigger condition: On any updates on Bids table that changes status from Pending to Accepted
 -- Action: Reject all other bids with the same pet, petowner and overlapping time period.
@@ -392,18 +457,16 @@ BEGIN
     END;
 $$ LANGUAGE plpgsql;
 
-DROP TRIGGER check_bids_constraint ON Bids;
-CREATE TRIGGER check_bids_constraint
+CREATE TRIGGER check_conflict_bids_constraint
 AFTER UPDATE ON Bids
 FOR EACH ROW
 WHEN  (OLD.status = 'Pending' AND NEW.status = 'Accepted')
 EXECUTE PROCEDURE reject_conflicting_bids();
 
-DROP TRIGGER check_bids_constraint ON Bids;
-CREATE TRIGGER check_bids_constraint
-BEFORE INSERT ON Bids
-FOR EACH ROW 
-EXECUTE PROCEDURE bids_constraint();
+
+-------------------------------------------- VIEWS ------------------------------------------
+
+-------------------------------------------- VIEWS ------------------------------------------
 
 -- View for Admin Dashboard
 CREATE OR REPLACE VIEW leaderboard AS (

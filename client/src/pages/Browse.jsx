@@ -8,8 +8,10 @@ import {
   ListItem,
   ListItemText,
   ListItemSecondaryAction,
+  ListItemIcon,
   TextField,
 } from '@material-ui/core';
+import PersonIcon from '@material-ui/icons/Person';
 import React, { useEffect, useState } from 'react';
 import { KeyboardDatePicker } from '@material-ui/pickers';
 import Paper from '@material-ui/core/Paper';
@@ -144,6 +146,9 @@ const Browse = () => {
                 button
                 onClick={() => history.push(`/profile/${caretaker.username}`)}
               >
+                <ListItemIcon>
+                    <PersonIcon color="primary" fontSize="large"/>
+                  </ListItemIcon>
                 <ListItemText
                   primary={
                     <Typography component="span" variant="h3" color="Primary">
