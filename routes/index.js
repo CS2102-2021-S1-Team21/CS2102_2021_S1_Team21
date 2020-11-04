@@ -16,7 +16,6 @@ const transferType = require('./transferType');
 const paymentMethod = require('./paymentMethod');
 const profileSettings = require('./profileSettings');
 const profile = require('./userProfiles');
-const caretakerMonthlyInfo = require('./caretakerMonthlyInfo');
 
 router.use('/', auth);
 
@@ -36,7 +35,6 @@ router.use('/pets', ensureAuthenticated, pets);
 router.use('/transferType', ensureAuthenticated, transferType);
 router.use('/paymentMethod', ensureAuthenticated, paymentMethod);
 router.use('/pet-categories', petCategories);
-router.use('/petday', ensureAuthenticated, caretakerMonthlyInfo)
 
 // Catch-all route (used for error handling)
 
