@@ -426,7 +426,7 @@ BEGIN
         RAISE EXCEPTION 'Caretaker is unable to receive more pets during this period';
     -- Part timer can hold up to 2 or 5 pets depending on rating
     ELSEIF (NEW.caretakerusername IN (SELECT P.caretakerusername FROM Part_Time_Employee P) 
-        AND ((SELECT totalAverageRating FROM Caretaker WHERE Caretakerusername = NEW.caretakerusername) <= 4) AND max_jobs >= 2) THEN
+        AND (average_rating(NEW.caretakerusername) <= 4) AND max_jobs >= 2) THEN
             RAISE EXCEPTION 'Part time Caretaker is unable to receive more pets during this period';
     END IF;
 
@@ -463,6 +463,8 @@ FOR EACH ROW
 WHEN  (OLD.status = 'Pending' AND NEW.status = 'Accepted')
 EXECUTE PROCEDURE reject_conflicting_bids();
 
+
+-------------------------------------------- VIEWS ------------------------------------------
 
 -------------------------------------------- VIEWS ------------------------------------------
 
@@ -511,7 +513,7 @@ CREATE OR REPLACE VIEW leaderboard AS (
   ) AS t8
   WHERE rank BETWEEN 1 AND 5
   ORDER BY role, rank, totalScore, efficiencyscore, popularityscore, satisfactionscore
-); 
+);
 
 CREATE VIEW admin_summary AS 
 	SELECT *,
