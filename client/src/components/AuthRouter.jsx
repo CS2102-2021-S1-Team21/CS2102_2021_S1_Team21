@@ -50,7 +50,7 @@ const AuthRouter = () => {
   const defaultHomePage = user.isAdmin
     ? '/pcs-admin/dashboard'
     : user.isPetOwner
-    ? '/caretakers'
+    ? '/browse'
     : '/my-jobs'; // user is a caretaker
   /* eslint-enable no-nested-ternary */
 

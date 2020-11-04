@@ -10,12 +10,13 @@ import PetsIcon from '@material-ui/icons/Pets';
 import React, { useEffect, useState } from 'react';
 import Paper from '@material-ui/core/Paper';
 import { useHistory } from 'react-router-dom';
+import moment from 'moment';
 import api from '../../api';
 import { useStore } from '../../utilities/store';
 import WriteReviewDialog from './Components/writeReviewDialog';
 import { useSnackbarContext } from '../../utilities/snackbar';
-
-const moment = require('moment');
+import { formatDate } from '../../utilities/datetime';
+import SecondaryInfo from './Components/SecondaryInfo';
 
 // TODO need to ensure that ONLY MARK AS COMPLETED AFTER PAYMENT
 // if not when updating bids cannot fetch transationdatetime and will cause invalid date error
@@ -43,15 +44,11 @@ const Past = () => {
         status: bid.status,
         transactionDateTime: moment(bid.transactiondatetime).format('YYYY-MM-DD HH:mm:ss.SSS'),
         paymentMethod: bid.paymentmethod,
-        totalAmount: null,
+        totalAmount: bid.totalamount,
         rating: bidRating,
         comment,
         reviewDateTime: moment.utc(moment(), 'YYYY-MM-DD HH:mm:ss.SSS'),
       };
-      console.log(body.submittedAt);
-      console.log(bid.transactiondatetime);
-      console.log(body.transactionDateTime);
-      console.log(`reviewDateTime${body.reviewDateTime}`);
       await showSnackbar(api.bids.updateBids(body));
     } catch (err) {
       console.log(`err${err.message}`);
@@ -85,10 +82,27 @@ const Past = () => {
                     }
                     secondary={
                       <>
-                        <Typography component="span" variant="body2" color="textPrimary">
-                          {`Caretaker: `}
-                        </Typography>
-                        {`${bids.caretakerusername}`}
+                        <SecondaryInfo label="Caretaker: " content={bids.caretakerusername} />
+                        <br />
+                        <SecondaryInfo label="Start Date: " content={formatDate(bids.startdate)} />
+                        <br />
+                        <SecondaryInfo label="End Date: " content={formatDate(bids.enddate)} />
+                        <br />
+                        <SecondaryInfo label="Transfer Type: " content={bids.transfertype} />
+                        <br />
+                        <SecondaryInfo label="Remarks: " content={bids.remarks} />
+                        <br />
+                        <SecondaryInfo label="Total Amount: " content={`$${bids.totalamount}`} />
+                        <br />
+                        <SecondaryInfo label="Payment Date: " content={formatDate(bids.transactiondatetime)} />
+                        <br />
+                        <SecondaryInfo label="Payment Method: " content={bids.paymentmethod || 'Not selected yet'} />
+                        <br />
+                        <SecondaryInfo label="Review Date: " content={formatDate(bids.reviewdatetime)} />
+                        <br />
+                        <SecondaryInfo label="Review Comments: " content={bids.comment} />
+                        <br />
+                        <SecondaryInfo label="Rating: " content={bids.rating} />
                       </>
                     }
                   />

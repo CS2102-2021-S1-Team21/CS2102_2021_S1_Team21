@@ -45,13 +45,15 @@ exports.index = async (req, res) => {
     `,
       [minRating, petCategory, startDate, endDate, offset],
     );
+    if (result.rowCount === 0) {
+      res.json({ info: 'All the caretakers matching your query have been found!' });
+      return;
+    }
     res.json({ totalCount: result.rowCount, entries: result.rows });
-    console.log(result.rowCount)
   } catch (err) {
     console.error(err);
   }
 };
-
 
 exports.view = async (req, res) => {
   const { username } = req.params;

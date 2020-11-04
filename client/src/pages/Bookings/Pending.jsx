@@ -11,20 +11,45 @@ import PetsIcon from '@material-ui/icons/Pets';
 import React, { useEffect, useState } from 'react';
 import Paper from '@material-ui/core/Paper';
 import { useHistory } from 'react-router-dom';
+import moment from 'moment';
 import api from '../../api';
+import { useSnackbarContext } from '../../utilities/snackbar';
 import { useStore } from '../../utilities/store';
+import { formatDate } from '../../utilities/datetime';
+import SecondaryInfo from './Components/SecondaryInfo';
 
 const Upcoming = () => {
   const [allBids, setAllBids] = useState([]);
 
   const store = useStore();
   const history = useHistory();
+  const showSnackbar = useSnackbarContext();
+
+  const updateBids = (username) => {
+    api.bids.getPetOwnerBids(store.user.username).then((x) => setAllBids(x));
+  };
 
   useEffect(() => {
-    api.bids.getPetOwnerBids(store.user.username).then((x) => setAllBids(x));
-  }, [store.user.username]);
+    updateBids(store.user.username);
+  }, [updateBids, store.user.username]);
 
-  console.log(`all bids${allBids}`);
+  const handleClick = async (bid) => {
+    try {
+      const params = {
+        petName: bid.petname,
+        petOwnerUsername: bid.petownerusername,
+        caretakerUsername: bid.caretakerusername,
+        submittedAt: moment(bid.submittedat).format('YYYY-MM-DD HH:mm:ss.SSS'),
+        startDate: bid.start,
+        endDate: bid.end,
+      };
+      await showSnackbar(api.bids.deleteBid(params)).then(() => updateBids(store.user.username));
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
+
+  console.log(allBids);
 
   return (
     <>
@@ -53,19 +78,24 @@ const Upcoming = () => {
                     }
                     secondary={
                       <>
-                        <Typography component="span" variant="body2" color="textPrimary">
-                          {`Caretaker: `}
-                        </Typography>
-                        {`${bids.caretakerusername}`}
+                        <SecondaryInfo label="Caretaker: " content={bids.caretakerusername} />
+                        <br />
+                        <SecondaryInfo label="Start Date: " content={formatDate(bids.startdate)} />
+                        <br />
+                        <SecondaryInfo label="End Date: " content={formatDate(bids.enddate)} />
+                        <br />
+                        <SecondaryInfo label="Transfer Type: " content={bids.transfertype} />
+                        <br />
+                        <SecondaryInfo label="Remarks: " content={bids.remarks} />
+                        <br />
+                        <SecondaryInfo label="Total Amount: " content={`$${bids.totalamount}`} />
                       </>
                     }
                   />
                   <ListItemSecondaryAction>
                     <Button
                       variant="outlined"
-                      onClick={() => {
-                        console.log(bids.id);
-                      }}
+                      onClick={() => handleClick(bids)}
                     >
                       {'Cancel'}
                     </Button>
