@@ -21,6 +21,7 @@ const useStyles = makeStyles((theme) => ({
     bottom: 0,
     width: '100%',
     height: '60px',
+    backgroundColor: theme.palette.grey[800],
   }
 }))
 
