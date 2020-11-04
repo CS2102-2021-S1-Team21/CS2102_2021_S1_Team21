@@ -118,7 +118,7 @@ exports.updateBids = async (req, res, next) => {
       ],
     );
     console.log(result.rows.transactiondatetime);
-    res.json({success: `Bid successfully updated!`, result: result.rows, params: req.body});
+    res.json({success: `Bid successfully updated!`, result: result.rows});
 
   } catch (err) {
     if (err.code === errorCodes.TRANSACTION_DATE_TIME_NOT_VALID_DATETIME) {
