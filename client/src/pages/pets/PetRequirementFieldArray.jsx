@@ -4,11 +4,20 @@ import RemoveIcon from '@material-ui/icons/Remove';
 import { Field } from 'formik';
 import React, { Fragment } from 'react';
 import FormTextField from '../../components/forms/FormTextField';
+import FormAutocomplete from '../../components/forms/FormAutocomplete';
 
 const DEFAULT_PET_REQUIREMENT = {
   requirementtype: '',
   description: '',
 };
+
+const PET_REQUIREMENT_OPTIONS = [
+  'Bathroom Needs',
+  'Daily Walk Timings',
+  'Dietary Needs',
+  'Exercise Habits',
+  'Grooming',
+];
 
 const PetRequirementsFieldArray = ({ form: { values }, push, remove }) => {
   // FIXME: quite laggy when typing
@@ -21,7 +30,8 @@ const PetRequirementsFieldArray = ({ form: { values }, push, remove }) => {
             <Field
               name={`requirements.${index}.requirementtype`}
               label="Requirement Type"
-              component={FormTextField}
+              component={FormAutocomplete}
+              options={PET_REQUIREMENT_OPTIONS.map((option) => ({ label: option, value: option }))}
             />
           </Grid>
           <Grid item xs={11} md={7}>
