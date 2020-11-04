@@ -11,7 +11,8 @@ import Paper from '@material-ui/core/Paper';
 import { useHistory } from 'react-router-dom';
 import api from '../../api';
 import { useStore } from '../../utilities/store';
-
+import SecondaryInfo from './SecondaryInfo';
+import { formatDate } from '../../utilities/datetime';
 
 const Upcoming = () => {
   const [bids, setBids] = useState([]);
@@ -49,10 +50,35 @@ const Upcoming = () => {
                     }
                     secondary={
                       <>
-                        <Typography component="span" variant="body2" color="textPrimary">
-                          {`Pet Owner: `}
-                        </Typography>
-                        {`${bid.petownerusername}`}
+                        <SecondaryInfo label="Pet Owner: " content={bid.petownerusername} />
+                        <br />
+                        <SecondaryInfo label="Start Date: " content={formatDate(bid.startdate)} />
+                        <br />
+                        <SecondaryInfo label="End Date: " content={formatDate(bid.enddate)} />
+                      </>
+                    }
+                  />
+                  <ListItemText 
+                    secondary={
+                      <>
+                        <SecondaryInfo label="Transfer Type: " content={bid.transfertype} />
+                        <br />
+                        <SecondaryInfo label="Remarks: " content={bid.remarks} />
+                        <br />
+                        <SecondaryInfo label="Total Amount: " content={`$${bid.totalamount}`} />
+                        <br />
+                        <SecondaryInfo label="Payment Date: " content={formatDate(bid.transactiondatetime)} />
+                        <br />
+                        <SecondaryInfo label="Payment Method: " content={bid.paymentmethod || 'Not selected yet'} />
+                        {bids.reviewdate && 
+                          <>
+                            <br />
+                            <SecondaryInfo label="Review Date: " content={formatDate(bids.reviewdatetime)} />
+                          </>}
+                        <br />
+                        <SecondaryInfo label="Review Comments: " content={bids.comment || 'No comments yet'} />
+                        <br />
+                        <SecondaryInfo label="Rating: " content={bids.rating || 'No rating yet'} />
                       </>
                     }
                   />
