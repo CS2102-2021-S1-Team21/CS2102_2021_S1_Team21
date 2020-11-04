@@ -419,7 +419,7 @@ BEGIN
         SELECT caretakerusername, as_of_date, COUNT(*) AS n
         FROM (SELECT d::date AS as_of_date FROM generate_series(NEW.startdate::date, NEW.enddate::date, '1 day') d) as dates
         INNER JOIN Bids ON dates.as_of_date BETWEEN Bids.startdate AND Bids.enddate
-        WHERE Bids.status = 'Accepted' OR Bids.status = 'Pending'
+        WHERE Bids.status = 'Accepted'
         GROUP BY caretakerusername, as_of_date) T WHERE NEW.caretakerusername = T.caretakerusername;
     -- All caretakers can have a maximum of 5 pets at one time
     IF max_jobs >= 5 THEN
@@ -431,7 +431,7 @@ BEGIN
     END IF;
 
     IF (NEW.caretakerusername IN (SELECT F.caretakerusername FROM Full_Time_Employee F)) THEN
-      NEW.status = 'Accepted';
+      NEW.status = 'Accepted';  
     ELSEIF (NEW.caretakerusername IN (SELECT caretakerusername FROM Part_Time_Employee)) THEN
       NEW.status = 'Pending';
     END IF;
@@ -453,7 +453,7 @@ BEGIN
     UPDATE bids SET status = 'Rejected'
     WHERE bids.status = 'Pending' AND bids.caretakerusername != NEW.caretakerusername AND bids.petownerusername = NEW.petownerusername AND bids.petname = NEW.petname AND 
         (bids.startdate BETWEEN NEW.startdate AND NEW.enddate OR bids.enddate BETWEEN NEW.startdate AND NEW.enddate);
-    RETURN NULL;
+        RETURN NULL;
     END;
 $$ LANGUAGE plpgsql;
 
@@ -462,8 +462,6 @@ AFTER UPDATE ON Bids
 FOR EACH ROW
 WHEN  (OLD.status = 'Pending' AND NEW.status = 'Accepted')
 EXECUTE PROCEDURE reject_conflicting_bids();
-
-
 
 
 -------------------------------------------- VIEWS ------------------------------------------
