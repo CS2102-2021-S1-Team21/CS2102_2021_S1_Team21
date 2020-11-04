@@ -150,7 +150,7 @@ exports.delete = async (req, res) => {
        RETURNING *`,
       [petName, petOwnerUsername, caretakerUsername, submittedAt, startDate, endDate],
     );
-    if (result.rowCount == 0) {
+    if (result.rowCount === 0) {
       res.json({
         error: 'Unable to delete bid',
       });
