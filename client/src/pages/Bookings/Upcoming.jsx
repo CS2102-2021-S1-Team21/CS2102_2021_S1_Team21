@@ -1,21 +1,14 @@
-import {
-  Typography,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemSecondaryAction,
-  ListItemIcon
-} from '@material-ui/core';
+import { List, ListItem, ListItemIcon, ListItemSecondaryAction, ListItemText, Typography, Paper } from '@material-ui/core';
 import PetsIcon from '@material-ui/icons/Pets';
 import React, { useEffect, useState } from 'react';
-import Paper from '@material-ui/core/Paper';
 import { useHistory } from 'react-router-dom';
+import moment from 'moment';
 import api from '../../api';
-import { useStore } from '../../utilities/store';
-import SelectPaymentMethod from './Components/selectPaymentMethod';
+import { formatDate } from '../../utilities/datetime';
 import { useSnackbarContext } from '../../utilities/snackbar';
-
-const moment = require('moment');
+import { useStore } from '../../utilities/store';
+import SecondaryInfo from './Components/SecondaryInfo';
+import SelectPaymentMethod from './Components/selectPaymentMethod';
 
 const Upcoming = () => {
   const [allBids, setAllBids] = useState([]);
@@ -26,13 +19,11 @@ const Upcoming = () => {
   const showSnackbar = useSnackbarContext();
 
   useEffect(() => {
-    api.bids.getPetOwnerBids(store.user.username).then((x) => setAllBids(x));
+    api.bids.getPetOwnerBids(store.user.username).then((response) => setAllBids(response));
     api.paymentMethod.getPaymentMethods().then((x) => setPaymentMethodOptions(x));
   }, [store.user.username]);
 
-  console.log(paymentMethod);
-
-  console.log(`all bids${allBids}`);
+  console.log(allBids);
 
   const handleClick = async (bidPaymentMethod, bid) => {
     try {
@@ -65,13 +56,13 @@ const Upcoming = () => {
       <List>
         {allBids
           .filter((bids) => bids.status === 'Accepted')
-          .map((bids) => {
+          .map((bid) => {
             return (
-              <Paper style={{ margin: 30, padding: 30 }} key={bids.id}>
+              <Paper style={{ margin: 30, padding: 30 }} key={bid.id}>
                 <ListItem 
                   alignItems="flex-start"
                   button
-                  onClick={() => history.push(`/profile/${bids.caretakerusername}`)}
+                  onClick={() => history.push(`/profile/${bid.caretakerusername}`)}
                 >
                   <ListItemIcon>
                     <PetsIcon color="primary" fontSize="large" />
@@ -79,15 +70,29 @@ const Upcoming = () => {
                   <ListItemText
                     primary={
                       <Typography component="span" variant="h3" color="Primary">
-                        {`${bids.petname}`}
+                        {`${bid.petname}`}
                       </Typography>
                     }
                     secondary={
                       <>
-                        <Typography component="span" variant="body2" color="textPrimary">
-                          {`Caretaker: `}
-                        </Typography>
-                        {`${bids.caretakerusername}`}
+                        <SecondaryInfo label="Caretaker: " content={bid.caretakerusername} />
+                        <br />
+                        <SecondaryInfo label="Start Date: " content={formatDate(bid.startdate)} />
+                        <br />
+                        <SecondaryInfo label="End Date: " content={formatDate(bid.enddate)} />
+                        <br />
+                        <SecondaryInfo label="Transfer Type: " content={bid.transfertype} />
+                        <br />
+                        <SecondaryInfo label="Remarks: " content={bid.remarks} />
+                        <br />
+                        <SecondaryInfo label="Total Amount: " content={`$${bid.totalamount}`} />
+                        {bid.transactiondatetime && 
+                          <>
+                            <br />
+                            <SecondaryInfo label="Payment Date: " content={formatDate(bid.transactiondatetime)} />
+                          </>}
+                        <br />
+                        <SecondaryInfo label="Payment Method: " content={bid.paymentmethod || 'Not selected yet'} />
                       </>
                     }
                   />
@@ -97,8 +102,8 @@ const Upcoming = () => {
                       paymentMethodOptions={paymentMethodOptions}
                       setPaymentMethod={setPaymentMethod}
                       handleUpdateBid={handleClick}
-                      bids={bids}
-                      isDisabled={bids.transactiondatetime}
+                      bids={bid}
+                      isDisabled={bid.transactiondatetime}
                     />
                     {/* <Button
                       size="small"

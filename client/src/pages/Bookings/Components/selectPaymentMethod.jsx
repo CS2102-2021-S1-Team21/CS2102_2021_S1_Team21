@@ -20,8 +20,6 @@ function ConfirmationDialogRaw(props) {
     setPaymentMethod,
     handleUpdateBid,
     bids,
-    keepMounted,
-    classes,
   } = props;
   const [value, setValue] = React.useState(valueProp);
   const radioGroupRef = React.useRef(null);
