@@ -105,6 +105,12 @@ const AdminDashboard = () => {
       width: 150,
     },
     {
+      field: 'variablepercentage',
+      headerName: 'Variable %',
+      description: 'For Part Timers, the variable percentage is 80% if the total Monthly Invoice Amount > $500. Else, the variable percentage is lower at 60%. For Full Timers, if their Invoice Amount > $2,500, they will be entitled 50% of the share for the excess portions.',
+      width: 150,
+    },
+    {
       field: 'totalsalary',
       headerName: 'Total Salary',
       description: 'Sum of the Base Salary and Variable Salary',
