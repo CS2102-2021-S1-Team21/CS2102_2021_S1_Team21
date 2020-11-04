@@ -33,7 +33,7 @@ exports.viewSalary = async (req, res) => {
   const { username } = req.params;
   try {
     const result = await db.query(
-      `SELECT *,
+      `SELECT ROW_NUMBER() OVER () AS id,*,
         CASE 
           WHEN profitMargin > 500 THEN 'Excellent'
           WHEN (profitMargin > 0 AND profitMargin < 499) THEN 'Good'
@@ -117,8 +117,7 @@ exports.viewSalary = async (req, res) => {
       res.json({ error: 'No such caretaker exists' });
       return; // TODO: next()?
     }
-    const user = result.rows[0];
-    res.json(user);
+    res.json(result.rows);
   } catch (err) {
     console.error('ERROR: ', err.message);
     res.json({ error: 'An unexpected error occurred' });
