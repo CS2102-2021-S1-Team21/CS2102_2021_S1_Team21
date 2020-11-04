@@ -514,3 +514,97 @@ CREATE OR REPLACE VIEW leaderboard AS (
   WHERE rank BETWEEN 1 AND 5
   ORDER BY role, rank, totalScore, efficiencyscore, popularityscore, satisfactionscore
 ); 
+
+CREATE VIEW admin_summary AS 
+	SELECT *,
+		CASE 
+			WHEN profitMargin >= 500 THEN 'Excellent Performance'
+			WHEN (profitMargin > 0 AND profitMargin < 500) THEN 'Good Performance'
+			WHEN profitMargin = 0 THEN 'No Performance'
+			WHEN profitMargin < 0 THEN 'Below Performance'
+			END AS performance
+		FROM
+		(SELECT *,
+			invoiceAmount - t3.totalSalary AS profitMargin
+			FROM
+			(SELECT *, 
+				t2.baseSalary + t2.variableSalary AS totalSalary 
+				FROM
+				(SELECT *,
+					CASE
+						WHEN t1.role = 'PT' THEN 0
+						WHEN t1.role = 'FT' THEN 2500
+						ELSE 0
+					END AS baseSalary,
+					CASE
+						WHEN t1.role = 'PT' AND (t1.averageRating > 3.7 OR t1.averageRating = 3.7) THEN t1.invoiceAmount * 0.8
+						WHEN t1.role = 'PT' AND t1.averageRating < 3.7 THEN t1.invoiceAmount * 0.6
+						WHEN t1.role = 'FT' AND t1.invoiceAmount > 3000 THEN (t1.invoiceAmount - 2500) * 0.5
+						ELSE 0
+					END AS variableSalary
+				FROM (
+
+					SELECT 
+						COALESCE(caretakerusername, caretakerusername2) AS caretakerusername,
+						COALESCE(role,role2) AS role,
+						jobCount,
+						bidCount,
+						averageRating,
+						petDayCount,
+						invoiceAmount
+					FROM 
+						((SELECT 
+							caretakerusername,	
+							CASE 
+								WHEN caretakerusername IN (SELECT * FROM part_time_employee) THEN 'PT'
+								WHEN caretakerusername IN (SELECT * FROM full_time_employee) THEN 'FT'
+								ELSE 'null'
+							END AS role,
+							COUNT(*) AS jobCount,
+							AVG(rating) AS averageRating,
+							SUM(bids.endDate - bids.startDate + 1) AS petDayCount,
+							SUM(bids.totalAmount) AS invoiceAmount
+						FROM Bids
+						WHERE status='Completed' AND endDate BETWEEN date_trunc('month', CURRENT_DATE - interval '1' month) AND date_trunc('month', CURRENT_DATE)
+						GROUP BY caretakerusername) t1 
+					FULL OUTER JOIN
+						(SELECT 
+							caretakerusername AS caretakerusername2,	
+							CASE 
+								WHEN caretakerusername IN (SELECT * FROM part_time_employee) THEN 'PT'
+								WHEN caretakerusername IN (SELECT * FROM full_time_employee) THEN 'FT'
+								ELSE 'null'
+							END AS role2,
+							COUNT(*) AS bidCount
+						FROM Bids
+						WHERE submittedAt BETWEEN date_trunc('month', CURRENT_DATE - interval '1' month) AND date_trunc('month', CURRENT_DATE)
+						GROUP BY caretakerusername) t2
+					ON t1.caretakerusername = t2.caretakerusername2 )
+						UNION
+					(SELECT 
+						caretakerusername,	
+						CASE 
+							WHEN caretakerusername IN (SELECT * FROM part_time_employee) THEN 'PT'
+							WHEN caretakerusername IN (SELECT * FROM full_time_employee) THEN 'FT'
+							ELSE 'null'
+						END AS role,
+						0 AS jobCount,
+						0 AS bidCount,
+						0 AS averageRating,
+						0 AS petDayCount,
+						0 AS invoiceAmount
+						FROM caretaker
+						WHERE NOT EXISTS(
+								SELECT 1 
+								FROM Bids b1
+								WHERE status='Completed' AND endDate BETWEEN date_trunc('month', CURRENT_DATE - interval '1' month) AND date_trunc('month', CURRENT_DATE)
+								AND caretaker.caretakerusername = b1.caretakerusername
+				    		)
+			    		)
+			    	) AS t1
+			    ) AS t2
+		    ) AS t3
+	    ) AS t4
+
+    ORDER BY role, profitMargin DESC
+;
