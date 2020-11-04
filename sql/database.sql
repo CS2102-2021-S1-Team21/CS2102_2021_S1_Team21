@@ -449,7 +449,6 @@ EXECUTE PROCEDURE bids_constraint();
 -- Action: Reject all other bids with the same pet, petowner and overlapping time period.
 CREATE OR REPLACE FUNCTION reject_conflicting_bids()
 RETURNS TRIGGER AS $$
-DECLARE totalJobs INTEGER;
 BEGIN
     UPDATE bids SET status = 'Rejected'
     WHERE bids.status = 'Pending' AND bids.caretakerusername != NEW.caretakerusername AND bids.petownerusername = NEW.petownerusername AND bids.petname = NEW.petname AND 
