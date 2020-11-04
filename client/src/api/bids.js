@@ -13,6 +13,9 @@ const bids = {
   updateBids: async (body) => {
     return baseAPI.put(`bids/update`, body);
   },
+  deleteBid: async ({ petName, petOwnerUsername, caretakerUsername, submittedAt, startDate, endDate }) => {
+    return baseAPI.delete(`bids/${petName}/${petOwnerUsername}/${caretakerUsername}/${submittedAt}/${startDate}/${endDate}`);
+  },
 };
 
 export default bids;
