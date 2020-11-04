@@ -520,7 +520,7 @@ CREATE OR REPLACE VIEW admin_summary AS
 		CASE 
 			WHEN profitMargin >= 500 THEN 'Excellent Performance'
 			WHEN (profitMargin > 0 AND profitMargin < 500) THEN 'Good Performance'
-			WHEN profitMargin = 0 THEN 'No Performance'
+			WHEN profitMargin = 0 THEN 'Average Performance'
 			WHEN profitMargin < 0 THEN 'Below Performance'
 			END AS performance
 		FROM
