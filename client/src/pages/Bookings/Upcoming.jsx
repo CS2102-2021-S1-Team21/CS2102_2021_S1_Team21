@@ -51,7 +51,7 @@ const Upcoming = () => {
         comment: null,
         reviewDateTime: null,
       };
-      await showSnackbar(api.bids.updateBids(body));
+      await showSnackbar(api.bids.updateBids(body)).then(console.log);
     } catch (err) {
       console.log(`err${err.message}`);
     }
