@@ -156,10 +156,6 @@ exports.viewSalary = async (req, res) => {
       `,
       [username],
     );
-    if (result.rowCount === 0) {
-      res.json({ error: 'No such caretaker exists' });
-      return; // TODO: next()?
-    }
     res.json(result.rows);
   } catch (err) {
     console.error('ERROR: ', err.message);
