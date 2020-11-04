@@ -12,7 +12,6 @@ const CaretakerSection = (props) => {
   const showSnackbar = useSnackbarContext();
   const [petCategories, setPetCategories] = useState([]);
   const [reviews, setReviews] = useState([]);
-  const [petDay, setPetDay] = useState([]);
   const [avg, setAverage] = useState(0);
 
   makeStyles((theme) => ({
@@ -47,12 +46,6 @@ const CaretakerSection = (props) => {
       }
     });
   }, [handle]);
-
-  useEffect(() => {
-    showSnackbar(api.caretakerMonthlyInfo.getPetDay(handle)).then((res) => {
-      setPetDay(res);
-    })
-  })
 
   const columns = [
     { field: 'id', headerName: 'ID', width: 70, hide: true },
