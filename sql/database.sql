@@ -518,10 +518,9 @@ CREATE OR REPLACE VIEW leaderboard AS (
 CREATE OR REPLACE VIEW admin_summary AS 
 	SELECT *,
 		CASE 
-			WHEN profitMargin >= 500 THEN 'Excellent Performance'
-			WHEN (profitMargin > 0 AND profitMargin < 500) THEN 'Good Performance'
-			WHEN profitMargin = 0 THEN 'Average Performance'
-			WHEN profitMargin < 0 THEN 'Below Performance'
+			WHEN profitMargin >= 500 THEN 'Exceeds Expectations'
+			WHEN (profitMargin > 0 AND profitMargin < 500) THEN 'Meets Expectations'
+			WHEN profitMargin <= 0 THEN 'Below Expectations'
 			END AS performance
 		FROM
 		(SELECT *,
