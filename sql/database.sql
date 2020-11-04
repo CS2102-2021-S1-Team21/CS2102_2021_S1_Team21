@@ -439,7 +439,7 @@ BEGIN
     END;
 $$ LANGUAGE plpgsql;
 
-
+DROP TRIGGER check_bids_constraint ON Bids;
 CREATE TRIGGER check_bids_constraint
 BEFORE INSERT ON Bids
 FOR EACH ROW 
