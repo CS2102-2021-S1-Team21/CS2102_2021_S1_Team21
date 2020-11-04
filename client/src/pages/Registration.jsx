@@ -200,7 +200,6 @@ const Registration = () => {
                     label="Care Taker Type"
                     component={FormSelect}
                     options={[
-                      { value: '', label: 'Not applicable' },
                       { value: 'fullTime', label: 'Full Time Care Taker' },
                       { value: 'partTime', label: 'Part Time Care Taker' },
                     ]}
