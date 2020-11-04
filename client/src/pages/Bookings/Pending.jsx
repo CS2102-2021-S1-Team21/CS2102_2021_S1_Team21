@@ -10,9 +10,9 @@ import {
 import PetsIcon from '@material-ui/icons/Pets';
 import React, { useEffect, useState } from 'react';
 import Paper from '@material-ui/core/Paper';
+import { useHistory } from 'react-router-dom';
 import api from '../../api';
 import { useStore } from '../../utilities/store';
-import { useHistory } from 'react-router-dom';
 
 const Upcoming = () => {
   const [allBids, setAllBids] = useState([]);
@@ -38,12 +38,12 @@ const Upcoming = () => {
             return (
               <Paper style={{ margin: 30, padding: 30 }} key={bids.id}>
                 <ListItem 
-                alignItems="flex-start"
-                button
-                onClick={() => history.push(`/profile/${bids.caretakerusername}`)}
+                  alignItems="flex-start"
+                  button
+                  onClick={() => history.push(`/profile/${bids.caretakerusername}`)}
                 >
                   <ListItemIcon>
-                    <PetsIcon color="primary" fontSize="large"/>
+                    <PetsIcon color="primary" fontSize="large" />
                   </ListItemIcon>
                   <ListItemText
                     primary={

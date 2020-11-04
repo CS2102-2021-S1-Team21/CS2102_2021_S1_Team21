@@ -168,11 +168,11 @@ RETURNS NUMERIC AS $avg$
 declare 
   avg NUMERIC;
 BEGIN 
-    SELECT AVG(rating) into avg
+    SELECT COALESCE(AVG(rating),0) into avg
     FROM bids b
     WHERE ctusername = b.caretakerusername
     GROUP BY b.caretakerusername;
-    RETURN COALESCE(avg, 0); -- Average rating = 0 if there are no bids yet
+    RETURN avg;
 END; 
 $avg$
 LANGUAGE plpgsql;
@@ -426,7 +426,7 @@ BEGIN
         RAISE EXCEPTION 'Caretaker is unable to receive more pets during this period';
     -- Part timer can hold up to 2 or 5 pets depending on rating
     ELSEIF (NEW.caretakerusername IN (SELECT P.caretakerusername FROM Part_Time_Employee P) 
-        AND (average_rating(NEW.caretakerusername) <= 4) AND max_jobs >= 2) THEN
+        AND ((SELECT totalAverageRating FROM Caretaker WHERE Caretakerusername = NEW.caretakerusername) <= 4) AND max_jobs >= 2) THEN
             RAISE EXCEPTION 'Part time Caretaker is unable to receive more pets during this period';
     END IF;
 
@@ -513,4 +513,4 @@ CREATE OR REPLACE VIEW leaderboard AS (
   ) AS t8
   WHERE rank BETWEEN 1 AND 5
   ORDER BY role, rank, totalScore, efficiencyscore, popularityscore, satisfactionscore
-); 
+);

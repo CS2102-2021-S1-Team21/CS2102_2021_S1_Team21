@@ -8,9 +8,9 @@ import {
 import PetsIcon from '@material-ui/icons/Pets';
 import React, { useEffect, useState } from 'react';
 import Paper from '@material-ui/core/Paper';
+import { useHistory } from 'react-router-dom';
 import api from '../../api';
 import { useStore } from '../../utilities/store';
-import { useHistory } from 'react-router-dom';
 
 const moment = require('moment');
 
@@ -35,11 +35,12 @@ const Upcoming = () => {
             return (
               <Paper style={{ margin: 30, padding: 30 }} key={bids.id}>
                 <ListItem 
-                alignItems="flex-start"
-                button
-                onClick={() => history.push(`/pet-owners/${bid.petownerusername}/pets/${bid.petname}`)}>
+                  alignItems="flex-start"
+                  button
+                  onClick={() => history.push(`/pet-owners/${bid.petownerusername}/pets/${bid.petname}`)}
+                >
                   <ListItemIcon>
-                    <PetsIcon color="primary" fontSize="large"/>
+                    <PetsIcon color="primary" fontSize="large" />
                   </ListItemIcon>
                   <ListItemText
                     primary={
@@ -49,11 +50,11 @@ const Upcoming = () => {
                     }
                     secondary={
                       <>
-                      <Typography component="span" variant="body2" color="textPrimary">
-                        {`Pet Owner: `}
-                      </Typography>
-                      {`${bid.petownerusername}`}
-                    </>
+                        <Typography component="span" variant="body2" color="textPrimary">
+                          {`Pet Owner: `}
+                        </Typography>
+                        {`${bid.petownerusername}`}
+                      </>
                     }
                   />
                 </ListItem>

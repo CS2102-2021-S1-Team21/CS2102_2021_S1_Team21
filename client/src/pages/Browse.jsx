@@ -150,8 +150,8 @@ const Browse = () => {
                 onClick={() => history.push(`/profile/${caretaker.username}`)}
               >
                 <ListItemIcon>
-                    <PersonIcon color="primary" fontSize="large"/>
-                  </ListItemIcon>
+                  <PersonIcon color="primary" fontSize="large" />
+                </ListItemIcon>
                 <ListItemText
                   primary={
                     <Typography component="span" variant="h3" color="Primary">
@@ -161,7 +161,7 @@ const Browse = () => {
                   secondary={
                     <>
                       <Typography component="span" variant="body2" color="textPrimary">
-                      {`Username: ${caretaker.username} `}
+                        {`Username: ${caretaker.username} `}
                       </Typography>
                       {/* {`Total average rating: ${caretaker.totalaveragerating} `}
                       {`Bio: ${caretaker.bio} `} */}
