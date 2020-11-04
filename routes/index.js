@@ -11,8 +11,12 @@ const availability = require('./availability');
 const caretakers = require('./caretakers');
 const caresFor = require('./caresFor');
 const reviews = require('./reviews');
+const bids = require('./bids');
+const transferType = require('./transferType');
+const paymentMethod = require('./paymentMethod');
 const profileSettings = require('./profileSettings');
 const profile = require('./userProfiles');
+const caretakerMonthlyInfo = require('./caretakerMonthlyInfo');
 
 router.use('/', auth);
 
@@ -25,10 +29,14 @@ router.use('/pet-owners', ensureAuthenticated, petOwners);
 router.use('/caretakers', ensureAuthenticated, caretakers);
 router.use('/caresfor', ensureAuthenticated, caresFor);
 router.use('/reviews', ensureAuthenticated, reviews);
+router.use('/bids', ensureAuthenticated, bids);
 router.use('/profile', ensureAuthenticated, profile);
 router.use('/profile-settings', ensureAuthenticated, profileSettings);
 router.use('/pets', ensureAuthenticated, pets);
+router.use('/transferType', ensureAuthenticated, transferType);
+router.use('/paymentMethod', ensureAuthenticated, paymentMethod);
 router.use('/pet-categories', petCategories);
+router.use('/petday', ensureAuthenticated, caretakerMonthlyInfo)
 
 // Catch-all route (used for error handling)
 

@@ -466,8 +466,6 @@ EXECUTE PROCEDURE reject_conflicting_bids();
 
 -------------------------------------------- VIEWS ------------------------------------------
 
--------------------------------------------- VIEWS ------------------------------------------
-
 -- View for Admin Dashboard
 CREATE OR REPLACE VIEW leaderboard AS (
   SELECT * FROM 
@@ -515,7 +513,7 @@ CREATE OR REPLACE VIEW leaderboard AS (
   ORDER BY role, rank, totalScore, efficiencyscore, popularityscore, satisfactionscore
 ); 
 
-CREATE OR REPLACE VIEW admin_summary AS 
+CREATE VIEW admin_summary AS 
 	SELECT *,
 		CASE 
 			WHEN profitMargin >= 500 THEN 'Excellent Performance'
@@ -532,16 +530,22 @@ CREATE OR REPLACE VIEW admin_summary AS
 				FROM
 				(SELECT *,
 					CASE
-						WHEN t1.role = 'PT' THEN 0
+						WHEN t1.role = 'PT' THEN 0.0
 						WHEN t1.role = 'FT' THEN 2500
-						ELSE 0
+						ELSE 0.0
 					END AS baseSalary,
 					CASE
-						WHEN t1.role = 'PT' AND (t1.averageRating > 3.7 OR t1.averageRating = 3.7) THEN t1.invoiceAmount * 0.8
-						WHEN t1.role = 'PT' AND t1.averageRating < 3.7 THEN t1.invoiceAmount * 0.6
-						WHEN t1.role = 'FT' AND t1.invoiceAmount > 3000 THEN (t1.invoiceAmount - 2500) * 0.5
-						ELSE 0
-					END AS variableSalary
+						WHEN t1.role = 'PT' AND t1.invoiceAmount > 500 THEN t1.invoiceAmount * 0.8
+						WHEN t1.role = 'PT' AND t1.invoiceAmount < 500 THEN t1.invoiceAmount * 0.6
+						WHEN t1.role = 'FT' AND t1.invoiceAmount > 2500 THEN (t1.invoiceAmount - 2500) * 0.5
+						ELSE 0.0
+					END AS variableSalary,
+					CASE
+						WHEN t1.role = 'PT' AND t1.invoiceAmount > 500 THEN '80%'
+						WHEN t1.role = 'PT' AND (t1.invoiceAmount < 500) and (t1.invoiceAmount > 0) THEN '60%'
+						WHEN t1.role = 'FT' AND t1.invoiceAmount > 2500 THEN '50% of excess $2,500'
+						ELSE '0%'
+					END AS variablePercentage
 				FROM (
 
 					SELECT 
@@ -599,12 +603,12 @@ CREATE OR REPLACE VIEW admin_summary AS
 								FROM Bids b1
 								WHERE status='Completed' AND endDate BETWEEN date_trunc('month', CURRENT_DATE - interval '1' month) AND date_trunc('month', CURRENT_DATE)
 								AND caretaker.caretakerusername = b1.caretakerusername
-				    		)
-			    		)
-			    	) AS t1
-			    ) AS t2
-		    ) AS t3
-	    ) AS t4
+							)
+						)
+					) AS t1
+				) AS t2
+			) AS t3
+		) AS t4
 
-    ORDER BY role, profitMargin DESC
+	ORDER BY role, profitMargin DESC
 ;

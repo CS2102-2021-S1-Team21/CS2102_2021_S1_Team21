@@ -150,7 +150,7 @@ const Performance = () => {
   return (
     <Container>
       <Paper className={classes.paper}>
-      <h1>
+        <h1>
           {'For the month of '}
           {reportMonth}
         </h1>
@@ -158,7 +158,7 @@ const Performance = () => {
           {'My Performance'}
         </h1>
         <div style={{ height: 185, width: '100%' }}>
-        <DataGrid disableSelectionOnClick="true" rows={personalPerformanceRows} columns={columnsPerformance}/>
+          <DataGrid disableSelectionOnClick="true" rows={personalPerformanceRows} columns={columnsPerformance} />
         </div>
         <h1>
           {'Leaderboard'}
