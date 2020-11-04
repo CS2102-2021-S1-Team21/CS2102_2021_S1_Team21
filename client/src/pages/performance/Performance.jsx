@@ -144,9 +144,6 @@ const Performance = () => {
     })
   }, []);
 
-  console.log(personalPerformanceRows)
-  console.log(rows)
-
   return (
     <Container>
       <Paper className={classes.paper}>
