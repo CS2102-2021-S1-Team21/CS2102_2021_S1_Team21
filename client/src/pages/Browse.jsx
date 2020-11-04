@@ -1,29 +1,36 @@
 import {
+  Box,
   Button,
   Card,
   CardActions,
   CardContent,
-  Typography,
   List,
   ListItem,
-  ListItemText,
-  ListItemSecondaryAction,
-  ListItemIcon,
-  TextField,
+  ListItemIcon, ListItemSecondaryAction, ListItemText,
+  makeStyles,
+  TextField, Typography
 } from '@material-ui/core';
-import PersonIcon from '@material-ui/icons/Person';
-import React, { useEffect, useState } from 'react';
-import { KeyboardDatePicker } from '@material-ui/pickers';
 import Paper from '@material-ui/core/Paper';
+import PersonIcon from '@material-ui/icons/Person';
+import { KeyboardDatePicker } from '@material-ui/pickers';
+import { format } from 'date-fns';
+import moment from 'moment';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import api from '../api';
+import { ISO_DATE_FORMAT } from '../utilities/datetime';
+import { useSnackbarContext } from '../utilities/snackbar';
+import { useStore } from '../utilities/store';
 import SimpleRating from './Bookings/Components/SimpleRating';
 import SelectPet from './Browse/SelectPet';
-import api from '../api';
-import { useStore } from '../utilities/store';
 import SelectTransferType from './Browse/SelectTransferType';
-import { useSnackbarContext } from '../utilities/snackbar';
 
-const moment = require('moment');
+const useStyles = makeStyles((theme) => ({
+  seeMoreButton: {
+    margin: theme.spacing(4),
+    minWidth: '25%',
+  },
+}))
 
 const Browse = () => {
   const [rating, setRating] = React.useState(2);
@@ -40,11 +47,14 @@ const Browse = () => {
   const [remarks, setRemarks] = useState();
   const [caretakers, setCaretakers] = useState([]);
   const [dailyPrice, setDailyPrice] = useState();
-  const store = useStore();
 
+  const [offset, setOffset] = useState(0); // for pagination
+  const [hasMoreCaretakers, setHasMoreCaretakers] = useState(false);
+
+  const classes = useStyles();
   const history = useHistory();
+  const store = useStore();
   const showSnackbar = useSnackbarContext();
-
 
   useEffect(() => {
     api.pets.getPetPet(store.user.username).then((x) => setPetOptions(x));
@@ -68,6 +78,47 @@ const Browse = () => {
     } catch (err) {
       console.log(err.message);
     }
+  };
+
+  const handleSearch = () => {
+    try {
+      const body = {
+        minRating: rating,
+        petCategory: pet.categoryname,
+        startDate: format(dateFrom, ISO_DATE_FORMAT),
+        endDate: format(dateTo, ISO_DATE_FORMAT),
+        offset: 0,
+      };
+      api.caretakers.getCaretakers(body).then((x) => {
+        setCaretakers(x.entries);
+        console.log(`total count ${x.entries}`);
+        setHasMoreCaretakers(true);
+        setOffset(0);
+      });
+      api.petCategories
+        .getDailyPrice(pet.categoryname)
+        .then((x) => setDailyPrice(x[0].dailyprice));
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+
+  const handleSeeMore = () => {
+    const searchParams = {
+      minRating: rating,
+      petCategory: pet.categoryname,
+      startDate: format(dateFrom, ISO_DATE_FORMAT),
+      endDate: format(dateTo, ISO_DATE_FORMAT),
+      offset: offset + 10,
+    }
+    showSnackbar(api.caretakers.getCaretakers(searchParams)).then((response) => {
+      if (response.info) { // no additional caretakers
+        setHasMoreCaretakers(false);
+        return; 
+      }
+      setCaretakers([...caretakers, ...response.entries]);
+    });
+    setOffset(offset + 10); // update offset after API request because state updates are asynchronous
   };
 
   return (
@@ -112,29 +163,7 @@ const Browse = () => {
             size="small"
             variant="outlined"
             color="primary"
-            onClick={() => {
-              try {
-                const body = {
-                  minRating: rating,
-                  petCategory: pet.categoryname,
-                  startDate: moment(dateFrom).format('YYYY-MM-DD'),
-                  endDate: moment(dateTo).format('YYYY-MM-DD'),
-                  offset: 0,
-                };
-                api.caretakers.getCaretakers(body).then((x) => {
-                  setCaretakers(x.entries);
-                  console.log(`total count ${x.entries}`);
-                });
-
-                api.petCategories
-                  .getDailyPrice(pet.categoryname)
-                  .then((x) => setDailyPrice(x[0].dailyprice));
-
-              } catch (err) {
-                console.log(err.message);
-              }
-             
-            }}
+            onClick={handleSearch}
           >
             {'SEARCH'}
           </Button>
@@ -188,6 +217,12 @@ const Browse = () => {
           );
         })}
       </List>
+      {hasMoreCaretakers && 
+        <Box textAlign="center">
+          <Button variant="outlined" color="primary" className={classes.seeMoreButton} onClick={handleSeeMore}>
+            {"See More"}
+          </Button>
+        </Box>}
     </>
   );
 };

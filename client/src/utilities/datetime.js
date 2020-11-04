@@ -1,5 +1,7 @@
 import { getYear as dateFnsGetYear } from 'date-fns';
 
+export const ISO_DATE_FORMAT = 'yyyy-MM-dd';
+
 export const TIME_FORMAT = 'hh:mm a';
 export const TIME_INPUT_FORMAT = 'hh:mm a';
 export const DATE_FORMAT = 'dd MM yyyy (EEE)';
