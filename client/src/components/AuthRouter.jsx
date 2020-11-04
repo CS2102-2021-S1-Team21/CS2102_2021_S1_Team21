@@ -3,6 +3,9 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import api from '../api';
 import Availability from '../pages/availabilities/Availability';
 import Leaves from '../pages/leaves/Leaves';
+import Bookings from '../pages/Bookings';
+import Jobs from '../pages/Jobs';
+import Browse from '../pages/Browse';
 import AdminDashboard from '../pages/pcsAdmin/AdminDashboard';
 import LeaveRequest from '../pages/pcsAdmin/LeaveRequest';
 import NewAdmin from '../pages/pcsAdmin/NewAdmin';
@@ -62,6 +65,10 @@ const AuthRouter = () => {
           <Route exact path="/my-leaves" component={Leaves} />
           <Route exact path="/my-availability" component={Availability} />
           <Route exact path="/my-pets" component={Pets} />
+          {/* <Route exact path="/edit-profile" component={EditProfile} /> */}
+          <Route exact path="/my-bookings" component={Bookings} />
+          <Route exact path="/browse" component={Browse} />
+          <Route exact path="/my-jobs" component={Jobs} />
           <Route path="/pet-owners/:petOwnerUsername/pets/:petName" component={PetProfile} />
           {/* <Route path="/pcs-admin" component={PcsAdmin} /> */}
           <Route path="/profile-settings" component={ProfileSettings} />

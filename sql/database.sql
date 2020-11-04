@@ -513,4 +513,4 @@ CREATE OR REPLACE VIEW leaderboard AS (
   ) AS t8
   WHERE rank BETWEEN 1 AND 5
   ORDER BY role, rank, totalScore, efficiencyscore, popularityscore, satisfactionscore
-); 
+);

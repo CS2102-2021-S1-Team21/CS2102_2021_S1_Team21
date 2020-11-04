@@ -9,6 +9,9 @@ import petOwners from './petOwners';
 import pets from './pets';
 import profileSettings from './profileSettings';
 import reviews from './reviews';
+import bids from './bids';
+import transferType from './transferType';
+import paymentMethod from './paymentMethod';
 import userProfiles from './userProfiles';
 import users from './users';
 
@@ -25,9 +28,12 @@ const api = {
   availability,
   caretakers,
   reviews,
-  profileSettings,
+  bids,
   pets,
   petCategories,
+  transferType,
+  paymentMethod,
+  profileSettings,
   caresFor,
   users,
   userProfiles,
