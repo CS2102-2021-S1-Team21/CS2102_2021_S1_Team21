@@ -513,7 +513,7 @@ CREATE OR REPLACE VIEW leaderboard AS (
   ORDER BY role, rank, totalScore, efficiencyscore, popularityscore, satisfactionscore
 ); 
 
-CREATE VIEW admin_summary AS 
+CREATE OR REPLACE VIEW admin_summary AS 
 	SELECT *,
 		CASE 
 			WHEN profitMargin >= 500 THEN 'Excellent Performance'
@@ -547,68 +547,37 @@ CREATE VIEW admin_summary AS
 						ELSE '0%'
 					END AS variablePercentage
 				FROM (
-
-					SELECT 
-						COALESCE(caretakerusername, caretakerusername2) AS caretakerusername,
-						COALESCE(role,role2) AS role,
-						jobCount,
-						bidCount,
-						averageRating,
-						petDayCount,
-						invoiceAmount
-					FROM 
-						((SELECT 
-							caretakerusername,	
-							CASE 
-								WHEN caretakerusername IN (SELECT * FROM part_time_employee) THEN 'PT'
-								WHEN caretakerusername IN (SELECT * FROM full_time_employee) THEN 'FT'
-								ELSE 'null'
-							END AS role,
-							COUNT(*) AS jobCount,
-							AVG(rating) AS averageRating,
-							SUM(bids.endDate - bids.startDate + 1) AS petDayCount,
-							SUM(bids.totalAmount) AS invoiceAmount
-						FROM Bids
-						WHERE status='Completed' AND endDate BETWEEN date_trunc('month', CURRENT_DATE - interval '1' month) AND date_trunc('month', CURRENT_DATE)
-						GROUP BY caretakerusername) t1 
-					FULL OUTER JOIN
-						(SELECT 
-							caretakerusername AS caretakerusername2,	
-							CASE 
-								WHEN caretakerusername IN (SELECT * FROM part_time_employee) THEN 'PT'
-								WHEN caretakerusername IN (SELECT * FROM full_time_employee) THEN 'FT'
-								ELSE 'null'
-							END AS role2,
-							COUNT(*) AS bidCount
-						FROM Bids
-						WHERE submittedAt BETWEEN date_trunc('month', CURRENT_DATE - interval '1' month) AND date_trunc('month', CURRENT_DATE)
-						GROUP BY caretakerusername) t2
-					ON t1.caretakerusername = t2.caretakerusername2 )
-						UNION
-					(SELECT 
-						caretakerusername,	
-						CASE 
-							WHEN caretakerusername IN (SELECT * FROM part_time_employee) THEN 'PT'
-							WHEN caretakerusername IN (SELECT * FROM full_time_employee) THEN 'FT'
-							ELSE 'null'
-						END AS role,
-						0 AS jobCount,
-						0 AS bidCount,
-						0 AS averageRating,
-						0 AS petDayCount,
-						0 AS invoiceAmount
-						FROM caretaker
-						WHERE NOT EXISTS(
-								SELECT 1 
-								FROM Bids b1
-								WHERE status='Completed' AND endDate BETWEEN date_trunc('month', CURRENT_DATE - interval '1' month) AND date_trunc('month', CURRENT_DATE)
-								AND caretaker.caretakerusername = b1.caretakerusername
-							)
-						)
+                    SELECT c4.caretakerusername,
+                    CASE 
+                        WHEN c4.caretakerusername IN (SELECT * FROM part_time_employee) THEN 'PT'
+                        WHEN c4.caretakerusername IN (SELECT * FROM full_time_employee) THEN 'FT'
+                        ELSE 'null'
+                    END AS role,
+                    COALESCE((SELECT COUNT(*)
+                        from bids b
+                        WHERE b.caretakerusername = c4.caretakerusername 
+                        AND submittedAt BETWEEN date_trunc('month', CURRENT_DATE - interval '1' month) AND date_trunc('month', CURRENT_DATE)
+                        GROUP BY b.caretakerusername), 0)
+                    AS bidCount,
+                    COALESCE(nullableJobCount,0) AS jobCount, 
+                    COALESCE(nullableAverageRating,0) as averageRating, 
+                    COALESCE(nullablePetDayCount,0) AS petDayCount, 
+                    COALESCE(nullableInvoiceAmount,0) as invoiceAmount
+                    FROM (caretaker c
+                        LEFT JOIN
+                        (SELECT b2.caretakerusername AS caretakerusername2, COUNT(*) as nullableJobCount,
+                            AVG(rating) AS nullableAverageRating,
+                            SUM(endDate - startDate + 1) AS nullablePetDayCount,
+                            SUM(totalAmount) AS nullableInvoiceAmount
+                            FROM bids b2
+                            WHERE status = 'Completed' 
+                            AND endDate BETWEEN date_trunc('month', CURRENT_DATE - interval '1' month) AND date_trunc('month', CURRENT_DATE)
+                            GROUP BY b2.caretakerusername) c2 ON
+                        c.caretakerusername = c2.caretakerusername2)
+                  AS c4
 					) AS t1
 				) AS t2
 			) AS t3
 		) AS t4
-
 	ORDER BY role, profitMargin DESC
 ;
