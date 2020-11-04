@@ -11,8 +11,8 @@ import Paper from '@material-ui/core/Paper';
 import { useHistory } from 'react-router-dom';
 import api from '../../api';
 import { useStore } from '../../utilities/store';
-
-const moment = require('moment');
+import { formatDate } from '../../utilities/datetime';
+import SecondaryInfo from './SecondaryInfo';
 
 const Upcoming = () => {
   const [bids, setBids] = useState([]);
@@ -50,10 +50,22 @@ const Upcoming = () => {
                     }
                     secondary={
                       <>
-                        <Typography component="span" variant="body2" color="textPrimary">
-                          {`Pet Owner: `}
-                        </Typography>
-                        {`${bid.petownerusername}`}
+                        <SecondaryInfo label="Pet Owner: " content={bid.petownerusername} />
+                        <br />
+                        <SecondaryInfo label="Start Date: " content={formatDate(bid.startdate)} />
+                        <br />
+                        <SecondaryInfo label="End Date: " content={formatDate(bid.enddate)} />
+                      </>
+                    }
+                  />
+                  <ListItemText 
+                    secondary={
+                      <>
+                        <SecondaryInfo label="Transfer Type: " content={bid.transfertype} />
+                        <br />
+                        <SecondaryInfo label="Remarks: " content={bid.remarks} />
+                        <br />
+                        <SecondaryInfo label="Total Amount: " content={`$${bid.totalamount}`} />
                       </>
                     }
                   />
