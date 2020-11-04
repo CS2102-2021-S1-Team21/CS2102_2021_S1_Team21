@@ -40,7 +40,7 @@ const Pending = () => {
         status,
         transactionDateTime: null,
         paymentMethod: null,
-        totalAmount: null,
+        totalAmount: bid.totalamount,
         rating: null,
         comment: null,
         reviewDateTime: null,

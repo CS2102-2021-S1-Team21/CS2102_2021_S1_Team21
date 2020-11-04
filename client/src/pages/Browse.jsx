@@ -56,6 +56,10 @@ const Browse = () => {
   const store = useStore();
   const showSnackbar = useSnackbarContext();
 
+  const calculateAmount = (dailyPrice, dateFrom, dateTo) => {
+    return dailyPrice * (moment(dateTo).diff(moment(dateFrom), 'days') + 1);
+  } 
+
   useEffect(() => {
     api.pets.getPetPet(store.user.username).then((x) => setPetOptions(x));
     api.transferType.getTransferTypes().then((x) => setTransferTypeOptions(x));
@@ -73,6 +77,7 @@ const Browse = () => {
         endDate: dateTo,
         transferType,
         remarks,
+        totalAmount: calculateAmount(dailyPrice, dateFrom, dateTo)
       };
       await showSnackbar(api.bids.applyBids(body));
     } catch (err) {
@@ -201,7 +206,7 @@ const Browse = () => {
                 <ListItemSecondaryAction>
                   <>
                     <Typography component="span" variant="h4" color="Primary" alignRight>
-                      {`$${dailyPrice * (moment(dateTo).diff(moment(dateFrom), 'days') + 1)} `}
+                      {`$${calculateAmount(dailyPrice, dateFrom, dateTo)} `}
                     </Typography>
                     <Button
                       variant="outlined"

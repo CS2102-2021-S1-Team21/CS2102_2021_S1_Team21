@@ -14,9 +14,10 @@ exports.apply = async (req, res) => {
       endDate,
       transferType,
       remarks,
+      totalAmount
     } = req.body;
     const result = await db.query(
-      'INSERT INTO Bids (petName, petOwnerUsername, caretakerUsername, dailyPrice, submittedAt, startDate, endDate, transferType, remarks) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *',
+      'INSERT INTO Bids (petName, petOwnerUsername, caretakerUsername, dailyPrice, submittedAt, startDate, endDate, transferType, remarks, totalAmount) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *',
       [
         petName,
         petOwnerUsername,
@@ -27,6 +28,7 @@ exports.apply = async (req, res) => {
         endDate,
         transferType,
         remarks,
+        totalAmount
       ],
     );
     console.log(result.rows);

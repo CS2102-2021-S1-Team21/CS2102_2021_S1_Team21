@@ -40,7 +40,7 @@ const Upcoming = () => {
         status: 'Completed',
         transactionDateTime: moment(bid.transactiondatetime).format('YYYY-MM-DD HH:mm:ss.SSS'),
         paymentMethod: bid.paymentmethod,
-        totalAmount: null,
+        totalAmount: bid.totalamount,
         rating: null,
         comment: null,
         reviewDateTime: null,

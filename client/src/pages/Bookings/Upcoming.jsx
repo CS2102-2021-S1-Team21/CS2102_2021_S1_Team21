@@ -37,7 +37,7 @@ const Upcoming = () => {
         status: bid.status,
         transactionDateTime: moment.utc(moment(), 'YYYY-MM-DD HH:mm:ss.SSS'),
         paymentMethod: bidPaymentMethod,
-        totalAmount: null,
+        totalAmount: bid.totalamount,
         rating: null,
         comment: null,
         reviewDateTime: null,

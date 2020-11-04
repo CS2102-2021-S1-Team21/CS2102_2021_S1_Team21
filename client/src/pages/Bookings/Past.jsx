@@ -44,7 +44,7 @@ const Past = () => {
         status: bid.status,
         transactionDateTime: moment(bid.transactiondatetime).format('YYYY-MM-DD HH:mm:ss.SSS'),
         paymentMethod: bid.paymentmethod,
-        totalAmount: null,
+        totalAmount: bid.totalamount,
         rating: bidRating,
         comment,
         reviewDateTime: moment.utc(moment(), 'YYYY-MM-DD HH:mm:ss.SSS'),
