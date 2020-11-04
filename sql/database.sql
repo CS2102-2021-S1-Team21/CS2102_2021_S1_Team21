@@ -515,7 +515,7 @@ CREATE OR REPLACE VIEW leaderboard AS (
   ORDER BY role, rank, totalScore, efficiencyscore, popularityscore, satisfactionscore
 ); 
 
-CREATE VIEW admin_summary AS 
+CREATE OR REPLACE VIEW admin_summary AS 
 	SELECT *,
 		CASE 
 			WHEN profitMargin >= 500 THEN 'Excellent Performance'
