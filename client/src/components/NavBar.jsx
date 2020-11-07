@@ -94,6 +94,15 @@ const NavBar = ({ children }) => {
               {'My Availability'}
             </Button>
           )}
+          {(user.isFullTimeCaretaker || user.isPartTimeCaretaker) && (
+            <Button
+              color="inherit"
+              className={classes.navItem}
+              onClick={() => history.push('/my-performance')}
+            >
+              {'My Performance'}
+            </Button>
+          )}
           {user.isAdmin && (
             <>
               <Button

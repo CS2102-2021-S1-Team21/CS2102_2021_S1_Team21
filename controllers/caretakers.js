@@ -73,3 +73,80 @@ exports.view = async (req, res) => {
     res.json({ error: 'An unexpected error occurred' });
   }
 };
+
+exports.viewSalary = async (req, res) => {
+  const { username } = req.params;
+  try {
+    const result = await db.query(
+      `SELECT ROW_NUMBER() OVER () AS id, *,
+      CASE 
+        WHEN profitMargin >= 500 THEN 'Exceeds Expectations'
+        WHEN (profitMargin > 0 AND profitMargin < 500) THEN 'Meets Expectations'
+        WHEN profitMargin <= 0 THEN 'Below Expectations'
+        END AS performance
+      FROM
+      (SELECT *,
+        invoiceAmount - t3.totalSalary AS profitMargin
+        FROM
+        (SELECT *, 
+          t2.baseSalary + t2.variableSalary AS totalSalary 
+          FROM
+          (SELECT *,
+            CASE
+              WHEN t1.role = 'PT' THEN 0.0
+              WHEN t1.role = 'FT' THEN 2500
+              ELSE 0.0
+            END AS baseSalary,
+            CASE
+              WHEN t1.role = 'PT' AND t1.invoiceAmount > 500 THEN t1.invoiceAmount * 0.8
+              WHEN t1.role = 'PT' AND t1.invoiceAmount < 500 THEN t1.invoiceAmount * 0.6
+              WHEN t1.role = 'FT' AND t1.invoiceAmount > 2500 THEN (t1.invoiceAmount - 2500) * 0.5
+              ELSE 0.0
+            END AS variableSalary,
+            CASE
+              WHEN t1.role = 'PT' AND t1.invoiceAmount > 500 THEN '80%'
+              WHEN t1.role = 'PT' AND (t1.invoiceAmount < 500) and (t1.invoiceAmount > 0) THEN '60%'
+              WHEN t1.role = 'FT' AND t1.invoiceAmount > 2500 THEN '50% of excess $2,500'
+              ELSE '0%'
+            END AS variablePercentage
+            FROM (
+              SELECT c4.caretakerusername,
+              CASE 
+                  WHEN c4.caretakerusername IN (SELECT * FROM part_time_employee) THEN 'PT'
+                  WHEN c4.caretakerusername IN (SELECT * FROM full_time_employee) THEN 'FT'
+                  ELSE 'null'
+              END AS role,
+              COALESCE((SELECT COUNT(*)
+                  from bids b
+                  WHERE b.caretakerusername = c4.caretakerusername 
+                  AND submittedAt BETWEEN date_trunc('month', CURRENT_DATE - interval '1' month) AND date_trunc('month', CURRENT_DATE)
+                  GROUP BY b.caretakerusername), 0)
+              AS bidCount,
+              COALESCE(nullableJobCount,0) AS jobCount, 
+              COALESCE(nullableAverageRating,0) as averageRating, 
+              COALESCE(nullablePetDayCount,0) AS petDayCount, 
+              COALESCE(nullableInvoiceAmount,0) as invoiceAmount
+              FROM (SELECT b2.caretakerusername, COUNT(*) as nullableJobCount,
+                      AVG(rating) AS nullableAverageRating,
+                      SUM(endDate - startDate + 1) AS nullablePetDayCount,
+                      SUM(totalAmount) AS nullableInvoiceAmount
+                      FROM bids b2
+                      WHERE status = 'Completed' AND caretakerusername = $1
+                      AND endDate BETWEEN date_trunc('month', CURRENT_DATE - interval '1' month) AND date_trunc('month', CURRENT_DATE)
+                      GROUP BY b2.caretakerusername)
+                AS c4
+            ) AS t1
+          ) AS t2
+        ) AS t3
+      ) AS t4
+  
+    ORDER BY role, profitMargin DESC
+      `,
+      [username],
+    );
+    res.json(result.rows);
+  } catch (err) {
+    console.error('ERROR: ', err.message);
+    res.json({ error: 'An unexpected error occurred' });
+  }
+};

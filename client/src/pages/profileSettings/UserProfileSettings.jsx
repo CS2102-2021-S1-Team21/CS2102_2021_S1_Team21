@@ -100,7 +100,7 @@ const UserProfileSettings = ({ username, role }) => {
                   <Field name="postalcode" label="Postal Code" component={FormTextField} required />
                 </Grid>
                 <Grid item xs={6} md={5}>
-                  <Field name="email" label="Email" component={FormTextField} required />
+                  <Field name="email" label="Email" component={FormTextField} disabled required />
                 </Grid>
                 <Grid item xs={6}>
                   <Field

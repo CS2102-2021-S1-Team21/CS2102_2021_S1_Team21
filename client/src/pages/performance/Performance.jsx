@@ -3,6 +3,7 @@ import { DataGrid } from '@material-ui/data-grid';
 import { Container, makeStyles, Paper } from '@material-ui/core';
 import api from '../../api';
 import { useSnackbarContext } from '../../utilities/snackbar';
+import { useStore } from '../../utilities/store';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -10,12 +11,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AdminDashboard = () => {
+const Performance = () => {
   const classes = useStyles();
+  const store = useStore();
   const showSnackbar = useSnackbarContext();
   const [rows, setRows] = useState([]);
+  const [personalPerformanceRows, setPersonalPerformanceRows] = useState([]);
   const [reportMonth, setMonth] = useState([]);
-  const [performanceRow, setPerformanceRow] = useState([]);
 
   const columns = [
     { field: 'rank', headerName: 'Rank', description: 'Based on Cumulative Score', width: 90 },
@@ -53,6 +55,7 @@ const AdminDashboard = () => {
     },
   ];
 
+  
   const columnsPerformance = [
     { field: 'caretakerusername', headerName: 'Username', width: 150, sortable: false },
     {
@@ -64,63 +67,63 @@ const AdminDashboard = () => {
       field: 'jobcount',
       headerName: 'Job Count',
       description: '',
-      width: 100,
+      width: 200,
     },
     {
       field: 'bidcount',
       headerName: 'Bid Count',
       description:
         '',
-      width: 100,
+      width: 150,
     },
     {
       field: 'averagerating',
-      headerName: 'Rating',
+      headerName: 'Average Rating',
       description:
         '',
-      width: 100,
+      width: 150,
     },
     {
       field: 'petdaycount',
       headerName: 'Pet Day',
       description: 'Total Number of Pet Day the caretaker serviced last month',
-      width: 100,
+      width: 200,
     },
     {
       field: 'invoiceamount',
       headerName: 'Invoice Amount',
       description: 'Total Monthly Revenue earned by each Caretaker. This is the amount the Petowner paid for the service and is calculated using the formula: Number of service days x Daily Price.',
-      width: 150,
+      width: 200,
+    },
+    {
+      field: 'variablepercentage',
+      headerName: 'Variable %',
+      description: 'For Part Timers, the variable percentage is 80% if the total Monthly Invoice Amount > $500. Else, the variable percentage is at 60%. For Full Timers, if Invoice Amount > $2,500, they will be entitled 50% of the share for the excess portions.',
+      width: 200,
     },
     {
       field: 'basesalary',
       headerName: 'Base Salary',
       description: 'Only Full Time Employees have $2,500 base monthly salary',
-      width: 150,
+      width: 200,
     },
     {
       field: 'variablesalary',
       headerName: 'Variable Salary',
       description: '',
-      width: 150,
-    },
-    {
-      field: 'variablepercentage',
-      headerName: 'Variable %',
-      description: 'For Part Timers, the variable percentage is 80% if the total Monthly Invoice Amount > $500. Else, the variable percentage is lower at 60%. For Full Timers, if their Invoice Amount > $2,500, they will be entitled 50% of the share for the excess portions.',
-      width: 150,
+      width: 200,
     },
     {
       field: 'totalsalary',
       headerName: 'Total Salary',
       description: 'Sum of the Base Salary and Variable Salary',
-      width: 150,
+      width: 200,
     },
     {
       field: 'profitmargin',
       headerName: 'Profit Margin',
       description: 'The monthly revenue (Total Invoice) - total monthly salary paid to each employee (Total Salary)',
-      width: 150,
+      width: 200,
     },
     {
       field: 'performance',
@@ -131,34 +134,31 @@ const AdminDashboard = () => {
   ];
 
   useEffect(() => {
-    showSnackbar(api.adminDashboard.getPerformance()).then((res) => {
-      setPerformanceRow(res);
-    });
-  }, []);
-
-  useEffect(() => {
     showSnackbar(api.adminDashboard.getCaretakerRanking()).then((res) => {
       if (res.info) return; // hacky way to check for no results
       setRows(res.result);
       setMonth(res.resultMonth);
     });
+    showSnackbar(api.caretakers.getSalary(store.user.username)).then((res) => {
+      setPersonalPerformanceRows(res);
+    })
   }, []);
 
   return (
     <Container>
       <Paper className={classes.paper}>
         <h1>
-          {'Caretaker Performance for '}
+          {'For the month of '}
           {reportMonth}
         </h1>
-        <div style={{ height: 400, width: '100%' }}>
-          <DataGrid disableSelectionOnClick="true" rows={performanceRow} columns={columnsPerformance} pageSize={10} />
-        </div>
-      </Paper>
-      <Paper className={classes.paper}>
         <h1>
-          {'Leaderboard for '}
-          {reportMonth}
+          {'My Performance'}
+        </h1>
+        <div style={{ height: 185, width: '100%' }}>
+          <DataGrid disableSelectionOnClick="true" rows={personalPerformanceRows} columns={columnsPerformance} />
+        </div>
+        <h1>
+          {'Leaderboard'}
         </h1>
         <div style={{ height: 400, width: '100%' }}>
           <DataGrid disableSelectionOnClick="true" rows={rows} columns={columns} pageSize={10} />
@@ -168,4 +168,4 @@ const AdminDashboard = () => {
   );
 };
 
-export default AdminDashboard;
+export default Performance;
