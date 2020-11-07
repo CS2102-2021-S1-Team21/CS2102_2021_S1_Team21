@@ -10,6 +10,7 @@ exports.errorDetails = {
   LEAVE_CONSTRAINTS: 'PL/pgSQL function leave_constraints()',
   NOT_ADMIN_CONSTRAINT: 'PL/pgSQL function not_admin()',
   NOT_USER_CONSTRAINT: 'PL/pgSQL function not_user()',
+  AVAILABILITY_DATERANGE_LIMIT: 'indicates_availability_period_enddate_check',
 };
 
 exports.messages = {

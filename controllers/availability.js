@@ -11,10 +11,17 @@ exports.apply = async (req, res, next) => {
     );
     res.json(result.rows);
   } catch (err) {
-    if (err.where.startsWith(errorDetails.AVAILABILITY_OVERLAPPING_DATE)) {
+    console.log(err)
+    if (err.where && err.where.startsWith(errorDetails.AVAILABILITY_OVERLAPPING_DATE)) {
       res
         .status(400)
         .json({ error: 'You have an existing availability that overlaps with this one' });
+      return;
+    }
+    if (err.constraint === errorDetails.AVAILABILITY_DATERANGE_LIMIT) {
+      res
+        .status(400)
+        .json({ error: 'You can only apply availability latest on end of next year' });
       return;
     }
     next(err);
