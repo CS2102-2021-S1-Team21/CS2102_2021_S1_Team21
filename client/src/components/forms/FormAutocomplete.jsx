@@ -20,26 +20,36 @@ const FormTextField = ({ field, form, options, AutocompleteProps, ...otherProps 
   const errorMessage = getIn(form.errors, field.name);
   const shouldShowError = getIn(form.touched, field.name) && !!errorMessage;
 
+  const handleInputChange = (e, value) => {
+    form.setFieldValue(field.name, value);
+  };
+
   return (
     <Autocomplete 
       freeSolo
       {...AutocompleteProps}
+      // Display original value if matching option not found.
+      // MUI's TextField requires empty input to be indicated by an empty string.
+      value={options.find((option) => option.value === field.value) || field.value || ''} 
+      inputValue={field.value}
+      onInputChange={handleInputChange}
       options={options}
-      getOptionLabel={(option) => option.label}
-      renderInput={(params) => (
+      getOptionLabel={(option) => {
+        // initial value may be a raw string
+        return typeof option === 'string' ? option : option.label;
+      }}
+      fullWidth
+      renderInput={(params) => 
         <TextField
           {...params}
-          {...field}
           disabled={form.isSubmitting}
           variant="outlined"
           {...otherProps} // allow the above props to be overridden
           id={field.name}
-          value={field.value || ''} // MUI's TextField requires empty input to be indicated by an empty string
           error={shouldShowError}
           helperText={shouldShowError ? errorMessage : otherProps?.helperText}
-          fullWidth
         />
-      )}
+      }
     />
   );
 };
