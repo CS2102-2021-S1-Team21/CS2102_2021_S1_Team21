@@ -151,7 +151,7 @@ const AdminDashboard = () => {
           {'Caretaker Performance for '}
           {reportMonth}
         </h1>
-        <div style={{ height: 400, width: '100%' }}>
+        <div style={{ height: 640, width: '100%' }}>
           <DataGrid disableSelectionOnClick="true" rows={performanceRow} columns={columnsPerformance} pageSize={10} />
         </div>
       </Paper>
@@ -160,8 +160,8 @@ const AdminDashboard = () => {
           {'Leaderboard for '}
           {reportMonth}
         </h1>
-        <div style={{ height: 400, width: '100%' }}>
-          <DataGrid disableSelectionOnClick="true" rows={rows} columns={columns} pageSize={10} />
+        <div style={{ height: 640, width: '100%' }}>
+          <DataGrid disableSelectionOnClick="true" rows={rows} columns={columns} pageSize={20} />
         </div>
       </Paper>
     </Container>
