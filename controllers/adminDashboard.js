@@ -21,3 +21,15 @@ exports.index = async (req, res) => {
     res.json({ error: 'An unexpected error occurred' });
   }
 };
+
+exports.performance = async (req, res) => {
+  try {
+    const result = await db.query(
+      `SELECT ROW_NUMBER() OVER () AS id, * FROM admin_summary`,
+    );
+    res.json(result.rows);
+  } catch (err) {
+    console.error('ERROR: ', err.message);
+    res.json({ error: 'An unexpected error occurred' });
+  }
+};
