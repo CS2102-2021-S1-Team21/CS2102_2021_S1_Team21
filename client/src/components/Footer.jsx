@@ -5,7 +5,7 @@ import ChildFriendlyIcon from '@material-ui/icons/ChildFriendly';
 import GitHubIcon from '@material-ui/icons/GitHub';
 import HotelIcon from '@material-ui/icons/Hotel';
 import HotTubIcon from '@material-ui/icons/HotTub';
-import PersonIcon from '@material-ui/icons/Person';
+import PeopleIcon from '@material-ui/icons/People';
 import PetsIcon from '@material-ui/icons/Pets';
 import React from 'react';
 
@@ -59,7 +59,7 @@ const Footer = () => {
         </Grid>
 
         <Grid item className={classes.item}>
-          <PersonIcon fontSize="small" className={classes.icon} />
+          <PeopleIcon fontSize="small" className={classes.icon} />
           <Typography variant="body2" className={classes.typography}>
             {"Contributors: "}
           </Typography>
