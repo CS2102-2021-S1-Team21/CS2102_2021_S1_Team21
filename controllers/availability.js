@@ -9,7 +9,7 @@ exports.apply = async (req, res, next) => {
       'INSERT INTO indicates_availability_period (caretakerUsername, startDate, endDate) VALUES ($1, $2, $3) RETURNING *',
       [caretakerUsername, startDate, endDate],
     );
-    res.json(result.rows);
+    res.json({ success: "You have successfully indicated your availability", result: result.rows });
   } catch (err) {
     console.log(err)
     if (err.where && err.where.startsWith(errorDetails.AVAILABILITY_OVERLAPPING_DATE)) {

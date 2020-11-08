@@ -42,7 +42,7 @@ const LeaveRequest = () => {
     const start = format(new Date(item.startdate), 'yyyy-MM-dd');
     const end = format(new Date(item.enddate), 'yyyy-MM-dd');
     try {
-      await api.leaves.updateLeaveApproved(item.caretakerusername, start, end);
+      await showSnackbar(api.leaves.updateLeaveApproved(item.caretakerusername, start, end));
     } catch (err) {
       console.log(err.message);
     }

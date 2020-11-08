@@ -9,7 +9,7 @@ exports.apply = async (req, res, next) => {
       'INSERT INTO applies_for_leave_period (caretakerUsername, startDate, endDate, isEmergency) VALUES ($1, $2, $3, $4) RETURNING *',
       [caretakerUsername, startDate, endDate, isEmergency],
     );
-    res.json(result.rows);
+    res.json({ success: "You have successfully applied for leave, please check again soon if it has been approved.", result: result.rows });
   } catch (err) {
     console.log(err)
     if (err.where === errorDetails.LEAVE_OVERLAPPING_DATE) {
@@ -41,7 +41,7 @@ exports.cancel = async (req, res) => {
       `DELETE FROM applies_for_leave_period WHERE caretakerusername = $1 AND startdate = $2 AND endDate = $3`,
       [caretakerUsername, startDate, endDate]
     );
-    res.json(result.rows);
+    res.json({ success: "You have successfully cancelled your leave application", result: result.rows });
   } catch (err) {
     console.error('ERROR: ', err.message);
     res.json({ error: 'An unexpected error occurred' });
@@ -77,12 +77,11 @@ exports.retrieveAllPending = async (req, res) => {
 exports.updateApproval = async (req, res) => {
   try {
     const { caretakerUsername, startDate, endDate } = req.params;
-    console.log(caretakerUsername, startDate, endDate);
     const result = await db.query(
       `UPDATE applies_for_leave_period SET isapproved = true WHERE (caretakerUsername = $1 AND startDate = $2 AND endDate = $3)`,
       [caretakerUsername, startDate, endDate],
     );
-    res.json(result.rows);
+    res.json({ success: "You have successfully approved the leave application", result: result.rows });
   } catch (err) {
     console.error('ERROR: ', err.message);
     res.json({ error: 'An unexpected error occurred' });
