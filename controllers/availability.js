@@ -21,7 +21,7 @@ exports.apply = async (req, res, next) => {
     if (err.constraint === errorDetails.AVAILABILITY_DATERANGE_LIMIT) {
       res
         .status(400)
-        .json({ error: 'You can only apply availability latest at the end of next year' });
+        .json({ error: 'You can only indicate availability until the end of next year' });
       return;
     }
     next(err);
