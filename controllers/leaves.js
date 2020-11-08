@@ -11,9 +11,22 @@ exports.apply = async (req, res, next) => {
     );
     res.json(result.rows);
   } catch (err) {
-    if (err.where.startsWith(errorDetails.LEAVE_CONSTRAINTS)) {
+    console.log(err)
+    if (err.where === errorDetails.LEAVE_OVERLAPPING_DATE) {
       res.status(400).json({
-        error: 'Leave application invalid. Please check that you meet the required conditions',
+        error: 'Leave application has overlapping date with an existing leave',
+      });
+      return;
+    }
+    if (err.where === errorDetails.LEAVE_CONSECUTIVE_DAYS) {
+      res.status(400).json({
+        error: 'Unable to apply for this leave. You have to work for at least 2 sets of 150 consecutive days.',
+      });
+      return;
+    }
+    if (err.where === errorDetails.LEAVE_HAVE_PET) {
+      res.status(400).json({
+        error: 'Unable to apply for this leave. Ensure that you apply leave on days without any pet duty.',
       });
       return;
     }
