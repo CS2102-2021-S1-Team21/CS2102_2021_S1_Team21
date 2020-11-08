@@ -11,7 +11,7 @@ import React from 'react';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    margin: theme.spacing(2, 4),
+    margin: theme.spacing(2, 4, 0),
   },
   item: {
     display: 'flex',
