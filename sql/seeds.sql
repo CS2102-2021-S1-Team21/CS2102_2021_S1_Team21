@@ -214,7 +214,7 @@ VALUES('Gougou',
        'Terrible, my dog came back obese',
        '1/1/20'),
        delete from bids where caretakerusername = 'dora' or caretakerusername = 'wincent';
-       insert into bids values ('Gougou','ladygaga','dora',25,'Pending','1/1/20','4/3/20','15/6/20','On-site transfer',null,NULL,NULL,NULL,null,null,null);
+       insert into bids values ('Emiline','petowner1','caretaker1', 25,'Accepted','2020-08-10','2021-05-14','2021-05-15','On-site transfer',null,NULL,NULL,NULL,null,null,null);
        insert into bids values ('Gougou','ladygaga','dora',25,'Pending','1/1/20','4/3/20','18/6/20','On-site transfer',null,NULL,NULL,NULL,null,null,null);
        insert into bids values ('Gougou','ladygaga','dora',25,'Pending','1/1/20','4/3/20','21/6/20','On-site transfer',null,NULL,NULL,NULL,null,null,null);
        insert into bids values ('Gougou','ladygaga','dora',25,'Pending','1/1/20','4/3/20','23/6/20','On-site transfer',null,NULL,NULL,NULL,null,null,null);

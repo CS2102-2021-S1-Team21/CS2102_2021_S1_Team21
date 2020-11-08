@@ -55,6 +55,19 @@ const Leaves = () => {
     return <p>{'No'}</p>;
   }
 
+  const cancelLeave = async (row) => {
+    try {
+      const body = {
+        caretakerUsername: row.caretakerusername,
+        startDate: row.start,
+        endDate: row.end
+      }    
+      showSnackbar(api.leaves.cancelLeave(body));
+    } catch (err) {
+      console.log(err.message);
+    }
+  }
+
   return (
     <Container>
       <h1>{'Leave Application\r'}</h1>
@@ -79,6 +92,7 @@ const Leaves = () => {
               <TableCell align="right">{'End Date'}</TableCell>
               <TableCell align="right">{'Emergency Leave'}</TableCell>
               <TableCell align="right">{'Approval Status'}</TableCell>
+              <TableCell />
             </TableRow>
           </TableHead>
           <TableBody>
@@ -88,6 +102,11 @@ const Leaves = () => {
                 <TableCell align="right">{row.end}</TableCell>
                 <TableCell align="right">{renderEmergency(row.isemergency)}</TableCell>
                 <TableCell align="right">{renderApproval(row.isapproved)}</TableCell>
+                <TableCell align="right">
+                  <Button variant="contained" color="secondary" onClick={() => cancelLeave(row)}>
+                    {"Cancel"}
+                  </Button>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

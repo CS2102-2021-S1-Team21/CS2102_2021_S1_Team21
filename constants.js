@@ -7,9 +7,12 @@ exports.errorDetails = {
   PET_DUPLICATE_KEY: 'Key (petownerusername, name)=',
   REQUIREMENT_DUPLICATE_KEY: 'Key (requirementtype, petname, petownerusername)=',
   AVAILABILITY_OVERLAPPING_DATE: 'PL/pgSQL function availability_overlapping_date()',
-  LEAVE_CONSTRAINTS: 'PL/pgSQL function leave_constraints()',
+  LEAVE_OVERLAPPING_DATE: 'PL/pgSQL function leave_constraints() line 15 at RAISE',
+  LEAVE_HAVE_PET: 'PL/pgSQL function leave_constraints() line 26 at RAISE',
+  LEAVE_CONSECUTIVE_DAYS: 'PL/pgSQL function leave_constraints() line 64 at RAISE',
   NOT_ADMIN_CONSTRAINT: 'PL/pgSQL function not_admin()',
   NOT_USER_CONSTRAINT: 'PL/pgSQL function not_user()',
+  AVAILABILITY_DATERANGE_LIMIT: 'indicates_availability_period_enddate_check',
 };
 
 exports.messages = {

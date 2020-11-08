@@ -35,7 +35,7 @@ const useStyles = makeStyles({
     marginBottom: 12,
   },
   table: {
-    minWidth: 650,
+    minWidth: 350
   },
 });
 
@@ -73,27 +73,26 @@ const Availability = () => {
           </p>
           <p>
             {
-              '- Start and end date starts and ends at 8am respectively. Eg: If you want to indicate your availability on Monday 11th January 2020, '
+              '- You can only indicate availability until the end of next year ie. 31st December next year.'
             }
           </p>
-          <p>{'you have put it as FROM: 11/01/2020 TO: 12/01/2020 (Not TO: 11/01/2020)'}</p>
           <Button variant="contained" color="primary" onClick={handleClickOpen} style={style}>
             {'Add availability\r'}
           </Button>
           <AvailabilityDialog setOpen={setOpen} open={open} />
-          <TableContainer component={Paper}>
+          <TableContainer component={Paper} >
             <Table className={classes.table} aria-label="simple table">
               <TableHead>
                 <TableRow>
-                  <TableCell>{'Available From'}</TableCell>
-                  <TableCell align="right">{'Available To'}</TableCell>
+                  <TableCell align="center">{'Available From'}</TableCell>
+                  <TableCell align="center">{'Available To'}</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {availability.map((row, index) => (
                   <TableRow key={index}>
-                    <TableCell align="left">{row.start}</TableCell>
-                    <TableCell align="right">{row.end}</TableCell>
+                    <TableCell align="center">{row.start}</TableCell>
+                    <TableCell align="center">{row.end}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>

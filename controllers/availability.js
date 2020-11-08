@@ -9,12 +9,19 @@ exports.apply = async (req, res, next) => {
       'INSERT INTO indicates_availability_period (caretakerUsername, startDate, endDate) VALUES ($1, $2, $3) RETURNING *',
       [caretakerUsername, startDate, endDate],
     );
-    res.json(result.rows);
+    res.json({ success: "You have successfully indicated your availability", result: result.rows });
   } catch (err) {
-    if (err.where.startsWith(errorDetails.AVAILABILITY_OVERLAPPING_DATE)) {
+    console.log(err)
+    if (err.where && err.where.startsWith(errorDetails.AVAILABILITY_OVERLAPPING_DATE)) {
       res
         .status(400)
-        .json({ error: 'You have an existing availability that overlaps with this one' });
+        .json({ error: 'You have an existing availability that overlaps with this availability application' });
+      return;
+    }
+    if (err.constraint === errorDetails.AVAILABILITY_DATERANGE_LIMIT) {
+      res
+        .status(400)
+        .json({ error: 'You can only indicate availability until the end of next year' });
       return;
     }
     next(err);

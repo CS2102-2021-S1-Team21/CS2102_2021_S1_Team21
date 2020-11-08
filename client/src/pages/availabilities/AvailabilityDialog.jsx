@@ -38,7 +38,7 @@ const AvailabilityDialog = ({ open, setOpen }) => {
 
   return (
     <Dialog open={open} onClose={handleCancel} aria-labelledby="form-dialog-title">
-      <DialogTitle id="form-dialog-title">{'Leave Form'}</DialogTitle>
+      <DialogTitle id="form-dialog-title">{'Availability Form'}</DialogTitle>
       <DialogContent>
         <DialogContentText>{'From:\r'}</DialogContentText>
         <KeyboardDatePicker
@@ -54,7 +54,7 @@ const AvailabilityDialog = ({ open, setOpen }) => {
           value={selectedDateTo}
           onChange={(date) => handleDateChangeTo(date)}
           minDate={selectedDateFrom}
-          maxDate={addYears(selectedDateTo, 1)}
+          maxDate={addYears(selectedDateTo, 2)}
           minDateMessage="Date should not be earlier than start Date"
           format="yyyy/MM/dd"
         />
