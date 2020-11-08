@@ -16,6 +16,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import React, { useCallback, useEffect, useState } from 'react';
 import api from '../../api';
+import Loading from '../../components/Loading';
 import { getYear } from '../../utilities/datetime';
 import { useSnackbarContext } from '../../utilities/snackbar';
 import { useStore } from '../../utilities/store';
@@ -48,15 +49,18 @@ const Pets = () => {
   const [petCategories, setPetCategories] = useState([]);
   const [pets, setPets] = useState([]);
   const [selectedPet, setSelectedPet] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const { username: petOwnerUsername } = store.user;
 
   const updatePets = useCallback(() => {
+    setIsLoading(true);
     showSnackbar(api.pets.getPets(petOwnerUsername))
       .then((response) => {
         setPets(response.rows);
       })
-      .catch(console.error);
+      .catch(console.error)
+      .finally(() => setIsLoading(false));
   }, [petOwnerUsername]);
 
   useEffect(updatePets, [updatePets]);
@@ -115,7 +119,10 @@ const Pets = () => {
           </Grid>
         </Box>
 
-        {pets.map((pet) => (
+        {isLoading ? (
+          <Loading />
+        ) : (
+          pets.map((pet) => (
           <Card key={pet.name}>
             <CardHeader
               avatar={<Avatar className={classes.avatar}>{pet.name[0]}</Avatar>}
@@ -163,7 +170,7 @@ const Pets = () => {
               </Grid>
             </CardContent>
           </Card>
-        ))}
+        )))}
       </Paper>
       <PetFormDialog
         title={selectedPet === 'default' ? 'New Pet' : 'Edit Pet'}
