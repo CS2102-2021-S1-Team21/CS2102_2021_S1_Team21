@@ -36,7 +36,6 @@ exports.apply = async (req, res, next) => {
 
 exports.cancel = async (req, res) => {
   try {
-    console.log(req.body);
     const { caretakerUsername, startDate, endDate } = req.body;
     const result = await db.query(
       `DELETE FROM applies_for_leave_period WHERE caretakerusername = $1 AND startdate = $2 AND endDate = $3`,

@@ -57,13 +57,11 @@ const Leaves = () => {
 
   const cancelLeave = async (row) => {
     try {
-  
       const body = {
         caretakerUsername: row.caretakerusername,
         startDate: row.start,
         endDate: row.end
       }    
-      console.log(body)
       showSnackbar(api.leaves.cancelLeave(body));
     } catch (err) {
       console.log(err.message);
