@@ -54,7 +54,7 @@ const AvailabilityDialog = ({ open, setOpen }) => {
           value={selectedDateTo}
           onChange={(date) => handleDateChangeTo(date)}
           minDate={selectedDateFrom}
-          maxDate={addYears(selectedDateTo, 1)}
+          maxDate={addYears(selectedDateTo, 2)}
           minDateMessage="Date should not be earlier than start Date"
           format="yyyy/MM/dd"
         />
