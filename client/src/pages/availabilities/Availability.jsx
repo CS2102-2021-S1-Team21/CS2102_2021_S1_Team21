@@ -73,10 +73,9 @@ const Availability = () => {
           </p>
           <p>
             {
-              '- Start and end date starts and ends at 8am respectively. Eg: If you want to indicate your availability on Monday 11th January 2020, '
+              '- You can only apply availability application latest at the end of next year ie. 31st December next year.'
             }
           </p>
-          <p>{'you have put it as FROM: 11/01/2020 TO: 12/01/2020 (Not TO: 11/01/2020)'}</p>
           <Button variant="contained" color="primary" onClick={handleClickOpen} style={style}>
             {'Add availability\r'}
           </Button>
