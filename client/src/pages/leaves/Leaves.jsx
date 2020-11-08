@@ -68,22 +68,6 @@ const Leaves = () => {
     }
   }
 
-  // const handleApply = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     const body = {
-  //       startDate: format(selectedDateFrom, 'yyyy-MM-dd'),
-  //       endDate: format(selectedDateTo, 'yyyy-MM-dd'),
-  //       caretakerUsername: store.user.username,
-  //       isEmergency: 'FALSE',
-  //     };
-  //     await showSnackbar(api.leaves.applyLeave(body));
-  //     setOpen(false);
-  //   } catch (err) {
-  //     console.log(err.message);
-  //   }
-  // };
-
   return (
     <Container>
       <h1>{'Leave Application\r'}</h1>
