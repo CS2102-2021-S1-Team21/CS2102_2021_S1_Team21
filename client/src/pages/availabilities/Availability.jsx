@@ -73,7 +73,7 @@ const Availability = () => {
           </p>
           <p>
             {
-              '- You can only apply availability application latest at the end of next year ie. 31st December next year.'
+              '- You can only indicate availability until the end of next year ie. 31st December next year.'
             }
           </p>
           <Button variant="contained" color="primary" onClick={handleClickOpen} style={style}>
