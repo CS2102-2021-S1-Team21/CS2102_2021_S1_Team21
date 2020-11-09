@@ -11,7 +11,7 @@ import FormTextField from '../../components/forms/FormTextField';
 import SubmitButton from '../../components/forms/SubmitButton';
 import { useSnackbarContext } from '../../utilities/snackbar';
 
-const UserProfileSettings = ({ username, role }) => {
+const UserProfileSettings = ({ username, isCaretaker, isPetOwner }) => {
   const UpdateSchema = Yup.object({
     name: Yup.string().required(),
     username: Yup.string().required(),
@@ -137,9 +137,9 @@ const UserProfileSettings = ({ username, role }) => {
             </Form>
           </Formik>
           {/* If PetOwner, render PetOwnerForm */}
-          {role === 'petowner' && <PetOwnerForm username={username} />}
+          {isPetOwner && <PetOwnerForm username={username} />}
           {/* If Caretaker, render CaretakerForm */}
-          {role === 'caretaker' && <CaretakerForm username={username} />}
+          {isCaretaker && <CaretakerForm username={username} />}
         </CardContent>
       </Card>
     </Container>

@@ -14,11 +14,8 @@ const ProfileSettings = () => {
         userAccount.isFullTimeCaretaker) && (
         <UserProfileSettings
           username={userAccount.username}
-          role={
-            userAccount.isFullTimeCaretaker || userAccount.isPartTimeCaretaker
-              ? 'caretaker'
-              : 'petowner'
-          }
+          isCaretaker = {userAccount.isFullTimeCaretaker || userAccount.isPartTimeCaretaker}
+          isPetOwner = {userAccount.isPetOwner}
         />
       )}
 
