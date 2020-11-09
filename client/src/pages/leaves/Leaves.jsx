@@ -13,6 +13,8 @@ import LeaveDialogContent from './LeaveDialogContent';
 import api from '../../api';
 import { useStore } from '../../utilities/store';
 import { useSnackbarContext } from '../../utilities/snackbar';
+import isPast from 'date-fns/isPast';
+import isFuture from 'date-fns/isFuture';
 
 const useStyles = makeStyles({
   table: {
@@ -103,7 +105,10 @@ const Leaves = () => {
                 <TableCell align="right">{renderEmergency(row.isemergency)}</TableCell>
                 <TableCell align="right">{renderApproval(row.isapproved)}</TableCell>
                 <TableCell align="right">
-                  <Button variant="contained" color="secondary" onClick={() => cancelLeave(row)}>
+                  <Button variant="contained" color="secondary" onClick={() => cancelLeave(row)}
+                  disabled = {
+                    isPast(new Date(row.start)) ? true : false
+                  }>
                     {"Cancel"}
                   </Button>
                 </TableCell>
