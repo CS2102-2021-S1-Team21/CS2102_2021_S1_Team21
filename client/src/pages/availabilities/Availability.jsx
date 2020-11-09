@@ -69,7 +69,7 @@ const Availability = () => {
           <Typography variant="h4">{'My Availability'}</Typography>
           <p>{'Note:'}</p>
           <p>
-            {'- Availability cannot have overlapping dates (Even if start and end date is same)'}
+            {'- Availability cannot have overlapping dates.'}
           </p>
           <p>
             {

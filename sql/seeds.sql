@@ -76,7 +76,7 @@ VALUES ('wincent',
  'orchard',
  '543123',
  '2010-06-01');
- insert into applies_for_leave_period values ('wincent', '2020-10-02', '2020-10-05', false);
+ insert into applies_for_leave_period values ('caretaker1', '2020-11-07', '2020-11-07', false);
 INSERT INTO Caretaker
 VALUES ('harambe');
 
