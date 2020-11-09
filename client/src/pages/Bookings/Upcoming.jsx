@@ -1,5 +1,5 @@
 import { List, ListItem, ListItemIcon, ListItemSecondaryAction, ListItemText, Typography, Paper } from '@material-ui/core';
-import PetsIcon from '@material-ui/icons/Pets';
+import PersonIcon from '@material-ui/icons/Person';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import moment from 'moment';
@@ -65,7 +65,7 @@ const Upcoming = () => {
                   onClick={() => history.push(`/profile/${bid.caretakerusername}`)}
                 >
                   <ListItemIcon>
-                    <PetsIcon color="primary" fontSize="large" />
+                    <PersonIcon color="primary" fontSize="large" />
                   </ListItemIcon>
                   <ListItemText
                     primary={

@@ -44,7 +44,7 @@ const AppRouter = () => {
           </Switch>
         </BrowserRouter>
       </div>
-      <Paper elevation={10} className={classes.footer}>
+      <Paper elevation={10} square className={classes.footer}>
         <Footer />
       </Paper>
     </div>
