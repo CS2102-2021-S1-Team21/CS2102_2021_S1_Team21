@@ -51,7 +51,7 @@ exports.edit = async (req, res) => {
       }),
     );
     await client.query('COMMIT');
-    res.json(updatedCategories.rows);
+    res.json({success: "Suitable pets successfully updated!", result: updatedCategories.rows});
   } catch (err) {
     await client.query('ROLLBACK');
     console.error(err);

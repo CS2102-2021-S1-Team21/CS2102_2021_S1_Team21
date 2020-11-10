@@ -46,6 +46,9 @@ const UserProfile = (props) => {
 
           <Typography variant="h6">{'Address'}</Typography>
           <Typography paragraph>{`${user.address}`}</Typography>
+          
+          <Typography variant="h6">{'Phone Number'}</Typography>
+          <Typography paragraph>{`${user.phonenumber}`}</Typography>
 
           <Typography variant="h6">{'Email'}</Typography>
           <Typography paragraph>{`${user.email}`}</Typography>

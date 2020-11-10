@@ -76,7 +76,7 @@ exports.editCc = async (req, res) => {
       res.status(404).json({ error: 'Pet owner not found' });
       return;
     }
-    res.json(result.rows);
+    res.json({ success: "Payment details successfully updated!", result: result.rows});
   } catch (err) {
     console.error(err);
   }
